@@ -1,4 +1,4 @@
-"""Official Wan ``rope_apply`` / Loopy-style roll adapter.
+"""Official Wan ``rope_apply`` + Circular Temporal RoPE roll adapter.
 
 Comfy ``rope_encode`` / ``apply_rope1`` is intentionally out of scope.
 """

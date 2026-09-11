@@ -1,46 +1,37 @@
 # latent-loop
 
-**Status: active development.** The current code implements the first model-agnostic circular latent primitives. It is not yet a complete Wan/VACE/ComfyUI integration.
+**Status:** Wan Mode B default frozen as **Circular Temporal RoPE + Bidirectional Layer Phase Distribution** (`SymmetricShiftSchedule`).
 
-## Core idea
-
-A looping video should not be represented as a linear timeline whose final frame is forced to equal the first frame. Treat temporal latent positions as a ring:
+## Mainline (validated)
 
 ```text
-      0
-   /     \
-  1       5
-  |       |
-  2 ----- 4
-     \
-      3
+Circular Temporal RoPE
+        ↓
+WanSelfAttention Q/K only (V untouched)
+        ↓
+expanded freqs_3d temporal roll
+        ↓
+Symmetric layer phase: 0, +1, -1, +2, -2, …  (% F)
+        ↓
+Wan2.2 TI2V-5B real T2V generation (batch=1 path validated)
 ```
 
-For six temporal positions the neighbourhoods are therefore:
+Hook:
 
-```text
-0 -> [5, 0, 1]
-1 -> [0, 1, 2]
-2 -> [1, 2, 3]
-3 -> [2, 3, 4]
-4 -> [3, 4, 5]
-5 -> [4, 5, 0]
+```python
+from latent_loop.adapters.wan import enable_mode_b_on_wan_model
+
+# default schedule = SymmetricShiftSchedule
+enable_mode_b_on_wan_model(model, flash_attention_fn=flash_attention)
 ```
 
-There is no duplicated endpoint.
+Selectable schedules: `SymmetricShiftSchedule` (default), `LoopyShiftSchedule`, `FixedShiftSchedule`, `IdentityShiftSchedule`.
 
-## What exists now
+RoPE follows official Wan per-sample `seq_len = F*H*W` (padding left untouched). Equal-length unpadded batches still match historical Loopy `rope_apply_loop`.
 
-`src/latent_loop/ring.py` provides:
+## Experimental / control only
 
-- `circular_indices()` — modulo temporal indexing
-- `circular_pad()` — circular temporal context padding
-- `ring_windows()` — wrapped neighbourhoods for every latent position
-- `circular_temporal_mix()` — small residual ring coupling
-- `cosine_denoise_strength()` — coupling fades out before final detail steps
-- `RingLatentProcessor` — sampler-facing entry point
-
-The residual mixer is intentionally only a first integration primitive. The target design is to inject ring topology directly into a video model's temporal context/attention rather than post-process decoded frames.
+`RingLatentProcessor` residual ring mix in `ring.py` is **not** the product mainline. It remains Mode C / control scaffolding.
 
 ## Install
 
@@ -49,24 +40,18 @@ pip install -e .[dev]
 pytest
 ```
 
-## Minimal integration
+## Cloud generate (A vs B)
 
-```python
-from latent_loop import RingLatentProcessor, RingMixConfig
-
-ring = RingLatentProcessor(
-    RingMixConfig(radius=1, maximum_strength=0.12, active_fraction=0.70)
-)
-
-for step in range(total_steps):
-    latents = scheduler_step(...)
-    latents = ring(latents, step=step, total_steps=total_steps)
+```bash
+python scripts/cloud_mode_b_generate.py --schedule symmetric   # default
+python scripts/cloud_mode_b_generate.py --schedule loopy
 ```
 
 ## Non-goals
 
 - do not copy the first frame to the last frame
-- do not crossfade decoded RGB frames as the primary solution
-- do not hide a discontinuity with a single seam interpolation
+- do not crossfade decoded RGB as the primary loop fix
+- do not turn seam metrics into auto Gate / Repair
+- Comfy adapter / true periodic RoPE — not started
 
-See `DEVELOPMENT_STATUS.md` before working on the same files with Cursor.
+See `DEVELOPMENT_STATUS.md` before working on the same files with Cursor / ChatGPT.

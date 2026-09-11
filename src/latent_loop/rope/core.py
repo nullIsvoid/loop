@@ -1,10 +1,9 @@
-"""Loopy-style temporal RoPE（旋转位置编码）roll — model-independent core.
+"""Circular Temporal RoPE — model-independent freqs roll core.
 
 Terminology boundary:
-  This is *Loopy-style RoPE roll* (per-block temporal phase reordering via
-  ``torch.roll`` on expanded ``freqs_3d``). It is **not** claimed to be a
-  mathematically periodic / circular RoPE. Closed-loop behaviour must be
-  validated on real Wan runs; stricter periodic encodings remain future work.
+  Per-block temporal phase reordering via ``torch.roll`` on expanded
+  ``freqs_3d`` (inspired by Loopy; default schedule is Symmetric). This is
+  **not** claimed to be a mathematically periodic / circular RoPE encoding.
 """
 
 from __future__ import annotations
@@ -64,13 +63,15 @@ def rope_apply_loopy_roll(
     freqs: Tensor,
     time_shift: int = 0,
 ) -> Tensor:
-    """Apply Wan 3D RoPE to Q/K with optional Loopy-style temporal freqs roll.
+    """Apply Wan 3D RoPE to Q/K with optional temporal freqs roll.
 
-    Matches WeChatCV/Loopy ``rope_apply_loop`` behaviour for numerical parity
-    when ``L == F * H * W`` (typical single-clip unpadded path).
+    Follows official Wan ``rope_apply`` per-sample ``seq_len = F*H*W``:
+    rotate ``x[i, :seq_len]``, keep ``x[i, seq_len:]`` padding unchanged.
+    When all samples are unpadded and equal length, this matches Loopy's
+    ``rope_apply_loop`` numerically for the same ``time_shift``.
 
     Args:
-        x: ``[B, L, N, C]`` real Q or K (C = head dim).
+        x: ``[B, L, N, C]`` real Q or K (C = head dim); ``L`` may be padded.
         grid_sizes: ``[B, 3]`` of ``(F, H, W)`` patch grid sizes.
         freqs: ``[M, C/2]`` complex Wan freqs table.
         time_shift: temporal roll amount; 0 leaves freqs unrolled.
@@ -78,7 +79,7 @@ def rope_apply_loopy_roll(
     Returns:
         Tensor with the same shape / device as ``x``, float32 stacked like Wan.
     """
-    s, n, c = x.size(1), x.size(2), x.size(3) // 2
+    padded_len, n, c = x.size(1), x.size(2), x.size(3) // 2
     if isinstance(grid_sizes, Tensor):
         fwh_list = grid_sizes.tolist()
     else:
@@ -88,16 +89,20 @@ def rope_apply_loopy_roll(
     for i, (f, h, w) in enumerate(fwh_list):
         f, h, w = int(f), int(h), int(w)
         seq_len = f * h * w
+        if seq_len > padded_len:
+            raise ValueError(
+                f"grid FHW={seq_len} exceeds padded sequence length {padded_len}"
+            )
 
         x_i = torch.view_as_complex(
-            x[i, :s].to(torch.float64).reshape(s, n, -1, 2)
+            x[i, :seq_len].to(torch.float64).reshape(seq_len, n, -1, 2)
         )
         freqs_3d = expand_wan_freqs_3d(freqs, f, h, w, head_half=c)
         freqs_3d = roll_temporal_freqs_3d(freqs_3d, time_shift)
         freqs_i = freqs_3d.reshape(seq_len, 1, -1)
 
         rotated = torch.view_as_real(x_i * freqs_i).flatten(2)
-        rotated = torch.cat([rotated, x[i, s:]])
+        rotated = torch.cat([rotated, x[i, seq_len:]])
         output.append(rotated)
 
     return torch.stack(output).float()

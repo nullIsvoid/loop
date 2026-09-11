@@ -11,7 +11,11 @@ from latent_loop.adapters.wan.attention import (
 )
 from latent_loop.adapters.wan.rope import wan_rope_apply
 from latent_loop.rope.core import rope_apply_baseline, rope_apply_loopy_roll
-from latent_loop.rope.schedule import FixedShiftSchedule, LoopyShiftSchedule
+from latent_loop.rope.schedule import (
+    FixedShiftSchedule,
+    LoopyShiftSchedule,
+    SymmetricShiftSchedule,
+)
 
 
 def _rope_params(max_seq_len: int, dim: int, theta: float = 10000.0) -> torch.Tensor:
@@ -91,6 +95,28 @@ class _FakeWan(nn.Module):
     def __init__(self, n_layers: int = 3):
         super().__init__()
         self.blocks = nn.ModuleList([_FakeBlock() for _ in range(n_layers)])
+
+
+def test_enable_mode_b_default_schedule_is_symmetric():
+    """Regression: omitting schedule must install SymmetricShiftSchedule."""
+    model = _FakeWan(n_layers=5)
+    f = 21
+
+    def flash_stub(*, q, k, v, k_lens, window_size=(-1, -1)):
+        _ = q, k, k_lens, window_size
+        return v
+
+    enable_mode_b_on_wan_model(
+        model,
+        flash_attention_fn=flash_stub,
+        enabled=True,
+    )
+    sched = model._latent_loop_shift_schedule
+    assert isinstance(sched, SymmetricShiftSchedule)
+    expected = [0, 1, f - 1, 2, f - 2]
+    got = [sched.time_shift(i, f) for i in range(5)]
+    assert got == expected
+    assert isinstance(model.blocks[0].self_attn._latent_loop_schedule, SymmetricShiftSchedule)
 
 
 def test_enable_mode_b_uses_injectable_schedule_and_preserves_v_path():

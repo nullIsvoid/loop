@@ -1,4 +1,4 @@
-"""Hook official Wan ``WanSelfAttention`` for Mode B Loopy-style RoPE roll.
+"""Hook official Wan ``WanSelfAttention`` for Mode B Circular Temporal RoPE.
 
 Does not import Wan at module load time. The patch expects the official
 signature::
