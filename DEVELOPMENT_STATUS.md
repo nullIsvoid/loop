@@ -23,20 +23,21 @@
 
 Hypothesis **rejected**: “any non-zero roll is the same” — shift geometry matters on phase-clear motion. Symmetric is the strongest candidate, not yet the frozen default.
 
-## Next experiment (in flight)
+## Next experiment — **READY TO SCORE**
 
-**S1 Loopy vs S3 Symmetric only**
+**S1 Loopy vs S3 Symmetric only** — cloud `CROSS_SEED_OK`, 12/12 x3 in `artifacts/mode_b_cross_seed/`.
 
 - Scenes: pendulum, rotating_fan, human_sway  
 - Seeds: 123, 888  
 - Shared: 1280×704, 81 frames / F=21, 20 steps, CFG=5, UniPC  
-- Total: 2 × 2 × 3 = **12 videos**
 
 Decision rule:
 
 - S3 wins or ties most of 6 pairs → promote `SymmetricShiftSchedule` as Wan default  
 - S1 more stable across seeds → keep Loopy default  
 - Clear scene split → selectable policy, not a single forced default  
+
+Fill `artifacts/mode_b_cross_seed/RESULT.md` (human + ChatGPT).
 
 ## Naming (forming)
 
