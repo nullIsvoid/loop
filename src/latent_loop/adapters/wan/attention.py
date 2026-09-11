@@ -8,7 +8,7 @@ signature::
 and modules with ``q/k/v/o``, ``norm_q/norm_k``, ``num_heads``, ``head_dim``,
 optional ``window_size``.
 
-Schedule is injected (default ``LoopyShiftSchedule``), never hard-coded into
+Schedule is injected (default ``SymmetricShiftSchedule``), never hard-coded into
 the attention body.
 """
 
@@ -23,7 +23,7 @@ from torch import Tensor, nn
 from latent_loop.adapters.wan.rope import wan_rope_apply
 from latent_loop.rope.schedule import (
     IdentityShiftSchedule,
-    LoopyShiftSchedule,
+    SymmetricShiftSchedule,
     TemporalShiftSchedule,
 )
 
@@ -75,7 +75,7 @@ def enable_mode_b_on_wan_model(
                 "is not importable"
             ) from exc
 
-    sched: TemporalShiftSchedule = schedule or LoopyShiftSchedule()
+    sched: TemporalShiftSchedule = schedule or SymmetricShiftSchedule()
     if not enabled:
         sched = IdentityShiftSchedule()
 

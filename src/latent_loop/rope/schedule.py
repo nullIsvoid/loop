@@ -1,8 +1,8 @@
-"""Injectable per-block temporal shift schedules for Loopy-style RoPE roll.
+"""Injectable per-block temporal shift schedules for Circular Temporal RoPE.
 
-Default policy mirrors Loopy; adapters must accept any ``TemporalShiftSchedule``
-so later experiments (fixed offsets, symmetric ± shifts, true periodic RoPE,
-Mobius latent shift) do not require rewriting attention hooks.
+Default Wan policy is ``SymmetricShiftSchedule`` (bidirectional layer phase).
+Adapters accept any ``TemporalShiftSchedule`` so Loopy / Fixed remain selectable
+without rewriting attention hooks.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ class IdentityShiftSchedule:
 
 @dataclass(frozen=True)
 class LoopyShiftSchedule:
-    """Loopy default: block 0 anchor; others ``(block_idx - 1) % (F - 1) + 1``."""
+    """Historical Loopy geometry: block 0 anchor; others ``(block_idx - 1) % (F - 1) + 1``."""
 
     def time_shift(self, block_idx: int, num_latent_frames: int) -> int:
         if block_idx < 0:
@@ -57,7 +57,7 @@ class FixedShiftSchedule:
 
 @dataclass(frozen=True)
 class SymmetricShiftSchedule:
-    """Bidirectional circular propagation with block-0 anchor.
+    """Default Wan schedule: bidirectional layer phase with block-0 anchor.
 
     Sequence of shifts (before modulo ``F``)::
 
@@ -84,5 +84,5 @@ def list_layer_time_shifts(
     schedule: TemporalShiftSchedule | None = None,
 ) -> list[int]:
     """Materialise per-block shifts for logging / tests."""
-    sched: TemporalShiftSchedule = schedule or LoopyShiftSchedule()
+    sched: TemporalShiftSchedule = schedule or SymmetricShiftSchedule()
     return [sched.time_shift(i, num_latent_frames) for i in range(num_layers)]
