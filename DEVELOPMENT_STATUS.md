@@ -1,38 +1,47 @@
 # Development status
 
-> ACTIVE — Mode B works. Multi-check in progress: human + automated metrics both lean **S3 Symmetric** on phase-clear scenes; **ChatGPT visual pass pending**.
+> ACTIVE — Mode B / Circular Temporal RoPE. **Do not freeze S3 as default yet.**  
+> Next gate: cross-seed S1 vs S3 only.
 
-## Multi-check results
+## Freeze (ChatGPT + human, 2026-09-12)
 
-### Candle (seed 42)
+- Do **not** add S4/S5/S6 or new schedule geometries
+- Do **not** expand `seam_metrics` into auto-score / auto-winner / Gate / Repair
+- Human seam watch = primary; automated metrics = auxiliary only
+- Do **not** raise steps/resolution for this research question
+- Do **not** implement Comfy / residual / “true periodic RoPE” yet
+- S2 Fixed(1) parked (no phase-hard win) — not in next round
 
-| Check | S0 | S1 Loopy | S2 Fixed(1) | S3 Symmetric |
+## Evidence so far (seed 42)
+
+| | Candle | Pendulum | Fan | Human sway |
 |--|--|--|--|--|
-| Human | ❌ jitter | ✅ | ✅ | ✅ |
-| Metrics majority | worst | **best** | tied 2nd | tied 2nd |
+| S0 Identity | ❌ | ❌ | ❌ | ❌ |
+| S1 Loopy | ✅ | 次 | 次 | 次 |
+| S2 Fixed1 | ✅ | 次 | 次 | 次 |
+| S3 Symmetric | ✅ | ★ | ★ | ★ |
 
-### Phase scenes (seed 42)
+Hypothesis **rejected**: “any non-zero roll is the same” — shift geometry matters on phase-clear motion. Symmetric is the strongest candidate, not yet the frozen default.
 
-| Check | Result |
-|--|--|
-| Human (S3 focus) | pendulum/fan no jitter; human_sway almost none |
-| Metrics majority | **S3 wins** all three scenes; S0 worst |
-| ChatGPT visual | **pending** — see `notes/chatgpt_review_request.md` |
+## Next experiment (in flight)
 
-## Open product implication
+**S1 Loopy vs S3 Symmetric only**
 
-Pending ChatGPT scores. If S3 stays best across checks:
+- Scenes: pendulum, rotating_fan, human_sway  
+- Seeds: 123, 888  
+- Shared: 1280×704, 81 frames / F=21, 20 steps, CFG=5, UniPC  
+- Total: 2 × 2 × 3 = **12 videos**
 
-- Default candidate → **SymmetricShiftSchedule**
-- Loopy monotonic is **not uniquely required** for usable seams
+Decision rule:
+
+- S3 wins or ties most of 6 pairs → promote `SymmetricShiftSchedule` as Wan default  
+- S1 more stable across seeds → keep Loopy default  
+- Clear scene split → selectable policy, not a single forced default  
+
+## Naming (forming)
+
+If S3 holds: this is no longer a Loopy copy — it is **Circular Temporal RoPE + Bidirectional Layer Phase Distribution**.
 
 ## Git policy
 
-Full single-loop MP4s on cloud. Repo: metadata + `*_x3.mp4` + RESULT + seam_metrics.
-
-## Next
-
-1. ChatGPT fills independent 0–2 seam scores for full S0–S3 matrix  
-2. Merge three checks → freeze default schedule  
-3. Optional second-seed only on survivors  
-Still not Comfy / residual / “true periodic RoPE”.
+Full single-loop MP4s on cloud. Repo: metadata + `*_x3.mp4` + RESULT (+ optional auxiliary metrics for this research only).
