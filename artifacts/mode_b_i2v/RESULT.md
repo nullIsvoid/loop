@@ -1,4 +1,4 @@
-# Mode B I2V — ready for human / ChatGPT review
+# Mode B I2V — human verdict
 
 ## Question
 
@@ -12,18 +12,20 @@ composition while adding gentle motion and a loopable last→first seam?
 - seed=42, 81 frames, 20 steps, CFG=5, UniPC, max_area=704×1280
 - Cloud: `ALL_I2V_OK`
 
-## Cases
+## Human verdict (2026-09-12)
 
-| case | source | output size | watch |
-|------|--------|-------------|-------|
-| `person/` | product live-wallpaper still | 800×1088 | hair/cloth sway + seam + identity |
-| `environment/` | Wan official `i2v_input` (cat/coast water) | 800×1088 | water/ambient + seam + identity |
+Seam / jitter focus:
 
-## Score sheet
+| case | A (baseline) | B (Symmetric) | winner |
+|------|--------------|---------------|--------|
+| person | **more obvious jitter** | slight jitter | **B** |
+| environment | **more obvious jitter** (same pattern) | slight jitter | **B** |
+
+**Takeaway:** On wallpaper I2V, Circular Temporal RoPE + Symmetric improves the last→first seam vs baseline for both person and environment. Residual slight jitter on B remains; identity/composition notes not separately scored in this pass.
+
+## Score sheet (filled)
 
 | case | A seam | B seam | identity vs source | winner |
 |------|--------|--------|--------------------|--------|
-| person | | | | |
-| environment | | | | |
-
-Play `A_x3.mp4` / `B_x3.mp4` next to `source.png`. Full single-loop mp4s stay on cloud.
+| person | clear jitter | slight | (not ranked) | **B** |
+| environment | clear jitter | slight | (not ranked) | **B** |
