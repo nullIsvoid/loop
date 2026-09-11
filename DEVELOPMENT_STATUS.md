@@ -65,8 +65,10 @@ src/latent_loop/
 
 1. ~~Analysis + ChatGPT inject-point ack~~
 2. ~~Mode B scaffold + Loopy parity unit tests~~
-3. **Done (cloud smoke):** official `WanModel` TI2V-5B on RTX 4090 — Mode A vs Mode B one-step forward OK (`SMOKE_OK`). Script: `scripts/cloud_mode_b_smoke.py`
-4. **Next:** short real generate (few steps / low res) + triple-play seam look; still not Comfy
+3. ~~Cloud one-step WanModel forward smoke~~
+4. **Done:** first real A/B full generate → `artifacts/mode_b_real/` (`GENERATE_OK`). See `RESULT.md`.
+5. **Human gate:** watch `A_x3.mp4` vs `B_x3.mp4` last→first seam; then choose branch 1/2/3 in RESULT.md
+
 
 
 ## Collaboration protocol

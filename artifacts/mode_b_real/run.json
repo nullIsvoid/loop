@@ -1,0 +1,82 @@
+{
+  "task": "ti2v-5B",
+  "ckpt": "/model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B",
+  "wan_root": "/root/Wan2.2",
+  "prompt": "A seamless looping live wallpaper of a candle flame gently flickering and swaying in a continuous periodic cycle, fixed camera, no cuts, smooth looping motion, cinematic lighting",
+  "n_prompt": "色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，多余的手指，画得不好的手部，画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，杂乱的背景，三条腿，背景人很多，倒着走",
+  "seed": 42,
+  "size_wh": [
+    1280,
+    704
+  ],
+  "frame_num": 81,
+  "latent_frames_F": 21,
+  "steps": 20,
+  "guide_scale": 5.0,
+  "shift": 5.0,
+  "sample_solver": "unipc",
+  "fps": 24,
+  "attention_backend": {
+    "flash_attn_2": false,
+    "flash_attn_3": false,
+    "backend": "official_attention_sdpa_fallback"
+  },
+  "mode_b_schedule": "LoopyShiftSchedule",
+  "mode_b_time_shifts": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "time_a_sec": 193.69,
+  "time_b_sec": 192.69,
+  "video_a_shape": [
+    3,
+    81,
+    704,
+    1280
+  ],
+  "video_b_shape": [
+    3,
+    81,
+    704,
+    1280
+  ],
+  "outputs": [
+    "A_baseline.mp4",
+    "B_rope_roll.mp4",
+    "A_x3.mp4",
+    "B_x3.mp4",
+    "A_first.png",
+    "A_last.png",
+    "B_first.png",
+    "B_last.png"
+  ],
+  "note": "Visual check: play A_x3.mp4 and B_x3.mp4; focus on last→first seam. No automated seam score in this run."
+}
