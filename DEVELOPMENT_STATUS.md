@@ -1,41 +1,36 @@
 # Development status
 
-> ACTIVE — Mode B (Loopy-style RoPE roll) **validated by human seam check**.
-> Next: **shift schedule geometry** comparison (not “Loopy parameter sweep”).
+> ACTIVE — Mode B works. Emerging candidate: **SymmetricShiftSchedule (S3)** on phase-clear motion.
 
-## Terminology
+## Human results
 
-- **Loopy-style RoPE roll**: per-block `torch.roll` on expanded `freqs_3d` temporal axis only.
-- **Not claimed:** mathematical periodic / circular RoPE.
-- **LoopyShiftSchedule has no tunable parameters** — it is a fixed formula. “Parameter sweep” is wrong wording; compare **schedule geometries** instead.
+### Candle (seed 42)
 
-## Owned now
+| S0 Identity | S1 Loopy | S2 Fixed(1) | S3 Symmetric |
+|--|--|--|--|
+| ❌ jitter | ✅ | ✅ | ✅ |
 
-ChatGPT-owned: `ring.py` / residual helpers / `tests/test_ring.py`  
-Cursor-owned: `rope/`, `adapters/wan/`, generate/compare scripts, experiment notes
+### Phase scenes (seed 42) — 2026-09-12
 
-## Experiment priority
+User report (seam only; ignore image quality):
 
-| Mode | Meaning | Role |
-|------|---------|------|
-| A / S0 | Wan + Identity shifts | baseline |
-| B / S1 | Wan + Loopy schedule | **validated winner (first A/B)** |
-| S2 | FixedShift(1) | geometry对照 |
-| S3 | Symmetric ± shifts | geometry对照 |
-| C | residual ring mix | CONTROL (later) |
-| E | Mobius latent shift | later |
+- **pendulum / S3**: no visible jitter  
+- **rotating_fan / S3**: no visible jitter  
+- **human_sway / S3**: **least jitter, almost none**
 
-## Current work
+→ S3 is the current preferred geometry for harder periodic motion.
 
-1. ~~Loopy parity + Wan adapter + full A/B generate~~
-2. ~~Human verdict (199f111): B clearly smoother than A~~
-3. ~~S0–S3 geometry compare (ad5375d)~~ — human: **S0 jitters**; **S1/S2/S3 all look fine** (no ranking among three). x3 mp4s in repo for ChatGPT.
-4. Git: allow `*_x3.mp4` previews; keep full single-loop schedule mp4s off git.
-5. **Next:** harder discrimination among S1 / S2 / S3 (harder motion / second seed / more steps). Not Comfy / residual / periodic RoPE yet.
+## Open product implication
 
-## Schedule formulas
+If S3 stays best after any remaining S1/S2 contrast notes:
 
-- Identity: all `0`
-- Loopy: `0`, then `(i-1)%(F-1)+1`
-- Fixed(1): `0`, then `1` (mod F)
-- Symmetric: `0, +1, -1, +2, -2, ...` applied as `s % F`
+- Default candidate may become **Symmetric** (or still Fixed(1) if later shown equal — not yet claimed equal on phase scenes)
+- Loopy monotonic schedule is **not uniquely required** for usable seams
+
+## Git policy
+
+Full single-loop MP4s on cloud. Repo: metadata + `*_x3.mp4` + RESULT.
+
+## Next (after ChatGPT sync)
+
+Confirm full matrix notes for S0/S1/S2 on phase scenes if needed; then decide default schedule + optional second-seed only on survivors. Still not Comfy / residual / “true periodic RoPE” yet.
