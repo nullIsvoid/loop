@@ -29,8 +29,9 @@ Cursor-owned: `rope/`, `adapters/wan/`, generate/compare scripts, experiment not
 
 1. ~~Loopy parity + Wan adapter + full A/B generate~~
 2. ~~Human verdict (199f111): B clearly smoother than A~~
-3. **Now:** S0 Identity / S1 Loopy / S2 Fixed(1) / S3 Symmetric — same seed/prompt/F/steps
-4. Git policy: **do not commit every schedule MP4**; keep metadata + RESULT + selected previews only. First A/B videos in `artifacts/mode_b_real/` may stay.
+3. ~~S0–S3 geometry compare (ad5375d)~~ — human: **S0 jitters**; **S1/S2/S3 all look fine** (no ranking among three). x3 mp4s in repo for ChatGPT.
+4. Git: allow `*_x3.mp4` previews; keep full single-loop schedule mp4s off git.
+5. **Next:** harder discrimination among S1 / S2 / S3 (harder motion / second seed / more steps). Not Comfy / residual / periodic RoPE yet.
 
 ## Schedule formulas
 
