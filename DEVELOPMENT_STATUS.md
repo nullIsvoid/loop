@@ -13,7 +13,8 @@ Same TI2V-5B with `img=PIL.Image`. A = baseline, B = Symmetric.
 | environment | more obvious jitter | slight jitter | **B** |
 
 → Circular Temporal RoPE helps wallpaper I2V loop seam, not only T2V.  
-Open: further reduce B’s slight residual jitter (not by inventing S4 yet).
+Open: further reduce B’s slight residual jitter (not by inventing S4 yet).  
+**ChatGPT independent I2V scores:** pending — `notes/chatgpt_i2v_review_request.md`.
 
 ## Freeze hygiene (done on `cf3f42f`)
 

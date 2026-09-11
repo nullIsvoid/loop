@@ -23,7 +23,11 @@ Seam / jitter focus:
 
 **Takeaway:** On wallpaper I2V, Circular Temporal RoPE + Symmetric improves the last→first seam vs baseline for both person and environment. Residual slight jitter on B remains; identity/composition notes not separately scored in this pass.
 
-## Score sheet (filled)
+## Check 2 — ChatGPT independent visual scores
+
+**Pending.** Fill `notes/chatgpt_i2v_review_request.md` after watching person/environment `A_x3` vs `B_x3` (and `source.png`). Do not rubber-stamp Check 1.
+
+## Score sheet (human filled)
 
 | case | A seam | B seam | identity vs source | winner |
 |------|--------|--------|--------------------|--------|
