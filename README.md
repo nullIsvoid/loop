@@ -40,11 +40,15 @@ pip install -e .[dev]
 pytest
 ```
 
-## Cloud generate (A vs B)
+## Cloud generate
 
 ```bash
-python scripts/cloud_mode_b_generate.py --schedule symmetric   # default
-python scripts/cloud_mode_b_generate.py --schedule loopy
+# Text-to-video A/B
+python scripts/cloud_mode_b_generate.py --schedule symmetric
+
+# Image-to-video A/B (same TI2V-5B; pass --image)
+python scripts/cloud_mode_b_i2v.py --image /path/to/wallpaper.png --case-id person \
+  --prompt "Subtle hair and clothing sway, seamless loop, preserve identity"
 ```
 
 ## Non-goals
