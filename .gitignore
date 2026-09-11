@@ -7,3 +7,7 @@ dist/
 build/
 *.egg-info/
 .idea/
+
+# Schedule / future experiments: keep metadata in git, not full videos.
+artifacts/mode_b_schedules/**/*.mp4
+artifacts/mode_b_schedules/**/*_x3.mp4

@@ -14,6 +14,7 @@ from latent_loop.rope.schedule import (
     FixedShiftSchedule,
     IdentityShiftSchedule,
     LoopyShiftSchedule,
+    SymmetricShiftSchedule,
     list_layer_time_shifts,
 )
 
@@ -77,6 +78,14 @@ def test_identity_and_fixed_schedules_keep_block0_anchor():
     assert IdentityShiftSchedule().time_shift(3, 8) == 0
     assert FixedShiftSchedule(7).time_shift(0, 8) == 0
     assert FixedShiftSchedule(7).time_shift(2, 8) == 7
+
+
+def test_symmetric_schedule_bidirectional_then_mod_f():
+    sched = SymmetricShiftSchedule()
+    assert sched.time_shift(0, 21) == 0
+    # signed intent: +1,-1,+2,-2 ; applied as % F  (-1%21==20, -2%21==19)
+    assert list_layer_time_shifts(7, 21, sched) == [0, 1, 20, 2, 19, 3, 18]
+    assert sched.time_shift(2, 21) == 20
 
 
 def test_roll_only_on_temporal_axis():

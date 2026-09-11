@@ -1,81 +1,40 @@
 # Development status
 
-> ACTIVE — Mode B scaffold approved (2026-09-11 ChatGPT).
-> Primary: official Wan `rope_apply` / `WanSelfAttention` Loopy-style RoPE roll.
-> Comfy adapter deferred. Residual mix = Mode C control only.
+> ACTIVE — Mode B (Loopy-style RoPE roll) **validated by human seam check**.
+> Next: **shift schedule geometry** comparison (not “Loopy parameter sweep”).
 
 ## Terminology
 
 - **Loopy-style RoPE roll**: per-block `torch.roll` on expanded `freqs_3d` temporal axis only.
-- **Not claimed:** mathematical periodic / circular RoPE. Closed-loop effect needs real Wan experiments.
-- Stricter periodic encodings remain a later comparable strategy under the same schedule interface.
+- **Not claimed:** mathematical periodic / circular RoPE.
+- **LoopyShiftSchedule has no tunable parameters** — it is a fixed formula. “Parameter sweep” is wrong wording; compare **schedule geometries** instead.
 
 ## Owned now
 
-ChatGPT-owned (do not rewrite without sync):
-
-- `src/latent_loop/ring.py`
-- `tests/test_ring.py`
-- residual helpers currently in `ring.py` (`RingLatentProcessor`, etc.)
-
-Cursor-owned (Mode B):
-
-- `src/latent_loop/rope/`
-- `src/latent_loop/adapters/wan/`
-- `tests/test_rope_roll.py`, `tests/test_wan_rope_adapter.py`
-- `notes/wan_rope_call_chain.md`
-
-## Layout
-
-```text
-src/latent_loop/
-├── ring.py                 # topology primitives (ChatGPT)
-├── rope/
-│   ├── core.py             # F-axis freqs roll + Wan-shaped apply
-│   └── schedule.py         # injectable TemporalShiftSchedule
-└── adapters/wan/
-    ├── rope.py             # wan_rope_apply
-    └── attention.py        # Mode B hook for WanSelfAttention
-```
+ChatGPT-owned: `ring.py` / residual helpers / `tests/test_ring.py`  
+Cursor-owned: `rope/`, `adapters/wan/`, generate/compare scripts, experiment notes
 
 ## Experiment priority
 
 | Mode | Meaning | Role |
 |------|---------|------|
-| A | Wan baseline | baseline |
-| B | Wan + Loopy-style RoPE roll | **PRIMARY** |
-| C | Wan + residual ring mix | CONTROL |
-| D | RoPE + residual | later |
-| E | Mobius-style latent shift | later对照 |
-
-## Rules (Mode B)
-
-1. Match Loopy behaviour first — no new circular RoPE formula yet.
-2. Roll temporal F only; never H/W.
-3. Apply to Q/K multipliers only; never V.
-4. Block 0 unshifted (anchor).
-5. Disabled Mode B == baseline `rope_apply`.
-6. Do not modify `ring.py` / `RingLatentProcessor`.
-7. No Comfy adapter yet.
-8. Do not touch diffusion `t`, scheduler, token order, or global `rope_params`.
-9. Shift schedule injectable (`LoopyShiftSchedule` default; Fixed/Identity ready).
-10. Tests: F-only roll + shape/dtype/device + Loopy numerical parity.
+| A / S0 | Wan + Identity shifts | baseline |
+| B / S1 | Wan + Loopy schedule | **validated winner (first A/B)** |
+| S2 | FixedShift(1) | geometry对照 |
+| S3 | Symmetric ± shifts | geometry对照 |
+| C | residual ring mix | CONTROL (later) |
+| E | Mobius latent shift | later |
 
 ## Current work
 
-1. ~~Analysis + ChatGPT inject-point ack~~
-2. ~~Mode B scaffold + Loopy parity unit tests~~
-3. ~~Cloud one-step WanModel forward smoke~~
-4. **Done:** first real A/B full generate → `artifacts/mode_b_real/` (`GENERATE_OK`). See `RESULT.md`.
-5. **Human gate: VERDICT (1)** — B clearly smoother on last→first than A (`RESULT.md`).
-6. **Next:** LoopyShiftSchedule parameter sweep (same seed/prompt/F); then raise steps/resolution; then task coverage. No residual-mix pivot.
+1. ~~Loopy parity + Wan adapter + full A/B generate~~
+2. ~~Human verdict (199f111): B clearly smoother than A~~
+3. **Now:** S0 Identity / S1 Loopy / S2 Fixed(1) / S3 Symmetric — same seed/prompt/F/steps
+4. Git policy: **do not commit every schedule MP4**; keep metadata + RESULT + selected previews only. First A/B videos in `artifacts/mode_b_real/` may stay.
 
+## Schedule formulas
 
-
-## Collaboration protocol
-
-Disagreement → Exchange inbox → wait → then code. See prior resolved Q1–Q3.
-
-### Exchange inbox
-
-_(empty — Mode B scaffold approved)_
+- Identity: all `0`
+- Loopy: `0`, then `(i-1)%(F-1)+1`
+- Fixed(1): `0`, then `1` (mod F)
+- Symmetric: `0, +1, -1, +2, -2, ...` applied as `s % F`

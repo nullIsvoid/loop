@@ -52,7 +52,30 @@ class FixedShiftSchedule:
             raise ValueError("num_latent_frames must be >= 2")
         if block_idx == 0:
             return 0
-        return int(self.shift)
+        return int(self.shift) % int(num_latent_frames)
+
+
+@dataclass(frozen=True)
+class SymmetricShiftSchedule:
+    """Bidirectional circular propagation with block-0 anchor.
+
+    Sequence of shifts (before modulo ``F``)::
+
+        0, +1, -1, +2, -2, +3, -3, ...
+
+    Applied as ``s % F`` so torch.roll stays on the temporal ring.
+    """
+
+    def time_shift(self, block_idx: int, num_latent_frames: int) -> int:
+        if block_idx < 0:
+            raise ValueError("block_idx must be >= 0")
+        if num_latent_frames < 2:
+            raise ValueError("num_latent_frames must be >= 2")
+        if block_idx == 0:
+            return 0
+        k = (block_idx + 1) // 2
+        signed = k if (block_idx % 2 == 1) else -k
+        return int(signed % num_latent_frames)
 
 
 def list_layer_time_shifts(
