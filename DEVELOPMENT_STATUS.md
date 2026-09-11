@@ -64,8 +64,10 @@ src/latent_loop/
 ## Current work
 
 1. ~~Analysis + ChatGPT inject-point ack~~
-2. **Done:** Mode B scaffold + Loopy parity unit tests (CPU, no Wan install)
-3. **Next:** real Wan TI2V/T2V smoke with `enable_mode_b_on_wan_model` (cloud), then seam metrics
+2. ~~Mode B scaffold + Loopy parity unit tests~~
+3. **Done (cloud smoke):** official `WanModel` TI2V-5B on RTX 4090 — Mode A vs Mode B one-step forward OK (`SMOKE_OK`). Script: `scripts/cloud_mode_b_smoke.py`
+4. **Next:** short real generate (few steps / low res) + triple-play seam look; still not Comfy
+
 
 ## Collaboration protocol
 
