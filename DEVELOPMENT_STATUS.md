@@ -67,7 +67,8 @@ src/latent_loop/
 2. ~~Mode B scaffold + Loopy parity unit tests~~
 3. ~~Cloud one-step WanModel forward smoke~~
 4. **Done:** first real A/B full generate → `artifacts/mode_b_real/` (`GENERATE_OK`). See `RESULT.md`.
-5. **Human gate:** watch `A_x3.mp4` vs `B_x3.mp4` last→first seam; then choose branch 1/2/3 in RESULT.md
+5. **Human gate: VERDICT (1)** — B clearly smoother on last→first than A (`RESULT.md`).
+6. **Next:** LoopyShiftSchedule parameter sweep (same seed/prompt/F); then raise steps/resolution; then task coverage. No residual-mix pivot.
 
 
 

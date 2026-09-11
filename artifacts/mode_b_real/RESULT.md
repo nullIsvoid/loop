@@ -24,12 +24,15 @@ See `artifacts/mode_b_real/`:
 - `A_x3.mp4` / `B_x3.mp4` (triple play for seam)
 - first/last PNGs + `run.json`
 
-## Visual check (human)
+## Visual check (human) — VERDICT 2026-09-11
 
-Play **`A_x3.mp4`** then **`B_x3.mp4`**. Focus only on **last → first** cut.
+**Decision: (1) A jumps, B clearly smoother.**
 
-Do **not** treat this as scored; decide among:
+User watched `A_x3.mp4` / `B_x3.mp4` and confirmed Mode B (Loopy-style RoPE roll) is **clearly better** on the last→first seam than baseline A.
 
-1. A jumps, B clearly smoother → continue Loopy schedule experiments  
-2. Both jump differently → try stricter periodic RoPE variants  
-3. B worse → Loopy schedule/geometry likely wrong for TI2V-5B; do not pivot to residual mix
+Implication (agreed branch):
+1. Keep Mode B as primary track
+2. Next: **LoopyShiftSchedule parameter experiments** (not residual mix, not Comfy)
+3. Then: normal steps → normal resolution → TI2V / T2V / I2V coverage
+
+Do **not** pivot to residual mix. Do **not** jump to “true periodic RoPE” until schedule/params are explored on this winning geometry.
