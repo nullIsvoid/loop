@@ -1,4 +1,4 @@
-# Mode B I2V — first product gate
+# Mode B I2V — ready for human / ChatGPT review
 
 ## Question
 
@@ -7,18 +7,23 @@ composition while adding gentle motion and a loopable last→first seam?
 
 ## Setup
 
-- Model: Wan2.2 TI2V-5B **I2V** path (`img=PIL.Image`, not `img=None`)
-- A = baseline Wan I2V
-- B = Wan I2V + `SymmetricShiftSchedule`
-- Shared: seed=42, 81 frames, 20 steps, CFG=5, UniPC, max_area=704×1280
+- Model: Wan2.2 TI2V-5B **I2V** (`img=PIL.Image`)
+- A = baseline · B = Symmetric
+- seed=42, 81 frames, 20 steps, CFG=5, UniPC, max_area=704×1280
+- Cloud: `ALL_I2V_OK`
 
 ## Cases
 
-| case | source | motion ask |
-|------|--------|------------|
-| `person` | product live-wallpaper still | hair / clothing hem slight sway |
-| `environment` | official Wan `i2v_input.JPG` (water/coast) | water / light / ambient motion |
+| case | source | output size | watch |
+|------|--------|-------------|-------|
+| `person/` | product live-wallpaper still | 800×1088 | hair/cloth sway + seam + identity |
+| `environment/` | Wan official `i2v_input` (cat/coast water) | 800×1088 | water/ambient + seam + identity |
 
-## Watch
+## Score sheet
 
-For each case: `source.png` vs `A_x3.mp4` vs `B_x3.mp4` — seam **and** identity.
+| case | A seam | B seam | identity vs source | winner |
+|------|--------|--------|--------------------|--------|
+| person | | | | |
+| environment | | | | |
+
+Play `A_x3.mp4` / `B_x3.mp4` next to `source.png`. Full single-loop mp4s stay on cloud.

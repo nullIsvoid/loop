@@ -17,3 +17,5 @@ artifacts/mode_b_phase_scenes/**/*.mp4
 artifacts/mode_b_i2v/_sources/
 scripts/_tmp_*.sh
 
+artifacts/mode_b_i2v/_inputs/
+
