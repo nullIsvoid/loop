@@ -26,6 +26,14 @@ Implication:
 - Monotonic Loopy is **not uniquely required** for a usable seam here; Fixed(1) and Symmetric also work visually.
 - Next should refine **how to discriminate S1/S2/S3** (harder prompt, more steps, second seed, or motion-heavy subject) — not jump to Comfy / residual / true periodic RoPE yet.
 
+## Check 2 — Automated metrics
+
+See `artifacts/seam_metrics/seam_metrics.md`. Candle majority rank prefers **S1_loopy**, with S2/S3 close; S0 worst. Soft flame may not discriminate geometry — phase scenes do.
+
+## Check 3 — ChatGPT
+
+Pending full matrix scores in `notes/chatgpt_review_request.md`.
+
 ## Videos in repo (for ChatGPT review)
 
 - `S0_identity_x3.mp4`

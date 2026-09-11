@@ -1,36 +1,38 @@
 # Development status
 
-> ACTIVE — Mode B works. Emerging candidate: **SymmetricShiftSchedule (S3)** on phase-clear motion.
+> ACTIVE — Mode B works. Multi-check in progress: human + automated metrics both lean **S3 Symmetric** on phase-clear scenes; **ChatGPT visual pass pending**.
 
-## Human results
+## Multi-check results
 
 ### Candle (seed 42)
 
-| S0 Identity | S1 Loopy | S2 Fixed(1) | S3 Symmetric |
-|--|--|--|--|
-| ❌ jitter | ✅ | ✅ | ✅ |
+| Check | S0 | S1 Loopy | S2 Fixed(1) | S3 Symmetric |
+|--|--|--|--|--|
+| Human | ❌ jitter | ✅ | ✅ | ✅ |
+| Metrics majority | worst | **best** | tied 2nd | tied 2nd |
 
-### Phase scenes (seed 42) — 2026-09-12
+### Phase scenes (seed 42)
 
-User report (seam only; ignore image quality):
-
-- **pendulum / S3**: no visible jitter  
-- **rotating_fan / S3**: no visible jitter  
-- **human_sway / S3**: **least jitter, almost none**
-
-→ S3 is the current preferred geometry for harder periodic motion.
+| Check | Result |
+|--|--|
+| Human (S3 focus) | pendulum/fan no jitter; human_sway almost none |
+| Metrics majority | **S3 wins** all three scenes; S0 worst |
+| ChatGPT visual | **pending** — see `notes/chatgpt_review_request.md` |
 
 ## Open product implication
 
-If S3 stays best after any remaining S1/S2 contrast notes:
+Pending ChatGPT scores. If S3 stays best across checks:
 
-- Default candidate may become **Symmetric** (or still Fixed(1) if later shown equal — not yet claimed equal on phase scenes)
-- Loopy monotonic schedule is **not uniquely required** for usable seams
+- Default candidate → **SymmetricShiftSchedule**
+- Loopy monotonic is **not uniquely required** for usable seams
 
 ## Git policy
 
-Full single-loop MP4s on cloud. Repo: metadata + `*_x3.mp4` + RESULT.
+Full single-loop MP4s on cloud. Repo: metadata + `*_x3.mp4` + RESULT + seam_metrics.
 
-## Next (after ChatGPT sync)
+## Next
 
-Confirm full matrix notes for S0/S1/S2 on phase scenes if needed; then decide default schedule + optional second-seed only on survivors. Still not Comfy / residual / “true periodic RoPE” yet.
+1. ChatGPT fills independent 0–2 seam scores for full S0–S3 matrix  
+2. Merge three checks → freeze default schedule  
+3. Optional second-seed only on survivors  
+Still not Comfy / residual / “true periodic RoPE”.
