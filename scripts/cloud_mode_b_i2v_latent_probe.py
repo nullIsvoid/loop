@@ -49,9 +49,23 @@ OUT_ROOT = Path(
 )
 
 
-def _temporal_indices(f: int) -> list[int]:
-    # F-3..F-1, 0..2 on a ring of length F
-    return [(f - 3) % f, (f - 2) % f, (f - 1) % f, 0, 1, 2]
+def _probe_labels(half_window: int) -> list[str]:
+    """Labels F-k..F-1 | 0..k for half_window=k."""
+    if half_window < 1:
+        raise ValueError("half_window must be >= 1")
+    return [f"F-{k}" for k in range(half_window, 0, -1)] + [
+        str(k) for k in range(half_window + 1)
+    ]
+
+
+def _temporal_indices(f: int, half_window: int = 3) -> list[int]:
+    # F-k..F-1, 0..k on a ring of length F
+    labels_n = 2 * half_window + 1
+    if f < labels_n:
+        raise ValueError(f"latent F={f} too short for half_window={half_window}")
+    return [(f - k) % f for k in range(half_window, 0, -1)] + list(
+        range(half_window + 1)
+    )
 
 
 def _save_latent_probe(
@@ -59,12 +73,18 @@ def _save_latent_probe(
     out_dir: Path,
     step_i: int,
     tag: str,
+    *,
+    half_window: int = 3,
 ) -> dict:
-    """latent: [C, F, H, W] on device/cpu."""
+    """latent: [C, F, H, W] on device/cpu.
+
+    ``half_window=3`` → F-3..2 (legacy). ``half_window=4`` → F-4..4 (D2).
+    """
     x = latent.detach().float().cpu()
-    c, f, h, w = x.shape
-    idxs = _temporal_indices(f)
-    slice_ = x[:, idxs, :, :].contiguous()  # [C, 6, H, W]
+    _c, f, _h, _w = x.shape
+    labels = _probe_labels(half_window)
+    idxs = _temporal_indices(f, half_window)
+    slice_ = x[:, idxs, :, :].contiguous()
     out_dir.mkdir(parents=True, exist_ok=True)
     pt_path = out_dir / f"step{step_i:02d}_{tag}_slices.pt"
     torch.save(
@@ -73,15 +93,15 @@ def _save_latent_probe(
             "tag": tag,
             "latent_shape": list(x.shape),
             "indices": idxs,
-            "labels": ["F-3", "F-2", "F-1", "0", "1", "2"],
+            "labels": labels,
+            "half_window": half_window,
             "slices": slice_,
         },
         pt_path,
     )
 
-    # Channel-mean montage for human glance (6 panels)
     panels = []
-    for j, lab in enumerate(["F-3", "F-2", "F-1", "0", "1", "2"]):
+    for j, _lab in enumerate(labels):
         m = slice_[:, j].mean(0).numpy()
         m = m - m.min()
         m = m / max(float(m.max()), 1e-6)
@@ -91,24 +111,33 @@ def _save_latent_probe(
     montage = np.concatenate(panels, axis=1)
     _write_png(montage, out_dir / f"step{step_i:02d}_{tag}_montage.png")
 
-    # Pairwise L2 between consecutive labeled slices (incl. F-1→0 seam)
     diffs = {}
-    labels = ["F-3", "F-2", "F-1", "0", "1", "2"]
     for a, b in zip(labels, labels[1:]):
         ia, ib = labels.index(a), labels.index(b)
         d = torch.norm(slice_[:, ia] - slice_[:, ib]).item()
         diffs[f"{a}->{b}"] = d
-    # Also F-2→F-1 already in list; highlight seam
+
     seam = diffs["F-1->0"]
-    adj = float(np.mean([diffs["F-3->F-2"], diffs["F-2->F-1"], diffs["0->1"], diffs["1->2"]]))
+    seam_pair_mean = float(np.mean([diffs["F-1->0"], diffs["0->1"]]))
+    non_seam_keys = [k for k in diffs if k not in ("F-1->0", "0->1")]
+    adj = float(np.mean([diffs[k] for k in non_seam_keys])) if non_seam_keys else 0.0
+    all_vals = list(diffs.values())
+    max_key = max(diffs, key=diffs.get)
     meta = {
         "step": step_i,
         "tag": tag,
+        "half_window": half_window,
         "indices": idxs,
+        "labels": labels,
         "diffs_l2": diffs,
         "seam_l2": seam,
+        "seam_pair_mean_l2": seam_pair_mean,
         "adj_mean_l2": adj,
         "seam_vs_adj": seam / max(adj, 1e-6),
+        "max_adj_l2": float(max(all_vals)),
+        "max_adj_edge": max_key,
+        "median_adj_l2": float(np.median(all_vals)),
+        "max_vs_median": float(max(all_vals)) / max(float(np.median(all_vals)), 1e-6),
         "pt": str(pt_path),
     }
     (out_dir / f"step{step_i:02d}_{tag}_diffs.json").write_text(

@@ -1,22 +1,22 @@
 # Development status
 
-> **D1b done:** Coupled Anchor Release failed to flatten late double spike.  
-> Next candidate (await green-light): **D2 Circular Soft Conditioning**. Symmetric RoPE unchanged.
+> **D2 in flight:** Circular Soft I2V Conditioning (radius-2, fixed every step).  
+> Symmetric RoPE unchanged. No late release. No Circular Temporal Context.
 
-## Causal chain (agreed)
-
-T2V + Symmetric RoPE → latent seam flat.  
-I2V hard clamp of frame 0 → late F-1→0 **and** 0→1 spike.
+## Settled so far
 
 | knife | change | late outcome |
 |-------|--------|--------------|
-| B | hard latent + hard t0=0 | double spike |
+| B | hard latent + hard t0=0 | double spike at 0 |
 | D1 | soft latent + hard t0 | F-1→0 ↓, 0→1 ↑ |
-| D1b | soft latent + soft t0=(1-a)t | still double spike; env worse |
+| D1b | soft latent + soft t0 | still double spike; env worse |
 
-## Still held
+Single-point conditioning path closed (`1a8f63a`).
 
-- No Circular Temporal Context as first knife  
-- No S4/S5  
+## D2 = Circular Soft Conditioning
 
-D2 is now justified if product wants to continue: soft reference conditioning on the ring around index 0, not further single-point D1.x.
+Ring distance `d=min(i,F-i)`; weights 1.0 / 0.75 / 0.25 / 0 for d=0..≥3.  
+Coupled: `x_i=w·ref+(1-w)·gen`, `t_i=(1-w)·t`. Same weights all 20 steps.  
+Probe F-4..4 to detect pushed seams. Compare B vs D2 only.
+
+Script: `scripts/cloud_mode_b_i2v_d2_compare.py` → `artifacts/mode_b_i2v_d2/`.

@@ -1,31 +1,20 @@
-# ChatGPT sync — D1b failed; D2 justified
+# ChatGPT sync — D2 Circular Soft running
 
-## Experiment
+## Prior
 
-B / D1 / D1b × person + environment (seed=42, 81f, 20 steps, Symmetric RoPE). Frame 0 only.
+D1 / D1b closed single-point soft conditioning (`1a8f63a`).
 
-D1b: same `a` as D1; `latent0 = a·ref+(1-a)·gen`; `t0 = (1-a)·current_t`.
+## Now: D2 (green-lit)
 
-## Late (step 19) — person
+Radius-2 ring soft weights (fixed every step, no late release):
 
-| | F-1→0 | 0→1 | seam_vs_adj |
-|--|------:|----:|------------:|
-| B | 213 | 169 | 1.77 |
-| D1 | 175 | 192 | 1.37 |
-| D1b | 192 | 198 | 1.37 |
+| d | w | t factor |
+|---|---|----------|
+| 0 | 1.00 | 0 |
+| 1 | 0.75 | 0.25 |
+| 2 | 0.25 | 0.75 |
+| ≥3 | 0 | 1 |
 
-## Late — environment
+Compare **B vs D2** × person + environment. Probe **F-4..4**. Watch for spike push to ±2/±3 and visual pause at seam.
 
-| | F-1→0 | 0→1 | seam_vs_adj |
-|--|------:|----:|------------:|
-| B | 258 | 218 | 1.56 |
-| D1 | 247 | 247 | 1.42 |
-| D1b | 271 | 260 | 1.49 |
-
-## Conclusion
-
-Coupling timestep release with latent release **does not** remove the conditioning boundary. Single-point soft conditioning (latent-only or coupled) is insufficient.
-
-**Ask:** Green-light **D2 = Circular Soft Conditioning** (soft weights on ring neighbors of index 0), or stop / different hypothesis?
-
-Detail: `artifacts/mode_b_i2v_d1b/RESULT.md`
+Artifacts: `artifacts/mode_b_i2v_d2/` (in flight).
