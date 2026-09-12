@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""H1 / H1-A/B/C: Hunyuan + Symmetric Circular Temporal RoPE on person_loop_v1.
+"""H1 depth variants and H2-B2 anchor-only generation on person_loop_v1.
 
 Same inputs as H0. Only change: Mode B temporal freqs roll on img Q/K.
 Depth localization: ``--active-blocks 0-17|18-35|36-53`` (same schedule,
@@ -49,6 +49,7 @@ DEPTH_SLICES = {
     "H1-A": ("0-17", "hunyuan15_symmetric_depth_0_17"),
     "H1-B": ("18-35", "hunyuan15_symmetric_depth_18_35"),
     "H1-C": ("36-53", "hunyuan15_symmetric_depth_36_53"),
+    "H2-B2": ("2", "hunyuan15_anchor_block2"),
 }
 
 
@@ -67,7 +68,7 @@ def parse_args() -> argparse.Namespace:
         type=str,
         default="H1",
         choices=sorted(DEPTH_SLICES.keys()),
-        help="H1=full; H1-A/B/C=depth thirds on 54-block 480p_i2v",
+        help="H1=full; H1-A/B/C=depth thirds; H2-B2=block 2 half-period shift",
     )
     p.add_argument(
         "--active-blocks",
@@ -145,7 +146,11 @@ def main() -> None:
         enable_mode_b_on_hunyuan_transformer,
         parse_active_block_spec,
     )
-    from latent_loop.rope.schedule import SymmetricShiftSchedule, list_layer_time_shifts
+    from latent_loop.rope.schedule import (
+        SingleBlockHalfShiftSchedule,
+        SymmetricShiftSchedule,
+        list_layer_time_shifts,
+    )
 
     initialize_parallel_state(sp=int(os.environ.get("WORLD_SIZE", "1")))
     infer_args = SimpleNamespace(
@@ -203,7 +208,12 @@ def main() -> None:
         overlap_group_offloading=True,
     )
 
-    schedule = SymmetricShiftSchedule()
+    # H2-B2 必须复用锚点探测的半周期位移，不能误用 Block 2 的对称调度位移。
+    if args.experiment_id == "H2-B2":
+        schedule = SingleBlockHalfShiftSchedule(target_block=2)
+    else:
+        schedule = SymmetricShiftSchedule()
+    schedule_name = type(schedule).__name__
     # Approximate F from pixel frames (Wan-style 4n+1 → latent); Hunyuan VAE t-factor=4.
     approx_tt = (video_length - 1) // 4 + 1
     pipe.transformer._latent_loop_num_latent_frames = approx_tt  # type: ignore[attr-defined]
@@ -272,8 +282,13 @@ def main() -> None:
         "note": "full-depth H1 failed; near dual spike",
     }
 
-    is_depth = args.experiment_id != "H1"
+    is_anchor_generation = args.experiment_id == "H2-B2"
+    is_depth = args.experiment_id != "H1" and not is_anchor_generation
     question = (
+        "Does a half-period temporal RoPE shift on anchor Block 2 alone reduce "
+        "Hunyuan F-1→0 without worsening 0→1 vs H0?"
+        if is_anchor_generation
+        else
         f"Depth slice {active_spec}: which third of the 54 double blocks "
         "turns H0's single main seam into H1's near dual spike?"
         if is_depth
@@ -287,7 +302,7 @@ def main() -> None:
         "experiment_id": args.experiment_id,
         "name": run_name,
         "mode_b_rope": True,
-        "rope_schedule": "SymmetricShiftSchedule",
+        "rope_schedule": schedule_name,
         "active_blocks_spec": active_spec,
         "active_blocks": None if active_set is None else sorted(active_set),
         "n_active_blocks": n_active,
@@ -340,11 +355,20 @@ def main() -> None:
         question=question,
         late=run["late"],
         notes=[
-            "Same inputs as H0; only Symmetric Circular Temporal RoPE added.",
-            f"Active blocks: {active_spec} (schedule still global Symmetric).",
-            "Judge vs H0: F-1→0 and 0→1; locate which depth harms.",
+            f"Same inputs as H0; only {schedule_name} temporal RoPE added.",
+            f"Active blocks: {active_spec}.",
+            (
+                "H2-B2 uses the probe-matched floor(F/2) shift on Block 2 only."
+                if is_anchor_generation
+                else "Depth variants retain the global Symmetric schedule."
+            ),
+            "Judge vs H0: F-1→0 and 0→1; reject any new ring wall.",
             "Visual: out_x3 jump/stall/reverse/speed-pop only.",
-            "No new schedule; W5/WA paused for this depth-loc pass.",
+            (
+                "This is one anchor-only generation check, not a schedule sweep."
+                if is_anchor_generation
+                else "No new schedule; W5/WA paused for this depth-loc pass."
+            ),
         ],
     )
     print(

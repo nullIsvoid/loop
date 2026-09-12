@@ -78,6 +78,30 @@ class SymmetricShiftSchedule:
         return int(signed % num_latent_frames)
 
 
+@dataclass(frozen=True)
+class SingleBlockHalfShiftSchedule:
+    """Shift one target block by half of the latent temporal period.
+
+    This is the generation counterpart of the Loopy-style anchor probe: all
+    non-target blocks retain their native temporal RoPE phase.
+    """
+
+    target_block: int
+
+    def __post_init__(self) -> None:
+        if self.target_block < 0:
+            raise ValueError("target_block must be >= 0")
+
+    def time_shift(self, block_idx: int, num_latent_frames: int) -> int:
+        if block_idx < 0:
+            raise ValueError("block_idx must be >= 0")
+        if num_latent_frames < 2:
+            raise ValueError("num_latent_frames must be >= 2")
+        if block_idx != self.target_block:
+            return 0
+        return int(num_latent_frames // 2)
+
+
 def list_layer_time_shifts(
     num_layers: int,
     num_latent_frames: int,
