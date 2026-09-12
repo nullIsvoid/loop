@@ -22,9 +22,11 @@ Locked at commit lineage through `5c7f59c` (D3 failed) and A14B architecture pro
 | model | role |
 |-------|------|
 | Wan2.2 TI2V-5B | W5 baseline + hard-conditioning failure case |
-| Wan2.2 I2V-A14B | WA architecture control (independent `y`) |
-| HunyuanVideo-1.5 | H primary development target |
-| LTX-2.x | later guiding-latent reference only |
+| Wan2.2 I2V-A14B | primary I2V backbone: independent `y` conditioning + future Loopy anchor/grouped shifts |
+| HunyuanVideo-1.5 | second backbone + cross-model validator for non-destructive conditioning and Loopy layer sensitivity |
+| LTX-2.x | official design reference for Guiding Latents versus Replacing Latents |
+| Loopy | primary circular-time method: alpha measurement, anchor selection, grouped per-layer temporal RoPE shifts |
+| Mobius | fallback circular-time method based on denoising-time latent cycle/rotation |
 
 ## Phase map (new IDs)
 
@@ -33,11 +35,15 @@ Locked at commit lineage through `5c7f59c` (D3 failed) and A14B architecture pro
 3. **Circular RoPE** — W5-1 / WA-1 / H1 only after natives  
 4. CTC / surgery — not authorized
 
-Ideal minimal stack after H1:
+Target main stack:
 
 ```text
-HunyuanVideo-1.5
-  + native non-destructive I2V conditioning
-  + Symmetric Circular Temporal RoPE
+Wan2.2-I2V-A14B
+  + native non-destructive image conditioning
+  + Loopy anchor-based grouped temporal RoPE shifts
   → seamless I2V candidate
 ```
+
+`SymmetricShiftSchedule` (`0,+1,-1,+2,-2,...`) is retained only as early experimental evidence. It is not the formal Loopy algorithm and is not the target production schedule.
+
+See `RESEARCH_DIRECTION.md` for the authoritative source/method/model mapping.

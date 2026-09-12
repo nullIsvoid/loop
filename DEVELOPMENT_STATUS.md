@@ -3,6 +3,9 @@
 > **H1 full-depth Symmetric FAILED** (near dual spike).  
 > **Depth loc DONE**: no single third reproduces dual spike; H1-A slightly improves `F-1→0`.  
 > **Anchor probe 0–4**: α2 ≫ neighbors (Loopy-like). Do **not** run `--blocks all` until approved.
+> **H2-B2 generation DONE**: Block 2 half-period perturbation is a diagnostic generation, not the final Loopy schedule. Late `F-1→0` improved from 130.14 to 123.57; `0→1` from 87.00 to 84.22. The seam remains.
+
+Authoritative research direction: `RESEARCH_DIRECTION.md`. The primary target is Wan2.2-I2V-A14B non-destructive conditioning plus a Loopy anchor/grouped-shift circular-time policy. Hunyuan is the second backbone and cross-model validator.
 
 ## H0 / H1 / depth thirds (late)
 
@@ -20,12 +23,12 @@
 |--:|--:|------:|--:|--:|
 | 0.000322 | 0.000530 | **0.004106** | 0.000506 | 0.000341 |
 
-## Next (pick one before coding)
+## Next
 
-1. **Early 二分/扩窗** — stress-test H1-A (e.g. 0–8 / 0–26)
-2. **Early+mid 交互** — find when dual spike appears (still no new schedule)
-3. **Pause Hunyuan RoPE** — run W5-0 / WA-0 natives on `person_loop_v1`
-4. Or: approve full anchor scan `0–53` (separate from RoPE variants)
+1. Finish or deliberately widen Hunyuan `alpha_l` measurement before designing its grouped shift table; Block 2 is only the strongest candidate among 0–4.
+2. Port the same strict same-input `alpha_l` measurement to Wan2.2-I2V-A14B's 40-block dual-expert runtime.
+3. Implement an explicit A14B grouped Loopy schedule only after the measured layer map and high-/low-noise expert indexing are verified.
+4. Keep Mobius latent rotation as route B; do not mix it into the Loopy measurements.
 
 No S4/S5 until decided.
 

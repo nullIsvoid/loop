@@ -1,8 +1,12 @@
 # latent-loop
 
-**Status:** Wan Mode B default frozen as **Circular Temporal RoPE + Bidirectional Layer Phase Distribution** (`SymmetricShiftSchedule`).
+**Research direction:** **Wan2.2-I2V-A14B non-destructive image conditioning + Loopy anchor-based circular temporal positions**.
 
-## Mainline (validated)
+Read [`RESEARCH_DIRECTION.md`](RESEARCH_DIRECTION.md) first. It is the source of truth for the research goal, borrowed methods, model roles, and acceptance criteria.
+
+**Current status:** HunyuanVideo-1.5 is the second backbone and cross-model validator. Its Loopy-style anchor measurement found Block 2 as the strongest candidate among Blocks 0–4; the full 54-block scan is not complete.
+
+## Early experimental implementation (not the final Loopy policy)
 
 ```text
 Circular Temporal RoPE
@@ -11,7 +15,7 @@ WanSelfAttention Q/K only (V untouched)
         ↓
 expanded freqs_3d temporal roll
         ↓
-Symmetric layer phase: 0, +1, -1, +2, -2, …  (% F)
+Early symmetric layer phase: 0, +1, -1, +2, -2, …  (% F)
         ↓
 Wan2.2 TI2V-5B real T2V generation (batch=1 path validated)
 ```
@@ -25,7 +29,7 @@ from latent_loop.adapters.wan import enable_mode_b_on_wan_model
 enable_mode_b_on_wan_model(model, flash_attention_fn=flash_attention)
 ```
 
-Selectable schedules: `SymmetricShiftSchedule` (default), `LoopyShiftSchedule`, `FixedShiftSchedule`, `IdentityShiftSchedule`.
+Selectable schedules currently include `SymmetricShiftSchedule`, `LoopyShiftSchedule`, `FixedShiftSchedule`, and `IdentityShiftSchedule`. `SymmetricShiftSchedule` is our early experiment. The current `LoopyShiftSchedule` mirrors the simple non-distributed Loopy path, not the grouped 40-block A14B schedule.
 
 RoPE follows official Wan per-sample `seq_len = F*H*W` (padding left untouched). Equal-length unpadded batches still match historical Loopy `rope_apply_loop`.
 
