@@ -46,6 +46,7 @@ logging.basicConfig(
 # Measured 480p_i2v topology — not the older 20+40 assumption.
 DEPTH_SLICES = {
     "H1": ("all", "hunyuan15_symmetric"),
+    "H1-T2V": ("all", "hunyuan15_t2v_symmetric"),
     "H1-A": ("0-17", "hunyuan15_symmetric_depth_0_17"),
     "H1-B": ("18-35", "hunyuan15_symmetric_depth_18_35"),
     "H1-C": ("36-53", "hunyuan15_symmetric_depth_36_53"),
@@ -68,7 +69,10 @@ def parse_args() -> argparse.Namespace:
         type=str,
         default="H1",
         choices=sorted(DEPTH_SLICES.keys()),
-        help="H1=full; H1-A/B/C=depth thirds; H2-B2=block 2 half-period shift",
+        help=(
+            "H1=full I2V; H1-T2V=same full schedule without image condition; "
+            "H1-A/B/C=depth thirds; H2-B2=block 2 half-period shift"
+        ),
     )
     p.add_argument(
         "--active-blocks",
@@ -94,6 +98,7 @@ def main() -> None:
     import json
 
     args = parse_args()
+    task = "t2v" if args.experiment_id == "H1-T2V" else "i2v"
     slice_spec, default_run = DEPTH_SLICES[args.experiment_id]
     active_spec = (args.active_blocks or slice_spec).strip()
     run_name = args.run_name or default_run
@@ -171,7 +176,6 @@ def main() -> None:
     infer_state = initialize_infer_state(infer_args)
     torch.cuda.set_device(int(os.environ.get("LOCAL_RANK", "0")))
 
-    task = "i2v"
     transformer_version = HunyuanVideo_1_5_Pipeline.get_transformer_version(
         args.resolution, task, False, False, False
     )
@@ -255,7 +259,7 @@ def main() -> None:
             output_type="pt",
             prompt_rewrite=bool(args.rewrite),
             return_pre_sr_video=False,
-            reference_image=str(bench.source_path),
+            reference_image=None if task == "t2v" else str(bench.source_path),
         )
     finally:
         disable_mode_b_on_hunyuan_transformer(pipe.transformer)
@@ -283,11 +287,18 @@ def main() -> None:
     }
 
     is_anchor_generation = args.experiment_id == "H2-B2"
-    is_depth = args.experiment_id != "H1" and not is_anchor_generation
+    is_t2v_control = args.experiment_id == "H1-T2V"
+    is_depth = args.experiment_id not in ("H1", "H1-T2V") and not is_anchor_generation
     question = (
         "Does a half-period temporal RoPE shift on anchor Block 2 alone reduce "
         "Hunyuan F-1→0 without worsening 0→1 vs H0?"
         if is_anchor_generation
+        else (
+            "With the same full Symmetric Circular Temporal RoPE schedule as H1, "
+            "does Hunyuan T2V without image conditioning still develop the 0→1 / "
+            "F-1→0 dual spike?"
+        )
+        if is_t2v_control
         else
         f"Depth slice {active_spec}: which third of the 54 double blocks "
         "turns H0's single main seam into H1's near dual spike?"
@@ -307,6 +318,7 @@ def main() -> None:
         "active_blocks": None if active_set is None else sorted(active_set),
         "n_active_blocks": n_active,
         "conditioning_edits": False,
+        "reference_conditioning": task == "i2v",
         "benchmark": bench.as_metadata(),
         "model": {
             "family": "HunyuanVideo-1.5",
@@ -326,9 +338,10 @@ def main() -> None:
             "n_double_blocks": n_double,
             "n_single_blocks": n_single,
             "approx_tt": approx_tt,
-            "matched_to_h0": True,
+            "matched_to_h0": task == "i2v",
             "runtime_topology_note": (
-                "480p_i2v measured double=54 single=0 (not 20+40)"
+                f"{transformer_version} runtime measured double={n_double} "
+                f"single={n_single}"
             ),
         },
         "h0_baseline_late": h0_late,
@@ -355,11 +368,19 @@ def main() -> None:
         question=question,
         late=run["late"],
         notes=[
-            f"Same inputs as H0; only {schedule_name} temporal RoPE added.",
+            (
+                f"Same prompt/seed/frame count/steps/schedule as H1 I2V, but the "
+                f"official {transformer_version} T2V checkpoint is used and "
+                "reference_image=None."
+                if is_t2v_control
+                else f"Same inputs as H0; only {schedule_name} temporal RoPE added."
+            ),
             f"Active blocks: {active_spec}.",
             (
                 "H2-B2 uses the probe-matched floor(F/2) shift on Block 2 only."
                 if is_anchor_generation
+                else "T2V control has no image condition; schedule remains full-depth."
+                if is_t2v_control
                 else "Depth variants retain the global Symmetric schedule."
             ),
             "Judge vs H0: F-1→0 and 0→1; reject any new ring wall.",
@@ -367,6 +388,8 @@ def main() -> None:
             (
                 "This is one anchor-only generation check, not a schedule sweep."
                 if is_anchor_generation
+                else "Control for separating image-condition effects from schedule effects."
+                if is_t2v_control
                 else "No new schedule; W5/WA paused for this depth-loc pass."
             ),
         ],
