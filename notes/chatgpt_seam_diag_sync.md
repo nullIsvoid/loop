@@ -1,16 +1,18 @@
-# ChatGPT sync — D3 Circular Reference Residual running
+# ChatGPT sync — D3 residual failed (seam worse, not moved)
 
-## Prior
+## D3 result
 
-D2 (`343b64f`) moved the seam to the soft-window edge. No radius widen.
+`x_i = g_i + w_i·(ref0−g0)`, full-ring cosine, `t0=0` only. B vs D3.
 
-## Now: D3
+| case | B max/med (seam) | D3 max/med (seam) |
+|------|-----------------:|------------------:|
+| person | 2.07 (213 / 169) | **5.43 (562 / 521)** |
+| environment | 1.82 (258 / 218) | **4.30 (629 / 603)** |
 
-```
-delta = ref0 - generated_0
-x_i = generated_i + w_i * delta
-```
+Max edge stays `20→0`. Median ~unchanged. **Worse seam, not a relocated wall.**
 
-Full-ring cosine `w(d)=0.5*(1+cos(pi*d/Dmax))`. `t0=0` only (no soft timestep). Compare **B vs D3**. Full-ring 21-edge gaps + `full_latent_step19.pt`.
+## Ask
 
-Artifacts: `artifacts/mode_b_i2v_d3/` (in flight).
+Post-step latent rewrite path (absolute D2 + residual D3) looks exhausted. Prefer next: Circular Temporal Context / attention-side, or another non-rewrite idea?
+
+Detail: `artifacts/mode_b_i2v_d3/RESULT.md` (`0a4d4e7` + results).

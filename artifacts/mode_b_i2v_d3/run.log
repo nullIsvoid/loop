@@ -1,0 +1,93 @@
+[2026-09-12 06:20:06,842] WARNING: flash_attn not installed; using Wan attention() SDPA fallback for full generate
+[2026-09-12 06:20:07,385] INFO: Building WanTI2V once ...
+[2026-09-12 06:21:21,745] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B/models_t5_umt5-xxl-enc-bf16.pth
+[2026-09-12 06:21:29,643] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B/Wan2.2_VAE.pth
+[2026-09-12 06:21:31,459] INFO: Creating WanModel from /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 46.64it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+[2026-09-12 06:21:33,346] INFO: === person / B_hard_anchor ===
+/root/Wan2.2/wan/modules/vae2_2.py:1028: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+  0%|          | 0/20 [00:00<?, ?it/s]/root/Wan2.2/wan/modules/attention.py:166: UserWarning: Padding mask is disabled when using scaled_dot_product_attention. It can have a significant impact on performance.
+  warnings.warn(
+  5%|▌         | 1/20 [00:05<01:42,  5.38s/it] 10%|█         | 2/20 [00:10<01:36,  5.35s/it][2026-09-12 06:22:41,871] INFO: probe step=2 tag=early mode=B
+ 15%|█▌        | 3/20 [00:16<01:31,  5.36s/it] 20%|██        | 4/20 [00:21<01:25,  5.36s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.36s/it] 30%|███       | 6/20 [00:32<01:15,  5.36s/it] 35%|███▌      | 7/20 [00:37<01:09,  5.37s/it] 40%|████      | 8/20 [00:42<01:04,  5.39s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.39s/it] 50%|█████     | 10/20 [00:53<00:53,  5.39s/it][2026-09-12 06:23:24,974] INFO: probe step=10 tag=middle mode=B
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.40s/it] 60%|██████    | 12/20 [01:04<00:43,  5.40s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.41s/it] 70%|███████   | 14/20 [01:15<00:32,  5.41s/it] 75%|███████▌  | 15/20 [01:20<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 06:24:13,663] INFO: probe step=19 tag=late mode=B
+100%|██████████| 20/20 [01:47<00:00,  5.41s/it]100%|██████████| 20/20 [01:47<00:00,  5.39s/it]
+/root/Wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+[2026-09-12 06:24:52,827] INFO: person/B_hard_anchor done max_edge=20->0 max=212.7 med=102.8 max/med=2.068 F-1->0=212.7 0->1=168.7
+[2026-09-12 06:24:53,137] INFO: === person / D3_ref_residual ===
+[2026-09-12 06:25:44,169] INFO: D3 full-ring cosine F=21 w0=1.0000 w1=0.9755 w_antipode=0.0000
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.33s/it] 10%|█         | 2/20 [00:10<01:36,  5.34s/it][2026-09-12 06:26:01,934] INFO: probe step=2 tag=early mode=D3
+ 15%|█▌        | 3/20 [00:16<01:30,  5.35s/it] 20%|██        | 4/20 [00:21<01:25,  5.36s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.37s/it] 30%|███       | 6/20 [00:32<01:15,  5.37s/it] 35%|███▌      | 7/20 [00:37<01:09,  5.38s/it] 40%|████      | 8/20 [00:42<01:04,  5.38s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.39s/it] 50%|█████     | 10/20 [00:53<00:53,  5.39s/it][2026-09-12 06:26:45,052] INFO: probe step=10 tag=middle mode=D3
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.39s/it] 60%|██████    | 12/20 [01:04<00:43,  5.40s/it] 65%|██████▌   | 13/20 [01:09<00:37,  5.40s/it] 70%|███████   | 14/20 [01:15<00:32,  5.40s/it] 75%|███████▌  | 15/20 [01:20<00:26,  5.40s/it] 80%|████████  | 16/20 [01:26<00:21,  5.40s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.40s/it] 90%|█████████ | 18/20 [01:36<00:10,  5.40s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 06:27:33,681] INFO: probe step=19 tag=late mode=D3
+100%|██████████| 20/20 [01:47<00:00,  5.41s/it]100%|██████████| 20/20 [01:47<00:00,  5.39s/it]
+[2026-09-12 06:28:12,953] INFO: person/D3_ref_residual done max_edge=20->0 max=562.3 med=103.5 max/med=5.433 F-1->0=562.3 0->1=520.7
+[2026-09-12 06:28:13,414] INFO: === environment / B_hard_anchor ===
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.34s/it] 10%|█         | 2/20 [00:10<01:36,  5.36s/it][2026-09-12 06:29:22,110] INFO: probe step=2 tag=early mode=B
+ 15%|█▌        | 3/20 [00:16<01:31,  5.37s/it] 20%|██        | 4/20 [00:21<01:26,  5.38s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.38s/it] 30%|███       | 6/20 [00:32<01:15,  5.39s/it] 35%|███▌      | 7/20 [00:37<01:10,  5.40s/it] 40%|████      | 8/20 [00:43<01:04,  5.40s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.41s/it] 50%|█████     | 10/20 [00:53<00:54,  5.41s/it][2026-09-12 06:30:05,354] INFO: probe step=10 tag=middle mode=B
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.41s/it] 60%|██████    | 12/20 [01:04<00:43,  5.41s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.41s/it] 70%|███████   | 14/20 [01:15<00:32,  5.41s/it] 75%|███████▌  | 15/20 [01:20<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 06:30:54,052] INFO: probe step=19 tag=late mode=B
+100%|██████████| 20/20 [01:48<00:00,  5.42s/it]100%|██████████| 20/20 [01:48<00:00,  5.40s/it]
+[2026-09-12 06:31:29,668] INFO: environment/B_hard_anchor done max_edge=20->0 max=258.0 med=142.2 max/med=1.815 F-1->0=258.0 0->1=218.1
+[2026-09-12 06:31:30,091] INFO: === environment / D3_ref_residual ===
+[2026-09-12 06:32:21,177] INFO: D3 full-ring cosine F=21 w0=1.0000 w1=0.9755 w_antipode=0.0000
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.34s/it] 10%|█         | 2/20 [00:10<01:36,  5.34s/it][2026-09-12 06:32:38,591] INFO: probe step=2 tag=early mode=D3
+ 15%|█▌        | 3/20 [00:16<01:30,  5.35s/it] 20%|██        | 4/20 [00:21<01:25,  5.36s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.37s/it] 30%|███       | 6/20 [00:32<01:15,  5.37s/it] 35%|███▌      | 7/20 [00:37<01:09,  5.38s/it] 40%|████      | 8/20 [00:42<01:04,  5.38s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.39s/it] 50%|█████     | 10/20 [00:53<00:53,  5.39s/it][2026-09-12 06:33:21,730] INFO: probe step=10 tag=middle mode=D3
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.40s/it] 60%|██████    | 12/20 [01:04<00:43,  5.40s/it] 65%|██████▌   | 13/20 [01:09<00:37,  5.40s/it] 70%|███████   | 14/20 [01:15<00:32,  5.40s/it] 75%|███████▌  | 15/20 [01:20<00:27,  5.40s/it] 80%|████████  | 16/20 [01:26<00:21,  5.40s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.40s/it] 90%|█████████ | 18/20 [01:36<00:10,  5.40s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.40s/it][2026-09-12 06:34:10,351] INFO: probe step=19 tag=late mode=D3
+100%|██████████| 20/20 [01:47<00:00,  5.41s/it]100%|██████████| 20/20 [01:47<00:00,  5.39s/it]
+[2026-09-12 06:34:47,207] INFO: environment/D3_ref_residual done max_edge=20->0 max=629.3 med=146.4 max/med=4.298 F-1->0=629.3 0->1=603.2
+{
+  "ok": true,
+  "runs": [
+    {
+      "case_id": "person",
+      "variant": "B_hard_anchor",
+      "mode": "B",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/person/B_hard_anchor",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 212.66065979003906,
+      "late_median_gap_l2": 102.83312225341797,
+      "late_max_vs_median": 2.0680171439895245,
+      "late_seam_F-1->0": 212.66065979003906,
+      "late_seam_0->1": 168.65615844726562
+    },
+    {
+      "case_id": "person",
+      "variant": "D3_ref_residual",
+      "mode": "D3",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/person/D3_ref_residual",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 562.3060302734375,
+      "late_median_gap_l2": 103.49073028564453,
+      "late_max_vs_median": 5.433395133278293,
+      "late_seam_F-1->0": 562.3060302734375,
+      "late_seam_0->1": 520.7498168945312
+    },
+    {
+      "case_id": "environment",
+      "variant": "B_hard_anchor",
+      "mode": "B",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/environment/B_hard_anchor",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 258.0081481933594,
+      "late_median_gap_l2": 142.17605590820312,
+      "late_max_vs_median": 1.8147088589934157,
+      "late_seam_F-1->0": 258.0081481933594,
+      "late_seam_0->1": 218.0906524658203
+    },
+    {
+      "case_id": "environment",
+      "variant": "D3_ref_residual",
+      "mode": "D3",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/environment/D3_ref_residual",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 629.2998046875,
+      "late_median_gap_l2": 146.4000244140625,
+      "late_max_vs_median": 4.298495216829024,
+      "late_seam_F-1->0": 629.2998046875,
+      "late_seam_0->1": 603.1611938476562
+    }
+  ]
+}
+D3_COMPARE_OK

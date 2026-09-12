@@ -1,0 +1,75 @@
+{
+  "name": "mode_b_i2v_d3_ref_residual",
+  "question": "Does full-ring smooth reference residual (delta=ref0-g0 added as w_i*delta) keep the entire circular adjacent-gap profile smooth, unlike absolute ref copy (D2)?",
+  "attention_backend": {
+    "flash_attn_2": false,
+    "flash_attn_3": false,
+    "backend": "official_attention_sdpa_fallback"
+  },
+  "rope_schedule": "SymmetricShiftSchedule",
+  "profile": {
+    "kind": "full_ring_cosine_residual",
+    "formula": "w(d)=0.5*(1+cos(pi*d/Dmax)), Dmax=F//2",
+    "timestep": "t0=0 only; other frames current_t"
+  },
+  "shared": {
+    "seed": 42,
+    "steps": 20,
+    "frame_num": 81,
+    "max_area": 901120,
+    "guide_scale": 5.0,
+    "shift": 5.0,
+    "sample_solver": "unipc"
+  },
+  "runs": [
+    {
+      "case_id": "person",
+      "variant": "B_hard_anchor",
+      "mode": "B",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/person/B_hard_anchor",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 212.66065979003906,
+      "late_median_gap_l2": 102.83312225341797,
+      "late_max_vs_median": 2.0680171439895245,
+      "late_seam_F-1->0": 212.66065979003906,
+      "late_seam_0->1": 168.65615844726562
+    },
+    {
+      "case_id": "person",
+      "variant": "D3_ref_residual",
+      "mode": "D3",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/person/D3_ref_residual",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 562.3060302734375,
+      "late_median_gap_l2": 103.49073028564453,
+      "late_max_vs_median": 5.433395133278293,
+      "late_seam_F-1->0": 562.3060302734375,
+      "late_seam_0->1": 520.7498168945312
+    },
+    {
+      "case_id": "environment",
+      "variant": "B_hard_anchor",
+      "mode": "B",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/environment/B_hard_anchor",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 258.0081481933594,
+      "late_median_gap_l2": 142.17605590820312,
+      "late_max_vs_median": 1.8147088589934157,
+      "late_seam_F-1->0": 258.0081481933594,
+      "late_seam_0->1": 218.0906524658203
+    },
+    {
+      "case_id": "environment",
+      "variant": "D3_ref_residual",
+      "mode": "D3",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d3/environment/D3_ref_residual",
+      "late_max_gap_edge": "20->0",
+      "late_max_gap_l2": 629.2998046875,
+      "late_median_gap_l2": 146.4000244140625,
+      "late_max_vs_median": 4.298495216829024,
+      "late_seam_F-1->0": 629.2998046875,
+      "late_seam_0->1": 603.1611938476562
+    }
+  ],
+  "note": "No D2 radius widen. No soft timestep spread. No Circular Temporal Context. D1/D1b/D2 not re-run."
+}
