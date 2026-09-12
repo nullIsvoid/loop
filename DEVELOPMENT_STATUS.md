@@ -1,29 +1,27 @@
 # Development status
 
-> **Next: residual-seam localization (B only).** No S4/S5. No sample expansion.  
-> Decoded frame+flow diagnostics landed; latent early/mid/late probes next when cloud is up.
+> Residual seam on Mode B I2V localizes to **late denoise**, not early RoPE topology.  
+> Next candidate when scoped: Circular Temporal Context (content across F-1→0). No S4/S5.
 
 ## Current latent handling
 
-**Active:** Circular Temporal RoPE on attention Q/K (`SymmetricShiftSchedule`), V untouched.  
+**Active:** Circular Temporal RoPE on Q/K (`SymmetricShiftSchedule`), V untouched.  
 **Not active:** residual ring mix, true periodic RoPE, circular temporal context.  
 Details: `notes/current_latent_path.md`.
 
-## Mode B I2V — human 2026-09-12
+## Seam diagnostics (B only) — filled
 
-| case | A | B | winner |
-|--|--|--|--|
-| person | more obvious jitter | slight jitter | **B** |
-| environment | more obvious jitter | slight jitter | **B** |
+Decoded flow: person strong seam/adj + dx flip; environment milder.  
+Latent `seam_vs_adj`: early/mid **&lt;1**, late **~1.6–1.8** (person + environment).
 
-## Seam diagnostics (B only) — in progress
+→ Prefer investigating **circular temporal context / latent shift** over more schedule geometry or periodic RoPE-as-first-fix.
 
-Decoded 75–80 / 0–5 + flow strips: `artifacts/mode_b_i2v_seam_diag/`.  
-Person: seam flow ≫ adj + **dx sign flip**. Environment: milder mag bump.  
-Latent probes (steps 2/10/19): script ready, cloud run pending.
+## Mode B I2V — human
 
-## Still forbidden
+A clearer jitter, B slight residual — B wins. Artifacts under `artifacts/mode_b_i2v/`.
 
-- No new schedules for curiosity  
-- No seam_metrics → Gate/Repair  
-- No implementing D (periodic RoPE / circular context) until latent stage is classified  
+## Still forbidden until explicitly scoped
+
+- No S4/S5  
+- No Gate/Repair metrics  
+- No implementing D until you green-light the candidate  

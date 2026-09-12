@@ -1,0 +1,24 @@
+{
+  "case_id": "person",
+  "schedule": "SymmetricShiftSchedule",
+  "seed": 42,
+  "steps": 20,
+  "probe_steps": [
+    2,
+    10,
+    19
+  ],
+  "elapsed_sec": 190.14,
+  "video_shape": [
+    3,
+    81,
+    1088,
+    800
+  ],
+  "attention_backend": {
+    "flash_attn_2": false,
+    "flash_attn_3": false,
+    "backend": "official_attention_sdpa_fallback"
+  },
+  "note": "Mode B only. No new schedule. Latent probes auxiliary."
+}
