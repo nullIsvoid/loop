@@ -25,3 +25,7 @@ A clearer jitter, B slight residual — B wins. Artifacts under `artifacts/mode_
 - No S4/S5  
 - No Gate/Repair metrics  
 - No implementing D until you green-light the candidate  
+
+## ChatGPT
+
+Sync note: `notes/chatgpt_seam_diag_sync.md` — please confirm late-seam readout and next D = Circular Temporal Context.
