@@ -1,20 +1,23 @@
 # Development status
 
-> **D2 done:** Circular Soft (radius-2) **moved** the seam to the conditioning window edge.  
-> Do **not** auto-widen radius. Need a new hypothesis.
+> **D3 in flight:** Circular Reference Residual Conditioning (full-ring cosine).  
+> Not D2 radius widen. Absolute ref copy excluded.
 
-## Settled knives
+## Settled exclusions
 
-| knife | late outcome |
-|-------|--------------|
-| B hard single-point | double spike at 0 |
-| D1 / D1b soft single-point | spike remains / worsens |
-| **D2 circular soft r2** | F-1→0 / 0→1 collapse; **new max at 2→3 or 3→4** |
+| knife | failure |
+|-------|---------|
+| B / D1 / D1b | boundary at index 0 |
+| D2 absolute ref soft window | boundary at window edge |
 
-## Still held
+## D3 = Circular Reference Residual
 
-- Symmetric Circular Temporal RoPE mainline  
-- No S4/S5  
-- Metrics auxiliary  
+```
+delta = ref0 - g0
+x_i = g_i + w_i * delta
+w(d) = 0.5 * (1 + cos(pi * d / Dmax))   # full ring, Dmax=F//2
+```
 
-Next: change approach — not D2.x radius sweep. Candidates TBD with ChatGPT (context / different blend / other).
+`w_0=1` → `x_0=ref0`. Timestep: **t0=0 only**. Probe: full F adjacent gaps + step19 full latent.
+
+Script: `scripts/cloud_mode_b_i2v_d3_compare.py` → `artifacts/mode_b_i2v_d3/`.

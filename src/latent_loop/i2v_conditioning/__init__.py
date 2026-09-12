@@ -15,13 +15,19 @@ from .circular_soft import (
     apply_circular_timestep_mask,
     ring_distance,
 )
+from .reference_residual import (
+    FullRingCosineProfile,
+    apply_circular_reference_residual,
+)
 
 __all__ = [
     "Frame0AnchorSchedule",
+    "FullRingCosineProfile",
     "HardAnchorSchedule",
     "LateAnchorReleaseSchedule",
     "Radius2CosineProfile",
     "apply_circular_latent_conditioning",
+    "apply_circular_reference_residual",
     "apply_circular_timestep_mask",
     "apply_frame0_anchor",
     "apply_frame0_timestep_mask",

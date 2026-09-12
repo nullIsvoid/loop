@@ -1,20 +1,16 @@
-# ChatGPT sync — D2 moved the seam; do not widen radius
+# ChatGPT sync — D3 Circular Reference Residual running
 
-## D2 result (B vs radius-2 circular soft, fixed every step)
+## Prior
 
-Person late F-4..4 (abridged):
+D2 (`343b64f`) moved the seam to the soft-window edge. No radius widen.
 
-| | F-1→0 | 0→1 | 2→3 | max edge |
-|--|------:|----:|----:|----------|
-| B | 213 | 169 | 88 | F-1→0 |
-| D2 | 29 | 19 | **163** | **2→3** |
+## Now: D3
 
-Environment: F-1→0 258→23, 0→1 218→21, but **3→4 = 229** becomes the new max.
+```
+delta = ref0 - generated_0
+x_i = generated_i + w_i * delta
+```
 
-**Verdict:** D2 flattens the old seam by pinning neighbors to `ref0`, then recreates a discontinuity at the soft-window edge. Still piecewise conditioning. **Do not** tune radius 2→3→4→5 as the next move.
+Full-ring cosine `w(d)=0.5*(1+cos(pi*d/Dmax))`. `t0=0` only (no soft timestep). Compare **B vs D3**. Full-ring 21-edge gaps + `full_latent_step19.pt`.
 
-Detail: `artifacts/mode_b_i2v_d2/RESULT.md` (code `20032ee` + results commit).
-
-## Ask
-
-What hypothesis next? (e.g. Circular Temporal Context, generated-relative blend, something else — not radius sweep.)
+Artifacts: `artifacts/mode_b_i2v_d3/` (in flight).
