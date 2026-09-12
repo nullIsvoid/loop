@@ -1,12 +1,18 @@
-# ChatGPT sync — post-D3 model switch (planning commit)
+# ChatGPT sync — A14B Phase A: double spike gone
 
-## Closed
+## Result (native A14B I2V, no RoPE, no cond edits)
 
-TI2V-5B post-step conditioning surgery (B→D3). Keep Symmetric Circular Temporal RoPE.
+Late full-ring:
 
-## Next
+| | F-1→0 | 0→1 | median | max/med |
+|--|------:|----:|-------:|--------:|
+| A14B | 236 | **123** | 122 | 1.93 |
 
-1. **A14B native probe** (architecture control, no RoPE) — script ready; cloud has ckpt  
-2. **HunyuanVideo-1.5** primary — call chain analyzed; adapter **skeleton only** (no Circular RoPE)
+**Only the loop seam `F-1→0` is high; `0→1` is normal.**  
+Unlike TI2V-5B hard clamp (both sides spiked).
 
-Docs: `notes/model_switch_plan.md`, `notes/hunyuan_i2v_call_chain.md`, `notes/wan_a14b_probe_run.md`.
+## Implication
+
+Independent conditioning channel removes the artificial 0→1 wall. Supports switching primary development to **HunyuanVideo-1.5** (native H0 probe next; Circular RoPE only after).
+
+Detail: `artifacts/wan_a14b_i2v_probe/RESULT.md` (`ece002b` + this results commit).

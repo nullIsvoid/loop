@@ -1,0 +1,31 @@
+[2026-09-12 07:17:52,387] WARNING: flash_attn not installed; using Wan attention() SDPA fallback for full generate
+[2026-09-12 07:17:52,971] INFO: Building WanI2V A14B from /model/HuggingFace/Wan-AI/Wan2.2-I2V-A14B ...
+[2026-09-12 07:19:06,236] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-I2V-A14B/models_t5_umt5-xxl-enc-bf16.pth
+[2026-09-12 07:19:30,478] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-I2V-A14B/Wan2.1_VAE.pth
+[2026-09-12 07:19:31,582] INFO: Creating WanModel from /model/HuggingFace/Wan-AI/Wan2.2-I2V-A14B
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:00,  9.82it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:00,  9.90it/s]Loading checkpoint shards:  50%|█████     | 3/6 [00:00<00:00,  9.86it/s]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:00<00:00, 10.23it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00, 10.58it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:00,  9.95it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:00,  9.92it/s]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:00<00:00, 10.20it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00, 11.21it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00, 10.85it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+/root/Wan2.2/wan/modules/vae2_1.py:651: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+  0%|          | 0/40 [00:00<?, ?it/s]/root/Wan2.2/wan/modules/attention.py:166: UserWarning: Padding mask is disabled when using scaled_dot_product_attention. It can have a significant impact on performance.
+  warnings.warn(
+  2%|▎         | 1/40 [00:33<22:02, 33.91s/it]  5%|▌         | 2/40 [01:01<19:07, 30.20s/it][2026-09-12 07:23:16,385] INFO: probe step=2 tag=early F=21
+  8%|▊         | 3/40 [01:29<17:57, 29.11s/it] 10%|█         | 4/40 [01:57<17:07, 28.55s/it] 12%|█▎        | 5/40 [02:24<16:29, 28.27s/it] 15%|█▌        | 6/40 [02:52<15:55, 28.09s/it] 18%|█▊        | 7/40 [03:20<15:23, 27.99s/it] 20%|██        | 8/40 [03:47<14:52, 27.88s/it] 22%|██▎       | 9/40 [04:15<14:22, 27.81s/it] 25%|██▌       | 10/40 [04:43<13:53, 27.79s/it] 28%|██▊       | 11/40 [05:11<13:25, 27.78s/it] 30%|███       | 12/40 [05:38<12:57, 27.78s/it] 32%|███▎      | 13/40 [06:06<12:28, 27.74s/it] 35%|███▌      | 14/40 [06:34<12:01, 27.75s/it] 38%|███▊      | 15/40 [07:02<11:33, 27.75s/it] 40%|████      | 16/40 [07:50<13:34, 33.95s/it] 42%|████▎     | 17/40 [08:18<12:17, 32.08s/it] 45%|████▌     | 18/40 [08:45<11:17, 30.78s/it] 48%|████▊     | 19/40 [09:13<10:27, 29.87s/it][2026-09-12 07:31:28,493] INFO: probe step=19 tag=middle F=21
+ 50%|█████     | 20/40 [09:41<09:44, 29.24s/it] 52%|█████▎    | 21/40 [10:09<09:06, 28.76s/it] 55%|█████▌    | 22/40 [10:36<08:31, 28.42s/it] 57%|█████▊    | 23/40 [11:04<07:59, 28.22s/it] 60%|██████    | 24/40 [11:32<07:29, 28.08s/it] 62%|██████▎   | 25/40 [11:59<06:59, 27.98s/it] 65%|██████▌   | 26/40 [12:27<06:30, 27.88s/it] 68%|██████▊   | 27/40 [12:55<06:01, 27.84s/it] 70%|███████   | 28/40 [13:22<05:33, 27.78s/it] 72%|███████▎  | 29/40 [13:50<05:05, 27.73s/it] 75%|███████▌  | 30/40 [14:18<04:37, 27.73s/it] 78%|███████▊  | 31/40 [14:46<04:09, 27.73s/it] 80%|████████  | 32/40 [15:13<03:41, 27.73s/it] 82%|████████▎ | 33/40 [15:41<03:14, 27.74s/it] 85%|████████▌ | 34/40 [16:09<02:46, 27.74s/it] 88%|████████▊ | 35/40 [16:37<02:18, 27.74s/it] 90%|█████████ | 36/40 [17:04<01:50, 27.72s/it] 92%|█████████▎| 37/40 [17:32<01:23, 27.72s/it] 95%|█████████▌| 38/40 [18:00<00:55, 27.72s/it] 98%|█████████▊| 39/40 [18:27<00:27, 27.73s/it][2026-09-12 07:40:42,724] INFO: probe step=39 tag=late F=21
+100%|██████████| 40/40 [18:55<00:00, 27.74s/it]100%|██████████| 40/40 [18:55<00:00, 28.39s/it]
+/root/Wan2.2/wan/modules/vae2_1.py:658: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+{
+  "ok": true,
+  "late": {
+    "max_gap_edge": "20->0",
+    "max_gap_l2": 235.71139526367188,
+    "median_gap_l2": 122.00433349609375,
+    "max_vs_median": 1.9319919916714985,
+    "seam_F-1->0": 235.71139526367188,
+    "seam_0->1": 123.23868560791016
+  }
+}
+A14B_NATIVE_PROBE_OK

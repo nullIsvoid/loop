@@ -1,37 +1,31 @@
 # Development status
 
-> **Phase switch:** Wan2.2 TI2V-5B conditioning surgery **closed** (`5c7f59c`).  
-> Next: architecture control (A14B) + **HunyuanVideo-1.5** as primary I2V backbone.  
-> Keep: Symmetric Circular Temporal RoPE (proven). Do not invent D3.x / D2 radius / S4/S5 / CTC yet.
+> **Phase A done:** A14B native I2V — **no double spike** (`0→1`≈median; only `F-1→0` elevated).  
+> Next: HunyuanVideo-1.5 native H0 probe (Phase C). Keep Symmetric Circular Temporal RoPE for later H1.
 
-## Goal (unchanged)
+## Goal
 
-Image-to-Video seamless loop: last→first temporal motion continuity.  
-No identity scoring, RepairPlan, product Gates, or RoPE schedule sweeps.
+I2V seamless loop (last→first motion continuity). No scoring Gates / RepairPlan / S4–S5.
 
-## Settled on Wan TI2V-5B
+## Settled
 
-| piece | status |
-|-------|--------|
-| Symmetric Circular Temporal RoPE | **keep** (T2V flat; I2V improves vs A) |
-| Hard / soft / residual post-step conditioning | **closed** (B→D3) |
+| item | status |
+|------|--------|
+| Symmetric Circular Temporal RoPE | keep |
+| TI2V-5B post-step conditioning (B→D3) | **closed** |
+| A14B architecture control | **done** — supports H1/H2 |
 
-TI2V-5B remains baseline + RoPE PoC + conditioning failure case. Do not delete artifacts.
+## A14B late (native, no RoPE)
 
-## Next phases
+| | F-1→0 | 0→1 | median | max/med |
+|--|------:|----:|-------:|--------:|
+| A14B | 236 | **123≈med** | 122 | 1.93 |
 
-| phase | model | action |
-|-------|-------|--------|
-| **A** | Wan2.2 I2V-A14B | Native I2V latent probe only (no RoPE patch). Architecture control. |
-| **B** | HunyuanVideo-1.5 | Source call-chain + adapter skeleton (no Circular RoPE yet). |
-| **C** | Hunyuan | Native I2V full-ring latent probe (H0). |
-| **D** | Hunyuan | Only if H0 clean → Symmetric Circular Temporal RoPE (H1). |
+vs TI2V-5B hard I2V: both F-1→0 and 0→1 high.
 
-Plan detail: `notes/model_switch_plan.md`.  
-Hunyuan call chain: `notes/hunyuan_i2v_call_chain.md`.
+## Next
 
-## Hypotheses under test
+1. Hunyuan native I2V latent probe (H0) — no Circular RoPE yet  
+2. If H0 clean → H1 = Hunyuan + Symmetric Circular Temporal RoPE  
 
-- **H1:** TI2V-5B residual seam largely from per-step hard frame0 conditioning.  
-- **H2:** Independent conditioning channels reduce that artificial boundary.  
-- **H3:** If conditioning is clean, Symmetric Circular Temporal RoPE may be enough as the main loop mechanism.
+Docs: `notes/model_switch_plan.md`, `artifacts/wan_a14b_i2v_probe/RESULT.md`.
