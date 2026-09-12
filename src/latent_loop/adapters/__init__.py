@@ -1,1 +1,1 @@
-"""Model adapters (Wan first; Comfy later)."""
+"""Model adapters (Wan + Hunyuan skeleton; Comfy deferred)."""

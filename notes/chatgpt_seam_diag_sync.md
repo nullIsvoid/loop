@@ -1,18 +1,12 @@
-# ChatGPT sync — D3 residual failed (seam worse, not moved)
+# ChatGPT sync — post-D3 model switch (planning commit)
 
-## D3 result
+## Closed
 
-`x_i = g_i + w_i·(ref0−g0)`, full-ring cosine, `t0=0` only. B vs D3.
+TI2V-5B post-step conditioning surgery (B→D3). Keep Symmetric Circular Temporal RoPE.
 
-| case | B max/med (seam) | D3 max/med (seam) |
-|------|-----------------:|------------------:|
-| person | 2.07 (213 / 169) | **5.43 (562 / 521)** |
-| environment | 1.82 (258 / 218) | **4.30 (629 / 603)** |
+## Next
 
-Max edge stays `20→0`. Median ~unchanged. **Worse seam, not a relocated wall.**
+1. **A14B native probe** (architecture control, no RoPE) — script ready; cloud has ckpt  
+2. **HunyuanVideo-1.5** primary — call chain analyzed; adapter **skeleton only** (no Circular RoPE)
 
-## Ask
-
-Post-step latent rewrite path (absolute D2 + residual D3) looks exhausted. Prefer next: Circular Temporal Context / attention-side, or another non-rewrite idea?
-
-Detail: `artifacts/mode_b_i2v_d3/RESULT.md` (`0a4d4e7` + results).
+Docs: `notes/model_switch_plan.md`, `notes/hunyuan_i2v_call_chain.md`, `notes/wan_a14b_probe_run.md`.
