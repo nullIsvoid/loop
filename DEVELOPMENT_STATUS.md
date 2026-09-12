@@ -1,23 +1,23 @@
 # Development status
 
-> **Control done:** Mode B Symmetric T2V late `seam_vs_adj≈1.0` (flat).  
-> I2V late spike is tied to **first-frame hard anchor**. Next research: **Circular I2V Conditioning**. HOLD Circular Temporal Context as first D.
+> **D1 in flight:** Late Anchor Release vs hard-anchor Symmetric I2V (person + environment).  
+> RoPE unchanged. No Circular Temporal Context. No D2 yet.
 
-## Current latent handling
+## Causal chain (agreed)
 
-**Active:** Circular Temporal RoPE on Q/K (`SymmetricShiftSchedule`), V untouched.  
-I2V still uses official Wan per-step clamp of temporal index 0 to image latent.
+T2V + Symmetric RoPE → latent seam flat.  
+I2V + per-step hard clamp of frame 0 → late F-1→0 **and** 0→1 spike.
 
-## Diagnostics summary
+## D1 = Late Anchor Release
 
-| path | late seam_vs_adj | F-1→0 & 0→1 |
-|------|-----------------:|-------------|
-| I2V Mode B | ~1.6–1.8 | both high |
-| T2V Mode B control | **~1.006** | flat / normal |
+`latent0 = a(step)*ref0 + (1-a)*gen0`  
+a: 0–12 → 1.0; then 0.90…0.00 by step 19.  
+Module: `latent_loop.i2v_conditioning`. Script: `scripts/cloud_mode_b_i2v_d1_compare.py`.
 
-## Next (not started)
+## Still held
 
-Design/experiment **Circular I2V Conditioning** only after ChatGPT/human green-light.  
-No S4/S5. No Circular Temporal Context as default next step.
+- No F-1 dual-nail to reference  
+- No Circular Temporal Context as first D  
+- No S4/S5  
 
-Sync: `notes/chatgpt_seam_diag_sync.md` · T2V result: `artifacts/mode_b_t2v_seam_diag/RESULT.md`
+Next after D1 results: if late double-spike dies → design D2 circular soft conditioning; else revisit.
