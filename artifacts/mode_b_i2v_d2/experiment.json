@@ -1,0 +1,98 @@
+{
+  "name": "mode_b_i2v_d2_circular_soft",
+  "question": "Does radius-2 circular soft conditioning (coupled latent+timestep, fixed every step) flatten F-4..4 adjacent gaps, or only push the discontinuity to the conditioning window edge?",
+  "attention_backend": {
+    "flash_attn_2": false,
+    "flash_attn_3": false,
+    "backend": "official_attention_sdpa_fallback"
+  },
+  "rope_schedule": "SymmetricShiftSchedule",
+  "profile": {
+    "d0": 1.0,
+    "d1": 0.75,
+    "d2": 0.25,
+    "d_ge_3": 0.0,
+    "late_release": false
+  },
+  "shared": {
+    "seed": 42,
+    "steps": 20,
+    "frame_num": 81,
+    "max_area": 901120,
+    "guide_scale": 5.0,
+    "shift": 5.0,
+    "sample_solver": "unipc",
+    "probe_half_window": 4
+  },
+  "runs": [
+    {
+      "case_id": "person",
+      "variant": "B_hard_anchor",
+      "mode": "B",
+      "late_seam_vs_adj": 2.190842643999147,
+      "late_max_vs_median": 2.0478323440214234,
+      "late_max_adj_edge": "F-1->0",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d2/person/B_hard_anchor",
+      "late_F-4->F-3": 99.6178207397461,
+      "late_F-3->F-2": 103.19561004638672,
+      "late_F-2->F-1": 104.49781799316406,
+      "late_F-1->0": 212.66065979003906,
+      "late_0->1": 168.65615844726562,
+      "late_1->2": 104.51622009277344,
+      "late_2->3": 87.65426635742188,
+      "late_3->4": 82.92611694335938
+    },
+    {
+      "case_id": "person",
+      "variant": "D2_circular_soft_r2",
+      "mode": "D2",
+      "late_seam_vs_adj": 0.21755031885727522,
+      "late_max_vs_median": 1.299514536880721,
+      "late_max_adj_edge": "2->3",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d2/person/D2_circular_soft_r2",
+      "late_F-4->F-3": 158.52955627441406,
+      "late_F-3->F-2": 138.7792510986328,
+      "late_F-2->F-1": 111.45875549316406,
+      "late_F-1->0": 29.209625244140625,
+      "late_0->1": 19.04216194152832,
+      "late_1->2": 90.59605407714844,
+      "late_2->3": 162.59396362304688,
+      "late_3->4": 143.63880920410156
+    },
+    {
+      "case_id": "environment",
+      "variant": "B_hard_anchor",
+      "mode": "B",
+      "late_seam_vs_adj": 1.813530675042928,
+      "late_max_vs_median": 1.7684820425121035,
+      "late_max_adj_edge": "F-1->0",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d2/environment/B_hard_anchor",
+      "late_F-4->F-3": 149.35719299316406,
+      "late_F-3->F-2": 142.29995727539062,
+      "late_F-2->F-1": 157.34017944335938,
+      "late_F-1->0": 258.0081481933594,
+      "late_0->1": 218.0906524658203,
+      "late_1->2": 142.42767333984375,
+      "late_2->3": 128.78611755371094,
+      "late_3->4": 133.3994140625
+    },
+    {
+      "case_id": "environment",
+      "variant": "D2_circular_soft_r2",
+      "mode": "D2",
+      "late_seam_vs_adj": 0.13189097068562078,
+      "late_max_vs_median": 1.5629627866794962,
+      "late_max_adj_edge": "3->4",
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d2/environment/D2_circular_soft_r2",
+      "late_F-4->F-3": 226.31541442871094,
+      "late_F-3->F-2": 172.69859313964844,
+      "late_F-2->F-1": 137.59713745117188,
+      "late_F-1->0": 22.723024368286133,
+      "late_0->1": 20.62367820739746,
+      "late_1->2": 111.5602798461914,
+      "late_2->3": 156.05975341796875,
+      "late_3->4": 229.48739624023438
+    }
+  ],
+  "note": "No late release. No Circular Temporal Context. No new RoPE. D1/D1b not re-run."
+}

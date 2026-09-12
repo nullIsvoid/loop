@@ -1,20 +1,20 @@
-# ChatGPT sync — D2 Circular Soft running
+# ChatGPT sync — D2 moved the seam; do not widen radius
 
-## Prior
+## D2 result (B vs radius-2 circular soft, fixed every step)
 
-D1 / D1b closed single-point soft conditioning (`1a8f63a`).
+Person late F-4..4 (abridged):
 
-## Now: D2 (green-lit)
+| | F-1→0 | 0→1 | 2→3 | max edge |
+|--|------:|----:|----:|----------|
+| B | 213 | 169 | 88 | F-1→0 |
+| D2 | 29 | 19 | **163** | **2→3** |
 
-Radius-2 ring soft weights (fixed every step, no late release):
+Environment: F-1→0 258→23, 0→1 218→21, but **3→4 = 229** becomes the new max.
 
-| d | w | t factor |
-|---|---|----------|
-| 0 | 1.00 | 0 |
-| 1 | 0.75 | 0.25 |
-| 2 | 0.25 | 0.75 |
-| ≥3 | 0 | 1 |
+**Verdict:** D2 flattens the old seam by pinning neighbors to `ref0`, then recreates a discontinuity at the soft-window edge. Still piecewise conditioning. **Do not** tune radius 2→3→4→5 as the next move.
 
-Compare **B vs D2** × person + environment. Probe **F-4..4**. Watch for spike push to ±2/±3 and visual pause at seam.
+Detail: `artifacts/mode_b_i2v_d2/RESULT.md` (code `20032ee` + results commit).
 
-Artifacts: `artifacts/mode_b_i2v_d2/` (in flight).
+## Ask
+
+What hypothesis next? (e.g. Circular Temporal Context, generated-relative blend, something else — not radius sweep.)
