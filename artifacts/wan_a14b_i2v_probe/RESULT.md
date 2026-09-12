@@ -43,3 +43,7 @@ This supports **H1/H2** (conditioning-implementation-specific extra wall on TI2V
 ## Next
 
 Proceed with HunyuanVideo-1.5 as primary (Phase C native H0 probe). Do not invest further in TI2V-5B latent surgery. A14B stays architecture control / reference — **not** proof of seamless success.
+
+## Classification
+
+**OLD RESEARCH EVIDENCE / NOT STRICT CROSS-MODEL BENCHMARK** (substitute source image). Strict reruns: rtifacts/loop_benchmark_v1/.

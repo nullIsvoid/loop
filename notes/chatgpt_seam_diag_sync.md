@@ -1,36 +1,35 @@
-# ChatGPT sync — A14B Phase A: architecture pass ≠ visual seamless
+# ChatGPT sync — fixed benchmark phase (person_loop_v1)
 
-## Do not misread
+## Correction
 
-**Eye check of `out_x3.mp4` still shows a clear loop jump.**  
-Phase A did **not** claim pixel/temporal seamless loop. The residual ring seam is real.
+A14B Phase A (`artifacts/wan_a14b_i2v_probe/`) remains **architecture evidence only**:
 
-Late latent full-ring (F=21):
+- native A14B: late `0→1` ≈ median; `F-1→0` elevated (~1.93×)
+- **not** a fair visual/seam comparison vs TI2V-5B (different source image, steps, CFG, resolution)
 
-| edge | L2 gap | note |
-|------|-------:|------|
-| ordinary adjacent (median) | **122** | normal motion |
-| `0→1` | **123** | ≈ median — **not** a second wall |
-| `20→0` (`F-1→0`) | **236** | **~1.93× median** — still the loop seam |
+Visual loop was still broken on that substitute-image run.
 
-So: **video is not seamless**; only the *shape* of the latent gap profile changed vs TI2V-5B.
+## New phase
 
-## What “passed”
+Locked benchmark: `assets/loop_benchmark/` (`person_loop_v1`).
 
-Question asked: does native A14B I2V (independent `y` cond, **no** Mode-B RoPE, **no** cond surgery) still show TI2V-5B-style **index-0 double spike** (both `F-1→0` **and** `0→1` anomalous)?
+- source = original mode_b person.png (sha256 pinned)
+- prompt = fixed `person_prompt.txt`
+- seed = 42, frame_num = 81
 
-**Answer: No.** Only `F-1→0` is elevated; `0→1` tracks median.
+Scripts (native only this commit):
 
-That supports **H1/H2** (hard frame-0 / fused conditioning created an *extra* boundary on TI2V-5B). It does **not** mean A14B closed the loop.
+| id | script |
+|----|--------|
+| W5-0 | `scripts/benchmark/run_wan_ti2v5b_native.py` |
+| WA-0 | `scripts/benchmark/run_wan_a14b_native.py` |
+| H0 | `scripts/benchmark/run_hunyuan15_native.py` |
 
-## Implication for next work
+Shared loader/probes: `scripts/benchmark/common.py`  
+Outputs: `artifacts/loop_benchmark_v1/<run>/`
 
-- Stop TI2V-5B latent conditioning surgery (already closed).
-- A14B = architecture control / reference, not “seamless achieved”.
-- Primary next: **HunyuanVideo-1.5 native H0** (no Circular RoPE yet). Visual/latent seam must still be fixed there (+ later Symmetric Circular Temporal RoPE if H0 is clean enough).
+**Not in this commit:** W5-1 / WA-1 / H1 (Circular RoPE), CTC, conditioning surgery.
 
-## Artifacts
+## Research question
 
-- Numbers: `artifacts/wan_a14b_i2v_probe/RESULT.md`, `latent/step39_late_full_ring_gaps.json`
-- Video (local, not necessarily in git): `artifacts/wan_a14b_i2v_probe/out_x3.mp4`
-- Cloud: `/root/latent-loop/artifacts/wan_a14b_i2v_probe/`
+Under identical I2V inputs, what late temporal seam structure do different conditioning architectures show — and can Symmetric Circular Temporal RoPE later flatten the real `F-1→0` ring seam without surgery?

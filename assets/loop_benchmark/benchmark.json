@@ -1,0 +1,16 @@
+{
+  "benchmark_id": "person_loop_v1",
+  "source": "person.png",
+  "prompt_file": "person_prompt.txt",
+  "seed": 42,
+  "frame_num": 81,
+  "motion_intent": "gentle hair and clothing hem sway",
+  "camera": "fixed",
+  "loop_goal": "last-to-first temporal continuity",
+  "source_sha256": "6807cba271b86885329d64b75ad7c3bb4b8d860374c03f414b0cdfbf4014ad9f",
+  "source_origin": "artifacts/mode_b_i2v/_inputs/person.png (original Wan I2V person experiments)",
+  "notes": [
+    "Fixed cross-model inputs. Model-specific steps/CFG/resolution/scheduler go in each run.json only.",
+    "Do not swap person.png after this lock without bumping benchmark_id."
+  ]
+}
