@@ -1,31 +1,23 @@
 # Development status
 
-> Residual seam on Mode B I2V localizes to **late denoise**, not early RoPE topology.  
-> Next candidate when scoped: Circular Temporal Context (content across F-1→0). No S4/S5.
+> **Control done:** Mode B Symmetric T2V late `seam_vs_adj≈1.0` (flat).  
+> I2V late spike is tied to **first-frame hard anchor**. Next research: **Circular I2V Conditioning**. HOLD Circular Temporal Context as first D.
 
 ## Current latent handling
 
 **Active:** Circular Temporal RoPE on Q/K (`SymmetricShiftSchedule`), V untouched.  
-**Not active:** residual ring mix, true periodic RoPE, circular temporal context.  
-Details: `notes/current_latent_path.md`.
+I2V still uses official Wan per-step clamp of temporal index 0 to image latent.
 
-## Seam diagnostics (B only) — filled
+## Diagnostics summary
 
-Decoded flow: person strong seam/adj + dx flip; environment milder.  
-Latent `seam_vs_adj`: early/mid **&lt;1**, late **~1.6–1.8** (person + environment).
+| path | late seam_vs_adj | F-1→0 & 0→1 |
+|------|-----------------:|-------------|
+| I2V Mode B | ~1.6–1.8 | both high |
+| T2V Mode B control | **~1.006** | flat / normal |
 
-→ Prefer investigating **circular temporal context / latent shift** over more schedule geometry or periodic RoPE-as-first-fix.
+## Next (not started)
 
-## Mode B I2V — human
+Design/experiment **Circular I2V Conditioning** only after ChatGPT/human green-light.  
+No S4/S5. No Circular Temporal Context as default next step.
 
-A clearer jitter, B slight residual — B wins. Artifacts under `artifacts/mode_b_i2v/`.
-
-## Still forbidden until explicitly scoped
-
-- No S4/S5  
-- No Gate/Repair metrics  
-- No implementing D until you green-light the candidate  
-
-## ChatGPT
-
-Sync note: `notes/chatgpt_seam_diag_sync.md` — please confirm late-seam readout and next D = Circular Temporal Context.
+Sync: `notes/chatgpt_seam_diag_sync.md` · T2V result: `artifacts/mode_b_t2v_seam_diag/RESULT.md`

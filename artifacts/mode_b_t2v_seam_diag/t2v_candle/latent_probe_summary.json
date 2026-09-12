@@ -1,0 +1,82 @@
+{
+  "path": "t2v",
+  "i2v_first_frame_hard_anchor": false,
+  "probe_steps": [
+    2,
+    10,
+    19
+  ],
+  "sampling_steps": 20,
+  "probes": [
+    {
+      "step": 2,
+      "tag": "early",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 560.2069091796875,
+        "F-2->F-1": 559.92529296875,
+        "F-1->0": 563.0614013671875,
+        "0->1": 563.3343505859375,
+        "1->2": 560.3115844726562
+      },
+      "seam_l2": 563.0614013671875,
+      "adj_mean_l2": 560.9445343017578,
+      "seam_vs_adj": 1.0037737546869312,
+      "pt": "/root/latent-loop/artifacts/mode_b_t2v_seam_diag/t2v_candle/latent/step02_early_slices.pt"
+    },
+    {
+      "step": 10,
+      "tag": "middle",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 470.2393798828125,
+        "F-2->F-1": 469.7635498046875,
+        "F-1->0": 472.83953857421875,
+        "0->1": 473.0414733886719,
+        "1->2": 470.5260925292969
+      },
+      "seam_l2": 472.83953857421875,
+      "adj_mean_l2": 470.8926239013672,
+      "seam_vs_adj": 1.0041345193660527,
+      "pt": "/root/latent-loop/artifacts/mode_b_t2v_seam_diag/t2v_candle/latent/step10_middle_slices.pt"
+    },
+    {
+      "step": 19,
+      "tag": "late",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 327.5754089355469,
+        "F-2->F-1": 315.5501403808594,
+        "F-1->0": 321.4454040527344,
+        "0->1": 311.4115295410156,
+        "1->2": 323.2356262207031
+      },
+      "seam_l2": 321.4454040527344,
+      "adj_mean_l2": 319.44317626953125,
+      "seam_vs_adj": 1.0062678683782988,
+      "pt": "/root/latent-loop/artifacts/mode_b_t2v_seam_diag/t2v_candle/latent/step19_late_slices.pt"
+    }
+  ],
+  "readout": "Compare to I2V probes. If T2V late seam_vs_adj stays ~1 while I2V late spikes with both F-1\u21920 and 0\u21921 high \u2192 blame I2V conditioning boundary. If T2V late also spikes on F-1\u21920 \u2192 Circular Temporal Context is more justified."
+}

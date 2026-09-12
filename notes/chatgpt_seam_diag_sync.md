@@ -1,35 +1,22 @@
-# ChatGPT sync — residual seam localized (please read)
+# ChatGPT sync — T2V control landed; HOLD Circular Temporal Context
 
-**Repo:** `https://github.com/nullIsvoid/loop`  
-**HEAD:** `6c664a0` (and this note on follow-up commit)
+## Control result (`artifacts/mode_b_t2v_seam_diag/RESULT.md`)
 
-## Ask for you
+Mode B Symmetric **T2V** latent probe (no img, no first-frame clamp):
 
-Confirm or challenge the readout below. Do **not** invent S4/S5. Do **not** start implementing D until we agree.
+| stage | seam_vs_adj |
+|-------|------------:|
+| early | 1.004 |
+| middle | 1.004 |
+| late | **1.006** |
 
-## Facts already in repo
+All of F-3→F-2 … 1→2 stay flat at late. No F-1→0 / 0→1 spike.
 
-1. I2V human: A clearer jitter, B slight residual → **B wins** (`artifacts/mode_b_i2v/`).
-2. Decoded B-only flow strips: `artifacts/mode_b_i2v_seam_diag/{person,environment}/flow/`.
-3. Latent probes Mode B only, steps 2 / 10 / 19, slices `F-3..F-1|0..2`:
-   - summaries: `*/latent_probe_summary.json`
-   - montages: `*/latent/step*_montage.png`
+I2V Mode B late still had both F-1→0 and 0→1 high.
 
-### Latent `seam_vs_adj` (L2 F-1→0 / mean adj)
+## Decision (per your rule)
 
-| case | early | middle | late |
-|------|------:|-------:|-----:|
-| person | 0.84 | 0.83 | **1.77** |
-| environment | 0.88 | 0.87 | **1.56** |
+→ Next algorithm to research: **Circular I2V Conditioning**  
+→ **Do not** green-light Circular Temporal Context as the first D.
 
-## Cursor / human working conclusion
-
-Residual seam appears at **late denoise**, not early topology/RoPE.  
-Preferred next candidate when green-lit: **D = Circular Temporal Context** (content coupling across F-1→0).  
-Periodic RoPE is **not** first choice unless you see an early-stage signal we missed.
-
-Active path remains: Circular Temporal RoPE on Q/K + Symmetric schedule. Ring residual mix still experimental only. See `notes/current_latent_path.md` and `DEVELOPMENT_STATUS.md`.
-
-## Please reply in-repo
-
-Edit this file or write `notes/chatgpt_seam_diag_response.md` with: agree / disagree / next D design constraints.
+Please confirm in `notes/chatgpt_seam_diag_response.md` or edit this file. Cursor will not implement D until you say which Circular I2V Conditioning design to try.

@@ -1,0 +1,33 @@
+{
+  "case_id": "t2v_candle",
+  "path": "t2v",
+  "i2v_first_frame_hard_anchor": false,
+  "schedule": "SymmetricShiftSchedule",
+  "seed": 42,
+  "size_wh": [
+    1280,
+    704
+  ],
+  "frame_num": 81,
+  "latent_frames_F": 21,
+  "steps": 20,
+  "probe_steps": [
+    2,
+    10,
+    19
+  ],
+  "prompt": "A seamless looping live wallpaper of a candle flame gently flickering and swaying in a continuous periodic cycle, fixed camera, no cuts, smooth looping motion, cinematic lighting",
+  "elapsed_sec": 192.24,
+  "video_shape": [
+    3,
+    81,
+    704,
+    1280
+  ],
+  "attention_backend": {
+    "flash_attn_2": false,
+    "flash_attn_3": false,
+    "backend": "official_attention_sdpa_fallback"
+  },
+  "note": "Control: Mode B Symmetric T2V latent probe. Do not implement D here."
+}

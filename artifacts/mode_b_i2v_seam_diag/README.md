@@ -29,9 +29,8 @@ Mode B only, steps **2 / 10 / 19**, slices `F-3..F-1 | 0..2`.
 | person | 0.84 | 0.83 | **1.77** |
 | environment | 0.88 | 0.87 | **1.56** |
 
-**Readout:** early/middle seam is **not** worse than adjacent temporal gaps; **late** denoise is where seam_vs_adj spikes.
+**Readout:** early/middle seam is **not** worse than adjacent temporal gaps; **late** denoise is where seam_vs_adj spikes — and **0→1 rises with F-1→0**, so index 0 is special under I2V.
 
-→ Residual RGB jitter is consistent with **late detail convergence**, not an early topology/RoPE failure.  
-Next algorithm candidate (when scoped): **Circular Temporal Context / latent content coupling** across F-1→0 — not inventing S4, and not jumping to periodic RoPE first unless a new early-stage signal appears.
+**T2V control** (`artifacts/mode_b_t2v_seam_diag/`): late `seam_vs_adj≈1.006`, gaps flat → spike is **I2V first-frame hard anchor**, not missing Circular Temporal Context. Next research: **Circular I2V Conditioning** (when scoped).
 
 Artifacts: `person/latent/`, `environment/latent/` (montages + diffs JSON; `.pt` stay on cloud).

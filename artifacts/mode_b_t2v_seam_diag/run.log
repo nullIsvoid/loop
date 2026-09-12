@@ -1,0 +1,29 @@
+[2026-09-12 04:06:07,310] WARNING: flash_attn not installed; using Wan attention() SDPA fallback for full generate
+[2026-09-12 04:06:07,937] INFO: Building WanTI2V for T2V latent probe (no I2V anchor) ...
+[2026-09-12 04:07:25,049] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B/models_t5_umt5-xxl-enc-bf16.pth
+[2026-09-12 04:07:34,075] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B/Wan2.2_VAE.pth
+[2026-09-12 04:07:36,326] INFO: Creating WanModel from /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 46.52it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+  0%|          | 0/20 [00:00<?, ?it/s]/root/Wan2.2/wan/modules/attention.py:166: UserWarning: Padding mask is disabled when using scaled_dot_product_attention. It can have a significant impact on performance.
+  warnings.warn(
+  5%|▌         | 1/20 [00:05<01:49,  5.74s/it] 10%|█         | 2/20 [00:11<01:41,  5.63s/it][2026-09-12 04:08:47,530] INFO: Saving T2V latent probe step=2 tag=early
+ 15%|█▌        | 3/20 [00:16<01:35,  5.64s/it] 20%|██        | 4/20 [00:22<01:29,  5.61s/it] 25%|██▌       | 5/20 [00:28<01:24,  5.60s/it] 30%|███       | 6/20 [00:33<01:18,  5.60s/it] 35%|███▌      | 7/20 [00:39<01:12,  5.60s/it] 40%|████      | 8/20 [00:44<01:07,  5.60s/it] 45%|████▌     | 9/20 [00:50<01:01,  5.60s/it] 50%|█████     | 10/20 [00:56<00:56,  5.60s/it][2026-09-12 04:09:32,354] INFO: Saving T2V latent probe step=10 tag=middle
+ 55%|█████▌    | 11/20 [01:01<00:50,  5.61s/it] 60%|██████    | 12/20 [01:07<00:44,  5.61s/it] 65%|██████▌   | 13/20 [01:12<00:39,  5.61s/it] 70%|███████   | 14/20 [01:18<00:33,  5.62s/it] 75%|███████▌  | 15/20 [01:24<00:28,  5.62s/it] 80%|████████  | 16/20 [01:29<00:22,  5.62s/it] 85%|████████▌ | 17/20 [01:35<00:16,  5.62s/it] 90%|█████████ | 18/20 [01:41<00:11,  5.62s/it] 95%|█████████▌| 19/20 [01:46<00:05,  5.63s/it][2026-09-12 04:10:23,003] INFO: Saving T2V latent probe step=19 tag=late
+100%|██████████| 20/20 [01:52<00:00,  5.64s/it]100%|██████████| 20/20 [01:52<00:00,  5.62s/it]
+/root/Wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+{
+  "ok": true,
+  "case_id": "t2v_candle",
+  "path": "t2v",
+  "schedule": "SymmetricShiftSchedule",
+  "elapsed_sec": 192.24,
+  "video_shape": [
+    3,
+    81,
+    704,
+    1280
+  ]
+}
+T2V_LATENT_PROBE_OK
