@@ -1,35 +1,28 @@
-# ChatGPT sync — fixed benchmark phase (person_loop_v1)
+# ChatGPT sync — H0 native Hunyuan on person_loop_v1
 
-## Correction
+## Benchmark
 
-A14B Phase A (`artifacts/wan_a14b_i2v_probe/`) remains **architecture evidence only**:
+Locked `person_loop_v1` (original Wan person.png, fixed prompt, seed=42, 81 frames).
 
-- native A14B: late `0→1` ≈ median; `F-1→0` elevated (~1.93×)
-- **not** a fair visual/seam comparison vs TI2V-5B (different source image, steps, CFG, resolution)
+## H0 late latent full-ring (F_latent=21)
 
-Visual loop was still broken on that substitute-image run.
+| | value |
+|--|------:|
+| median | 54.7 |
+| `0→1` | **87.0** (~1.59×) — rank 2 |
+| `F-1→0` | **130.1** (~2.38×) — **max** |
 
-## New phase
+## Read
 
-Locked benchmark: `assets/loop_benchmark/` (`person_loop_v1`).
+- **Not** TI2V-5B equal double spike.
+- **Not** as clean as A14B’s `0→1≈median` either — Hunyuan shows a **mild** `0→1` bump.
+- Dominant problem remains the real ring seam `F-1→0`.
 
-- source = original mode_b person.png (sha256 pinned)
-- prompt = fixed `person_prompt.txt`
-- seed = 42, frame_num = 81
+Supports next step **H1 = Symmetric Circular Temporal RoPE** (no conditioning surgery).  
+W5-0 / WA-0 on the same benchmark still pending for a three-way table.
 
-Scripts (native only this commit):
+## Video
 
-| id | script |
-|----|--------|
-| W5-0 | `scripts/benchmark/run_wan_ti2v5b_native.py` |
-| WA-0 | `scripts/benchmark/run_wan_a14b_native.py` |
-| H0 | `scripts/benchmark/run_hunyuan15_native.py` |
+`artifacts/loop_benchmark_v1/hunyuan15_native/out_x3.mp4`
 
-Shared loader/probes: `scripts/benchmark/common.py`  
-Outputs: `artifacts/loop_benchmark_v1/<run>/`
-
-**Not in this commit:** W5-1 / WA-1 / H1 (Circular RoPE), CTC, conditioning surgery.
-
-## Research question
-
-Under identical I2V inputs, what late temporal seam structure do different conditioning architectures show — and can Symmetric Circular Temporal RoPE later flatten the real `F-1→0` ring seam without surgery?
+Detail: `artifacts/loop_benchmark_v1/hunyuan15_native/RESULT.md`

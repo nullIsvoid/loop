@@ -1,0 +1,45 @@
+[2026-09-12 09:00:30,151] INFO: H0 create_pipeline version=480p_i2v aspect=3:4 frames=81 steps=50
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:28<01:53, 28.40s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:43<01:01, 20.64s/it]Loading checkpoint shards:  60%|██████    | 3/5 [01:11<00:48, 24.12s/it]Loading checkpoint shards:  80%|████████  | 4/5 [01:40<00:25, 25.74s/it]Loading checkpoint shards: 100%|██████████| 5/5 [01:40<00:00, 20.02s/it]
+
+============================================================
+🎬  HunyuanVideo Generation Task
+------------------------------------------------------------
+User Prompt:               Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move
+Rewritten Prompt:          <disabled>
+Aspect Ratio:              528:768
+Video Length:              81
+Reference Image:           /root/latent-loop/assets/loop_benchmark/person.png (718, 1047)
+Guidance Scale:            6.0
+Guidance Embedded Scale:   None
+Shift:                     5.0
+Seed:                      42
+Video Resolution:          528 x 768
+Attn mode:                 flash
+Transformer dtype:         torch.bfloat16
+Sampling Steps:            50
+Use Meanflow:              False
+============================================================
+
+  0%|          | 0/50 [00:00<?, ?it/s]The module 'HunyuanVideo_1_5_DiffusionTransformer' is group offloaded and moving it using `.to()` is not supported.
+/root/HunyuanVideo-1.5/hyvideo/commons/__init__.py:225: UserWarning: Falling back from `flash` to `torch` because `flash` is not properly installed.
+  warnings.warn(f"Falling back from `{original_attn_mode}` to `{attn_mode}` because `{original_attn_mode}` is not properly installed.")
+/root/HunyuanVideo-1.5/hyvideo/commons/__init__.py:225: UserWarning: Falling back from `flash` to `torch` because `flash` is not properly installed.
+  warnings.warn(f"Falling back from `{original_attn_mode}` to `{attn_mode}` because `{original_attn_mode}` is not properly installed.")
+  2%|▏         | 1/50 [00:18<14:56, 18.30s/it]  4%|▍         | 2/50 [00:31<12:23, 15.48s/it][2026-09-12 09:04:12,120] INFO: H0 probe step=2 tag=early shape=(1, 32, 21, 48, 33)
+  6%|▌         | 3/50 [00:45<11:25, 14.59s/it]  8%|▊         | 4/50 [00:58<10:51, 14.17s/it] 10%|█         | 5/50 [01:12<10:27, 13.94s/it] 12%|█▏        | 6/50 [01:25<10:07, 13.81s/it] 14%|█▍        | 7/50 [01:39<09:50, 13.73s/it] 16%|█▌        | 8/50 [01:53<09:34, 13.68s/it] 18%|█▊        | 9/50 [02:06<09:19, 13.64s/it] 20%|██        | 10/50 [02:20<09:04, 13.62s/it] 22%|██▏       | 11/50 [02:33<08:50, 13.60s/it] 24%|██▍       | 12/50 [02:47<08:36, 13.59s/it] 26%|██▌       | 13/50 [03:00<08:22, 13.58s/it] 28%|██▊       | 14/50 [03:14<08:08, 13.58s/it] 30%|███       | 15/50 [03:28<07:55, 13.59s/it] 32%|███▏      | 16/50 [03:41<07:42, 13.59s/it] 34%|███▍      | 17/50 [03:55<07:28, 13.59s/it] 36%|███▌      | 18/50 [04:08<07:15, 13.60s/it] 38%|███▊      | 19/50 [04:22<07:01, 13.60s/it] 40%|████      | 20/50 [04:36<06:47, 13.60s/it] 42%|████▏     | 21/50 [04:49<06:34, 13.60s/it] 44%|████▍     | 22/50 [05:03<06:21, 13.61s/it] 46%|████▌     | 23/50 [05:16<06:07, 13.61s/it] 48%|████▊     | 24/50 [05:30<05:53, 13.62s/it][2026-09-12 09:09:10,964] INFO: H0 probe step=24 tag=middle shape=(1, 32, 21, 48, 33)
+ 50%|█████     | 25/50 [05:44<05:40, 13.62s/it] 52%|█████▏    | 26/50 [05:57<05:26, 13.60s/it] 54%|█████▍    | 27/50 [06:11<05:12, 13.60s/it] 56%|█████▌    | 28/50 [06:24<04:58, 13.59s/it] 58%|█████▊    | 29/50 [06:38<04:45, 13.58s/it] 60%|██████    | 30/50 [06:52<04:31, 13.57s/it] 62%|██████▏   | 31/50 [07:05<04:17, 13.57s/it] 64%|██████▍   | 32/50 [07:19<04:04, 13.57s/it] 66%|██████▌   | 33/50 [07:32<03:50, 13.56s/it] 68%|██████▊   | 34/50 [07:46<03:36, 13.56s/it] 70%|███████   | 35/50 [07:59<03:23, 13.56s/it] 72%|███████▏  | 36/50 [08:13<03:09, 13.56s/it] 74%|███████▍  | 37/50 [08:26<02:56, 13.54s/it] 76%|███████▌  | 38/50 [08:40<02:42, 13.54s/it] 78%|███████▊  | 39/50 [08:53<02:29, 13.55s/it] 80%|████████  | 40/50 [09:07<02:15, 13.54s/it] 82%|████████▏ | 41/50 [09:21<02:01, 13.54s/it] 84%|████████▍ | 42/50 [09:34<01:48, 13.54s/it] 86%|████████▌ | 43/50 [09:48<01:34, 13.54s/it] 88%|████████▊ | 44/50 [10:01<01:21, 13.54s/it] 90%|█████████ | 45/50 [10:15<01:07, 13.54s/it] 92%|█████████▏| 46/50 [10:28<00:54, 13.55s/it] 94%|█████████▍| 47/50 [10:42<00:40, 13.55s/it] 96%|█████████▌| 48/50 [10:55<00:27, 13.56s/it] 98%|█████████▊| 49/50 [11:09<00:13, 13.55s/it][2026-09-12 09:14:49,798] INFO: H0 probe step=49 tag=late shape=(1, 32, 21, 48, 33)
+100%|██████████| 50/50 [11:23<00:00, 13.56s/it]The module 'HunyuanVideo_1_5_DiffusionTransformer' is group offloaded and moving it using `.to()` is not supported.
+100%|██████████| 50/50 [11:23<00:00, 13.66s/it]
+{
+  "ok": true,
+  "late": {
+    "max_gap_edge": "20->0",
+    "max_gap_l2": 130.13558959960938,
+    "median_gap_l2": 54.711273193359375,
+    "max_vs_median": 2.3785882141635972,
+    "seam_F-1->0": 130.13558959960938,
+    "seam_0->1": 87.00177001953125
+  }
+}
+H0_OK
+[rank0]:[W912 09:15:09.544731939 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())

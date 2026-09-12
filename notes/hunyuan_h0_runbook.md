@@ -6,64 +6,46 @@ Run **H0** = HunyuanVideo-1.5 native I2V on `person_loop_v1` with early/middle/l
 
 No Circular RoPE. No conditioning edits. Prompt rewrite **OFF**.
 
+## Cloud paths (important)
+
+`/model` is **read-only** UPFS. Do **not** write encoders there.
+
+Writable overlay used for H0:
+
+```text
+/workspace/hunyuan-ckpts/HunyuanVideo-1.5/
+  transformer -> /model/.../transformer
+  vae/          # local clean config.json + symlink weight
+                # (ModelScope vae/config.json was duplicated JSON)
+  text_encoder/llm              # Qwen2.5-VL-7B-Instruct (ModelScope)
+  text_encoder/byt5-small
+  text_encoder/Glyph-SDXL-v2
+  vision_encoder/siglip -> FLUX.1-Redux-dev
+```
+
+Env:
+
+```bash
+export HY_MODEL_PATH=/workspace/hunyuan-ckpts/HunyuanVideo-1.5
+export HY_ROOT=/root/HunyuanVideo-1.5
+```
+
 ## Script
 
 ```bash
 cd /root/latent-loop
 /usr/local/miniconda3/envs/mobius/bin/python \
-  scripts/benchmark/run_hunyuan15_native.py
+  scripts/benchmark/run_hunyuan15_native.py \
+  --model-path /workspace/hunyuan-ckpts/HunyuanVideo-1.5
 ```
 
-Check layout only:
+`--check-only` validates nested encoder paths + large LLM shards.
 
-```bash
-.../python scripts/benchmark/run_hunyuan15_native.py --check-only
-```
+## Probe note
 
-## Model layout required under `HY_MODEL_PATH`
+Hunyuan `__call__` **recreates** `scheduler` via `_create_scheduler(flow_shift)`.  
+The runner wraps both the current scheduler and `_create_scheduler` so early/middle/late probes stick.
 
-Default: `/model/ModelScope/Tencent-Hunyuan/HunyuanVideo-1.5`
+## Status
 
-Must exist:
-
-```text
-transformer/480p_i2v/   # (or 720p_i2v if --resolution 720p)
-vae/
-text_encoder/           # Qwen2.5-VL + byT5/Glyph layout per official docs
-vision_encoder/         # SigLIP from FLUX.1-Redux-dev
-```
-
-Official download notes: `/root/HunyuanVideo-1.5/checkpoints-download.md`
-
-As of 2026-09-12 cloud snapshot: DiT + VAE present; **text_encoder / vision_encoder dirs missing** — H0 will exit with `prerequisites.json` until those are installed (prefer non-C: cloud paths).
-
-## Fixed benchmark inputs
-
-Loaded from `assets/loop_benchmark/` via `scripts/benchmark/common.py`:
-
-| field | value |
-|-------|-------|
-| source | person.png |
-| prompt | person_prompt.txt |
-| seed | 42 |
-| frames | 81 (`--video-length` override allowed; official prefers 121) |
-
-## Model-specific defaults (recorded in run.json)
-
-| knobs | default |
-|-------|---------|
-| resolution | 480p |
-| aspect_ratio | inferred from person.png (≈9:16) |
-| steps | 50 |
-| sr | off |
-| rewrite | off |
-
-## Output
-
-```text
-artifacts/loop_benchmark_v1/hunyuan15_native/
-  source.png out.mp4 out_x3.mp4 first.png last.png
-  run.json RESULT.md prerequisites.json
-  latent/{early,middle,late}_full_latent.pt
-  latent/{early,middle,late}_full_ring_gaps.json
-```
+H0 on `person_loop_v1` **completed** — see `artifacts/loop_benchmark_v1/hunyuan15_native/RESULT.md`.

@@ -44,10 +44,11 @@ logging.basicConfig(
 )
 
 HY_ROOT = Path(os.environ.get("HY_ROOT", "/root/HunyuanVideo-1.5"))
+# Prefer writable overlay tree: /model is read-only UPFS on the research cloud.
 HY_MODEL_PATH = Path(
     os.environ.get(
         "HY_MODEL_PATH",
-        "/model/ModelScope/Tencent-Hunyuan/HunyuanVideo-1.5",
+        "/workspace/hunyuan-ckpts/HunyuanVideo-1.5",
     )
 )
 
@@ -70,9 +71,18 @@ def _required_paths(model_path: Path) -> list[Path]:
     return [
         model_path / "transformer" / "480p_i2v",
         model_path / "vae",
-        model_path / "text_encoder",
-        model_path / "vision_encoder",
+        model_path / "text_encoder" / "llm",
+        model_path / "text_encoder" / "byt5-small",
+        model_path / "text_encoder" / "Glyph-SDXL-v2" / "checkpoints" / "byt5_model.pt",
+        model_path / "vision_encoder" / "siglip",
     ]
+
+
+def _llm_looks_complete(llm_dir: Path) -> bool:
+    if not llm_dir.is_dir():
+        return False
+    weights = list(llm_dir.glob("*.safetensors")) + list(llm_dir.glob("*.bin"))
+    return any(p.stat().st_size > 100_000_000 for p in weights)
 
 
 def check_prerequisites(model_path: Path) -> list[str]:
@@ -80,37 +90,56 @@ def check_prerequisites(model_path: Path) -> list[str]:
     for p in _required_paths(model_path):
         if not p.exists():
             missing.append(str(p))
+    llm = model_path / "text_encoder" / "llm"
+    if llm.exists() and not _llm_looks_complete(llm):
+        missing.append(f"{llm} (incomplete: no large weight shards)")
     return missing
 
 
 def _install_latent_probes(pipe, probe_dir: Path, probe_steps: tuple[int, ...]):
-    """Wrap scheduler.step to dump early/middle/late full-ring gaps."""
+    """Wrap scheduler.step; also wrap ``_create_scheduler`` because Hunyuan
+    recreates the scheduler inside ``__call__`` (flow_shift), which would
+    otherwise discard a one-shot ``scheduler.step`` monkeypatch.
+    """
     tags = probe_tag_map(probe_steps)
-    state = {"i": 0, "metas": []}
-    orig_step = pipe.scheduler.step
+    state: dict = {"i": 0, "metas": []}
 
-    def stepped(*args, **kwargs):
-        out = orig_step(*args, **kwargs)
-        latents = out[0] if isinstance(out, (tuple, list)) else out
-        step_i = state["i"]
-        if step_i in tags:
-            tag = tags[step_i]
-            # Hunyuan latents: [B, C, F, H, W]
-            logging.info(
-                "H0 probe step=%s tag=%s shape=%s",
-                step_i,
-                tag,
-                tuple(latents.shape),
-            )
-            state["metas"].append(
-                save_latent_probe(
-                    latents, probe_dir / "latent", tag=tag, step_i=step_i
+    def _wrap_scheduler(sched):
+        orig_step = sched.step
+
+        def stepped(*args, **kwargs):
+            out = orig_step(*args, **kwargs)
+            latents = out[0] if isinstance(out, (tuple, list)) else out
+            step_i = state["i"]
+            if step_i in tags:
+                tag = tags[step_i]
+                logging.info(
+                    "H0 probe step=%s tag=%s shape=%s",
+                    step_i,
+                    tag,
+                    tuple(getattr(latents, "shape", ())),
                 )
-            )
-        state["i"] += 1
-        return out
+                state["metas"].append(
+                    save_latent_probe(
+                        latents, probe_dir / "latent", tag=tag, step_i=step_i
+                    )
+                )
+            state["i"] += 1
+            return out
 
-    pipe.scheduler.step = stepped  # type: ignore[method-assign]
+        sched.step = stepped  # type: ignore[method-assign]
+        return sched
+
+    _wrap_scheduler(pipe.scheduler)
+
+    # Classmethod on the pipeline class — bind a wrapper on the instance so
+    # ``self._create_scheduler(flow_shift)`` inside __call__ returns a wrapped sched.
+    orig_create = pipe._create_scheduler
+
+    def create_wrapped(flow_shift):
+        return _wrap_scheduler(orig_create(flow_shift))
+
+    pipe._create_scheduler = create_wrapped  # type: ignore[method-assign]
     return state
 
 
