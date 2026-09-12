@@ -1,7 +1,7 @@
-"""HunyuanVideo-1.5 adapters (skeleton).
+"""HunyuanVideo-1.5 adapters.
 
-Circular Temporal RoPE is **not** implemented here yet.
-See ``notes/hunyuan_i2v_call_chain.md`` and ``call_chain.md``.
+Circular Temporal RoPE: ``attention.enable_mode_b_on_hunyuan_transformer``
+(see ``notes/hunyuan_h1_rope_call_chain.md``).
 """
 
 from . import attention, conditioning, rope

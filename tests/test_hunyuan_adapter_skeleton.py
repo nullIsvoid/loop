@@ -7,7 +7,7 @@ from latent_loop.adapters.hunyuan.rope import describe_official_rope_layout
 def test_hunyuan_rope_layout_metadata():
     meta = describe_official_rope_layout()
     assert meta["rope_dim_list_default"] == [16, 56, 56]
-    assert meta["circular_mode_b"] == "not_implemented"
+    assert meta["circular_mode_b"] == "symmetric_temporal_freqs_roll"
 
 
 def test_hunyuan_conditioning_is_non_destructive():

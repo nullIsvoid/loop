@@ -1,89 +1,44 @@
-# ChatGPT sync — loop project (commit `2a4d7ce`)
+# ChatGPT sync — H1 approved after H0 (commit pending)
 
-Repo: https://github.com/nullIsvoid/loop  
-Tip: `main` @ `2a4d7ce`
+Repo tip follows this note on `main`.
 
----
-
-## Research goal (only)
-
-Image-to-Video **seamless loop**: last→first temporal motion continuity.
-
-Not now: identity/face scores, Gates, RepairPlan, S4/S5, CTC, conditioning surgery.
-
----
-
-## Locked benchmark: `person_loop_v1`
+## Refined conditioning conclusion (locked)
 
 ```text
-assets/loop_benchmark/
-  person.png          # original Wan I2V person (sha256 pinned)
-  person_prompt.txt
-  benchmark.json      # seed=42, frame_num=81
+TI2V-5B:  destructive frame0 write     → severe artificial 0→1 wall
+A14B:     independent y cond           → 0→1 ≈ median (arch probe; not v1 yet)
+Hunyuan:  non-destructive cond+vision  → mild 0→1 bump (1.59×); dominant F-1→0 (2.38×)
 ```
 
-All models must load via `scripts/benchmark/common.py`.  
-Do **not** compare runs that swapped source/prompt/steps silently.
+**More accurate rule:** non-destructive conditioning avoids TI2V-style severe dual walls, but index-0 reference asymmetry can still leave a **weak** local `0→1` effect. Do not claim “non-destructive ⇒ 0→1 always flat.”
 
----
+## H0 baseline (person_loop_v1, strict)
 
-## Experiment IDs
+| edge | L2 | vs med |
+|------|---:|-------:|
+| median | 54.7 | 1.00× |
+| `0→1` | 87.0 | 1.59× (rank 2) |
+| `F-1→0` | 130.1 | 2.38× (**max**) |
 
-| id | meaning | status |
-|----|---------|--------|
-| W5-0 | Wan TI2V-5B native | script ready, **not run on v1 yet** |
-| W5-1 | W5 + Symmetric Circular Temporal RoPE | not started |
-| WA-0 | Wan A14B native | script ready, **not run on v1 yet** |
-| WA-1 | WA + Symmetric Circular Temporal RoPE | not started |
-| **H0** | HunyuanVideo-1.5 native | **done on person_loop_v1** |
-| H1 | Hunyuan + Symmetric Circular Temporal RoPE | **next candidate** |
+## H1 authorization
 
----
+**Approved.** Do **not** wait for W5-0/WA-0.
 
-## Prior architecture evidence (NOT strict cross-model benchmark)
+```text
+H1 = H0 inputs + Symmetric Circular Temporal RoPE only
+     schedule 0,+1,-1,+2,-2,... on Hunyuan ND RoPE (img Q/K)
+```
 
-| run | note |
-|-----|------|
-| TI2V-5B B→D3 | hard frame0 clamp creates **extra** `0→1` wall; conditioning surgery closed |
-| A14B Phase A (`artifacts/wan_a14b_i2v_probe/`) | substitute image; late `0→1≈median`, `F-1→0`↑ — architecture only; **video still not seamless** |
+Success vs H0:
 
----
+1. `F-1→0` clearly closer to ordinary adjacent  
+2. `0→1` **not worse**  
+3. no new ring walls  
+4. `out_x3`: jump / stall / reverse / speed-pop only  
 
-## H0 result (strict `person_loop_v1`)
+Call chain: `notes/hunyuan_h1_rope_call_chain.md`  
+Runner: `scripts/benchmark/run_hunyuan15_symmetric.py`
 
-Path: `artifacts/loop_benchmark_v1/hunyuan15_native/`  
-Video: `out_x3.mp4`  
-Detail: `RESULT.md`
+## Still pending (not blocking H1)
 
-Late latent full-ring (`F_latent=21`):
-
-| metric | value |
-|--------|------:|
-| median | 54.7 |
-| `0→1` | **87.0** (~1.59× median) — rank **2** / 21 |
-| `F-1→0` | **130.1** (~2.38× median) — **max** |
-
-### Read carefully
-
-1. **Not** TI2V-5B equal double spike (`F-1→0` and `0→1` both huge).
-2. **Not** as clean as A14B architecture probe (`0→1≈median`) — Hunyuan has a **mild** `0→1` bump.
-3. Dominant failure mode = real ring seam **`F-1→0`**.
-4. Visual loop is still expected to jump; H0 did **not** claim seamless.
-
-### Implication
-
-Next authorized step: **H1 = Hunyuan native conditioning + Symmetric Circular Temporal RoPE**  
-(block shifts `0,+1,-1,+2,-2,…` on Hunyuan’s own ND RoPE — **do not** copy Wan adapter blindly).
-
-Do **not** reopen TI2V conditioning surgery.  
-Optional before H1: run W5-0 / WA-0 on the same benchmark for a three-way native table.
-
----
-
-## Ask ChatGPT
-
-Given H0 above, confirm:
-
-1. Is H1 the right next knife (vs first finishing W5-0/WA-0 natives)?
-2. For H1, what must be re-verified in Hunyuan `rope_dim_list=[16,56,56]` / `apply_rotary_emb` path before coding?
-3. How should we judge H1 success using the same late full-ring metrics + `out_x3` visual checklist only (jump / stall / reverse / speed pop)?
+- W5-0 / WA-0 on person_loop_v1 (three-way native table later)

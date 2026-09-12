@@ -1,36 +1,25 @@
 # Development status
 
-> **H0 done on person_loop_v1.** Late: `F-1→0` max (~2.38× med); `0→1` mild 2nd (~1.59×).  
-> Next eligible: **H1** (Hunyuan + Symmetric Circular Temporal RoPE) — not conditioning surgery.  
-> Still pending fair natives: **W5-0 / WA-0** on the same benchmark.
+> **H1 authorized.** H0 on `person_loop_v1` done; next is Hunyuan + Symmetric Circular Temporal RoPE.  
+> Refined rule: non-destructive cond avoids TI2V dual walls, but may leave a mild `0→1` bump.
 
 ## Confirmed
 
-- TI2V-5B hard frame0 conditioning creates an extra `0→1` boundary.
-- Native A14B (architecture probe) removes that extra wall; still has real `F-1→0`.
-- Previous cross-model visuals were uncontrolled → fixed `person_loop_v1`.
-- **H0 (Hunyuan native, locked benchmark):** dominant `F-1→0`; `0→1` only mildly high — not TI2V double spike.
-
-## Current task
-
-1. Optionally finish **W5-0 / WA-0** natives on the same benchmark for three-way table.  
-2. Then **H1** Circular RoPE on Hunyuan (only after deciding W5/WA order).
+- TI2V-5B hard frame0 → severe extra `0→1` wall; surgery closed.
+- Hunyuan H0 (strict benchmark): `F-1→0` 2.38× med (dominant); `0→1` 1.59× (mild).
+- Fixed `person_loop_v1` locked.
 
 ## Experiment IDs
 
 | id | status |
 |----|--------|
-| W5-0 | script ready — not yet run on v1 |
-| WA-0 | script ready — not yet run on v1 |
 | H0 | **done** — `artifacts/loop_benchmark_v1/hunyuan15_native/` |
-| W5-1 / WA-1 / H1 | not started |
+| H1 | **in progress** — Symmetric Circular Temporal RoPE |
+| W5-0 / WA-0 | scripts ready; not required before H1 |
+| W5-1 / WA-1 | later |
 
-## Artifacts
+## Docs
 
-| path | role |
-|------|------|
-| `assets/loop_benchmark/` | locked inputs |
-| `artifacts/loop_benchmark_v1/hunyuan15_native/` | H0 strict run |
-| `artifacts/wan_a14b_i2v_probe/` | OLD RESEARCH EVIDENCE |
-
-Docs: `notes/loop_benchmark.md`, `notes/hunyuan_h0_runbook.md`, `notes/chatgpt_seam_diag_sync.md`.
+- `notes/hunyuan_h1_rope_call_chain.md`
+- `notes/chatgpt_seam_diag_sync.md`
+- `scripts/benchmark/run_hunyuan15_symmetric.py`
