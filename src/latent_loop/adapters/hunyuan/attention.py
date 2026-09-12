@@ -5,12 +5,15 @@ offloading hooks on ``forward`` stay intact (replacing ``forward`` breaks them).
 
 Global block index: double blocks first, then single blocks — matches
 ``SymmetricShiftSchedule`` ``0,+1,-1,+2,-2,...``.
+
+Actual **480p_i2v** runtime (H0/H1 measured): ``double_blocks=54``,
+``single_blocks=0`` — do not assume the older 20+40 layout.
 """
 
 from __future__ import annotations
 
 import types
-from typing import Any
+from typing import Any, Iterable
 
 from torch import nn
 from torch.utils.hooks import RemovableHandle
@@ -21,6 +24,42 @@ from latent_loop.rope.schedule import (
     SymmetricShiftSchedule,
     TemporalShiftSchedule,
 )
+
+
+def parse_active_block_spec(spec: str | None, n_layers: int) -> set[int] | None:
+    """Parse ``all`` / empty → None (all layers); else ``0-17`` / ``0,5,9``.
+
+    Indices are **global** block indices (0 .. n_layers-1). Inclusive ranges.
+    """
+    if spec is None:
+        return None
+    text = str(spec).strip().lower()
+    if not text or text in {"all", "*", "full"}:
+        return None
+    out: set[int] = set()
+    for part in text.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if "-" in part:
+            a_s, b_s = part.split("-", 1)
+            a, b = int(a_s), int(b_s)
+            if a > b:
+                a, b = b, a
+            for i in range(a, b + 1):
+                out.add(i)
+        else:
+            out.add(int(part))
+    if not out:
+        raise ValueError(f"empty active block set from spec={spec!r}")
+    bad = [i for i in sorted(out) if i < 0 or i >= n_layers]
+    if bad:
+        raise ValueError(
+            f"active blocks out of range [0, {n_layers}): {bad[:8]}..."
+            if len(bad) > 8
+            else f"active blocks out of range [0, {n_layers}): {bad}"
+        )
+    return out
 
 
 def _rope_sizes(transformer: nn.Module) -> tuple[int, int, int]:
@@ -126,8 +165,15 @@ def enable_mode_b_on_hunyuan_transformer(
     *,
     schedule: TemporalShiftSchedule | None = None,
     enabled: bool = True,
+    active_block_indices: Iterable[int] | None = None,
 ) -> list[int]:
-    """Install temporal freqs-roll pre-hooks on double/single stream blocks."""
+    """Install temporal freqs-roll pre-hooks on double/single stream blocks.
+
+    ``active_block_indices``: if set, only those **global** indices roll.
+    Other blocks keep native freqs (depth localization for H1-A/B/C).
+    Shift amount still uses the full Symmetric schedule at that global index
+    (not reindexed within the active subset).
+    """
     double = getattr(transformer, "double_blocks", None)
     single = getattr(transformer, "single_blocks", None)
     if double is None:
@@ -144,33 +190,56 @@ def enable_mode_b_on_hunyuan_transformer(
     _wrap_get_rotary_pos_embed(transformer)
 
     n_double = len(double)
+    n_single = len(single)
+    n_layers = n_double + n_single
+    active: set[int] | None
+    if active_block_indices is None:
+        active = None
+    else:
+        active = {int(i) for i in active_block_indices}
+        bad = [i for i in sorted(active) if i < 0 or i >= n_layers]
+        if bad:
+            raise ValueError(
+                f"active_block_indices out of range [0, {n_layers}): {bad}"
+            )
+
     for i, block in enumerate(double):
+        on = bool(enabled) and (active is None or i in active)
         _attach_block_hook(
             block,
             global_idx=i,
             schedule=sched,
-            enabled=enabled,
+            enabled=on,
             transformer=transformer,
         )
     for j, block in enumerate(single):
+        g = n_double + j
+        on = bool(enabled) and (active is None or g in active)
         _attach_block_hook(
             block,
-            global_idx=n_double + j,
+            global_idx=g,
             schedule=sched,
-            enabled=enabled,
+            enabled=on,
             transformer=transformer,
         )
 
     transformer._latent_loop_mode_b = bool(enabled)  # type: ignore[attr-defined]
     transformer._latent_loop_shift_schedule = sched  # type: ignore[attr-defined]
     transformer._latent_loop_n_double = n_double  # type: ignore[attr-defined]
-    transformer._latent_loop_n_single = len(single)  # type: ignore[attr-defined]
+    transformer._latent_loop_n_single = n_single  # type: ignore[attr-defined]
+    transformer._latent_loop_active_blocks = (  # type: ignore[attr-defined]
+        None if active is None else sorted(active)
+    )
 
     f = getattr(transformer, "_latent_loop_num_latent_frames", None)
-    n_layers = n_double + len(single)
     if f is None:
         return []
-    return [sched.time_shift(i, int(f)) for i in range(n_layers)]
+    # Effective shifts: inactive / disabled → 0
+    out: list[int] = []
+    for i in range(n_layers):
+        on = bool(enabled) and (active is None or i in active)
+        out.append(sched.time_shift(i, int(f)) if on else 0)
+    return out
 
 
 def disable_mode_b_on_hunyuan_transformer(transformer: nn.Module) -> int:
@@ -204,6 +273,7 @@ def disable_mode_b_on_hunyuan_transformer(transformer: nn.Module) -> int:
         "_latent_loop_shift_schedule",
         "_latent_loop_n_double",
         "_latent_loop_n_single",
+        "_latent_loop_active_blocks",
         "_latent_loop_rope_sizes",
         "_latent_loop_num_latent_frames",
     ):

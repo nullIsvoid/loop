@@ -33,5 +33,5 @@ Do **not** treat this as “Circular RoPE fails forever” — first diagnose:
 
 ## Next
 
-Pause further H1 schedule variants until the failure layer is named.  
-W5-0 / WA-0 on the same benchmark remain useful controls, but are not required to record this H1 miss.
+**Depth localization** (same Symmetric schedule): H1-A `0-17`, H1-B `18-35`, H1-C `36-53`.  
+No S4/S5. W5/WA paused until depth answer exists.

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""H1: HunyuanVideo-1.5 + Symmetric Circular Temporal RoPE on person_loop_v1.
+"""H1 / H1-A/B/C: Hunyuan + Symmetric Circular Temporal RoPE on person_loop_v1.
 
 Same inputs as H0. Only change: Mode B temporal freqs roll on img Q/K.
-See ``notes/hunyuan_h1_rope_call_chain.md``.
+Depth localization: ``--active-blocks 0-17|18-35|36-53`` (same schedule,
+subset of layers). See ``notes/hunyuan_h1_rope_call_chain.md``.
 """
 from __future__ import annotations
 
@@ -42,6 +43,14 @@ logging.basicConfig(
     format="[%(asctime)s] %(levelname)s: %(message)s",
 )
 
+# Measured 480p_i2v topology — not the older 20+40 assumption.
+DEPTH_SLICES = {
+    "H1": ("all", "hunyuan15_symmetric"),
+    "H1-A": ("0-17", "hunyuan15_symmetric_depth_0_17"),
+    "H1-B": ("18-35", "hunyuan15_symmetric_depth_18_35"),
+    "H1-C": ("36-53", "hunyuan15_symmetric_depth_36_53"),
+}
+
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="H1 Hunyuan + Symmetric Circular RoPE")
@@ -53,7 +62,20 @@ def parse_args() -> argparse.Namespace:
             Path(os.environ.get("LOOP_ARTIFACTS_ROOT", DEFAULT_ARTIFACTS_ROOT))
         ),
     )
-    p.add_argument("--run-name", type=str, default="hunyuan15_symmetric")
+    p.add_argument(
+        "--experiment-id",
+        type=str,
+        default="H1",
+        choices=sorted(DEPTH_SLICES.keys()),
+        help="H1=full; H1-A/B/C=depth thirds on 54-block 480p_i2v",
+    )
+    p.add_argument(
+        "--active-blocks",
+        type=str,
+        default="",
+        help="Override depth slice, e.g. 0-17 (empty → from --experiment-id)",
+    )
+    p.add_argument("--run-name", type=str, default="")
     p.add_argument("--hy-root", type=str, default=str(HY_ROOT))
     p.add_argument("--model-path", type=str, default=str(HY_MODEL_PATH))
     p.add_argument("--resolution", type=str, default="480p", choices=["480p", "720p"])
@@ -71,8 +93,11 @@ def main() -> None:
     import json
 
     args = parse_args()
+    slice_spec, default_run = DEPTH_SLICES[args.experiment_id]
+    active_spec = (args.active_blocks or slice_spec).strip()
+    run_name = args.run_name or default_run
     bench = load_benchmark(args.benchmark_dir)
-    out_dir = prepare_run_dir(args.out_root, args.run_name, bench)
+    out_dir = prepare_run_dir(args.out_root, run_name, bench)
 
     from PIL import Image
 
@@ -87,7 +112,18 @@ def main() -> None:
         {"model_path": args.model_path, "missing": missing, "ok": len(missing) == 0},
     )
     if args.check_only:
-        print(json.dumps({"check_only": True, "missing": missing, "ok": not missing}, indent=2))
+        print(
+            json.dumps(
+                {
+                    "check_only": True,
+                    "missing": missing,
+                    "ok": not missing,
+                    "experiment_id": args.experiment_id,
+                    "active_blocks": active_spec,
+                },
+                indent=2,
+            )
+        )
         if missing:
             raise SystemExit("H1_PREREQ_MISSING")
         print("H1_CHECK_OK")
@@ -107,6 +143,7 @@ def main() -> None:
     from latent_loop.adapters.hunyuan.attention import (
         disable_mode_b_on_hunyuan_transformer,
         enable_mode_b_on_hunyuan_transformer,
+        parse_active_block_spec,
     )
     from latent_loop.rope.schedule import SymmetricShiftSchedule, list_layer_time_shifts
 
@@ -143,11 +180,13 @@ def main() -> None:
     )
 
     logging.info(
-        "H1 create_pipeline version=%s aspect=%s frames=%s steps=%s",
+        "%s create_pipeline version=%s aspect=%s frames=%s steps=%s active=%s",
+        args.experiment_id,
         transformer_version,
         aspect,
         video_length,
         args.steps,
+        active_spec,
     )
     pipe = HunyuanVideo_1_5_Pipeline.create_pipeline(
         pretrained_model_name_or_path=str(args.model_path),
@@ -168,15 +207,25 @@ def main() -> None:
     # Approximate F from pixel frames (Wan-style 4n+1 → latent); Hunyuan VAE t-factor=4.
     approx_tt = (video_length - 1) // 4 + 1
     pipe.transformer._latent_loop_num_latent_frames = approx_tt  # type: ignore[attr-defined]
-    shifts = enable_mode_b_on_hunyuan_transformer(
-        pipe.transformer, schedule=schedule, enabled=True
-    )
     n_double = len(pipe.transformer.double_blocks)
     n_single = len(pipe.transformer.single_blocks)
+    n_layers = n_double + n_single
+    active_set = parse_active_block_spec(active_spec, n_layers)
+    shifts = enable_mode_b_on_hunyuan_transformer(
+        pipe.transformer,
+        schedule=schedule,
+        enabled=True,
+        active_block_indices=active_set,
+    )
+    n_active = n_layers if active_set is None else len(active_set)
     logging.info(
-        "H1 Mode B on: double=%s single=%s preview_shifts_head=%s",
+        "%s Mode B: double=%s single=%s n_active=%s active=%s "
+        "preview_effective_shifts_head=%s",
+        args.experiment_id,
         n_double,
         n_single,
+        n_active,
+        None if active_set is None else sorted(active_set)[:8],
         shifts[:8] if shifts else list_layer_time_shifts(8, approx_tt, schedule),
     )
 
@@ -208,19 +257,40 @@ def main() -> None:
     probes = probe_state["metas"]
     late = next((p for p in probes if p["tag"] == "late"), None)
 
-    # H0 baseline numbers for in-run comparison note
+    # H0 / full-H1 baselines for in-run comparison
     h0_late = {
         "median_gap_l2": 54.711273193359375,
         "seam_0->1": 87.00177001953125,
         "seam_F-1->0": 130.13558959960938,
         "max_vs_median": 2.3785882141635972,
     }
+    h1_full_late = {
+        "median_gap_l2": 96.5,
+        "seam_0->1": 302.6,
+        "seam_F-1->0": 309.1,
+        "max_vs_median": 3.20,
+        "note": "full-depth H1 failed; near dual spike",
+    }
+
+    is_depth = args.experiment_id != "H1"
+    question = (
+        f"Depth slice {active_spec}: which third of the 54 double blocks "
+        "turns H0's single main seam into H1's near dual spike?"
+        if is_depth
+        else (
+            "On person_loop_v1, does Symmetric Circular Temporal RoPE reduce "
+            "Hunyuan F-1→0 without worsening 0→1 vs H0?"
+        )
+    )
 
     run = {
-        "experiment_id": "H1",
-        "name": "hunyuan15_symmetric",
+        "experiment_id": args.experiment_id,
+        "name": run_name,
         "mode_b_rope": True,
         "rope_schedule": "SymmetricShiftSchedule",
+        "active_blocks_spec": active_spec,
+        "active_blocks": None if active_set is None else sorted(active_set),
+        "n_active_blocks": n_active,
         "conditioning_edits": False,
         "benchmark": bench.as_metadata(),
         "model": {
@@ -242,8 +312,12 @@ def main() -> None:
             "n_single_blocks": n_single,
             "approx_tt": approx_tt,
             "matched_to_h0": True,
+            "runtime_topology_note": (
+                "480p_i2v measured double=54 single=0 (not 20+40)"
+            ),
         },
         "h0_baseline_late": h0_late,
+        "h1_full_baseline_late": h1_full_late,
         "elapsed_sec": round(elapsed, 2),
         "media": media,
         "probes": probes,
@@ -257,25 +331,35 @@ def main() -> None:
             "seam_F-1->0": late["seam_F-1->0"],
             "seam_0->1": late["seam_0->1"],
         },
-        "question": (
-            "On person_loop_v1, does Symmetric Circular Temporal RoPE reduce "
-            "Hunyuan F-1→0 without worsening 0→1 vs H0?"
-        ),
+        "question": question,
     }
     write_json(out_dir / "run.json", run)
     write_result_stub(
         out_dir,
-        experiment_id="H1",
-        question=run["question"],
+        experiment_id=args.experiment_id,
+        question=question,
         late=run["late"],
         notes=[
             "Same inputs as H0; only Symmetric Circular Temporal RoPE added.",
-            "Judge vs H0: F-1→0↓, 0→1 not worse, no new ring walls.",
+            f"Active blocks: {active_spec} (schedule still global Symmetric).",
+            "Judge vs H0: F-1→0 and 0→1; locate which depth harms.",
             "Visual: out_x3 jump/stall/reverse/speed-pop only.",
+            "No new schedule; W5/WA paused for this depth-loc pass.",
         ],
     )
-    print(json.dumps({"ok": True, "late": run["late"], "h0_baseline_late": h0_late}, indent=2))
-    print("H1_OK")
+    print(
+        json.dumps(
+            {
+                "ok": True,
+                "experiment_id": args.experiment_id,
+                "active_blocks": active_spec,
+                "late": run["late"],
+                "h0_baseline_late": h0_late,
+            },
+            indent=2,
+        )
+    )
+    print(f"{args.experiment_id}_OK")
 
 
 if __name__ == "__main__":

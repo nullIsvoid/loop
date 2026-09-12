@@ -1,0 +1,87 @@
+{
+  "transformer_version": "480p_i2v",
+  "n_double_blocks": 54,
+  "n_single_blocks": 0,
+  "n_blocks": 54,
+  "requested_blocks": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "benchmark": {
+    "benchmark_id": "person_loop_v1",
+    "source": "/root/latent-loop/assets/loop_benchmark/person.png",
+    "source_sha256": "6807cba271b86885329d64b75ad7c3bb4b8d860374c03f414b0cdfbf4014ad9f",
+    "prompt": "Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move",
+    "seed": 42,
+    "frame_num": 81,
+    "motion_intent": "gentle hair and clothing hem sway",
+    "camera": "fixed",
+    "loop_goal": "last-to-first temporal continuity"
+  },
+  "steps": 50,
+  "video_length": 81,
+  "aspect_ratio": "3:4",
+  "method": "Loopy-style: single-layer temporal RoPE shift=floor(T_latent/2); alpha_l=mean stepwise denoiser-output MSE on frozen native inputs",
+  "signature": {
+    "transformer_version": "480p_i2v",
+    "benchmark": {
+      "benchmark_id": "person_loop_v1",
+      "source": "/root/latent-loop/assets/loop_benchmark/person.png",
+      "source_sha256": "6807cba271b86885329d64b75ad7c3bb4b8d860374c03f414b0cdfbf4014ad9f",
+      "prompt": "Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move",
+      "seed": 42,
+      "frame_num": 81,
+      "motion_intent": "gentle hair and clothing hem sway",
+      "camera": "fixed",
+      "loop_goal": "last-to-first temporal continuity"
+    },
+    "steps": 50,
+    "video_length": 81,
+    "aspect_ratio": "3:4",
+    "dtype": "bf16",
+    "sr": false,
+    "prompt_rewrite": false
+  },
+  "completed_blocks": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "anchor_layer": 2,
+  "anchor_alpha": 0.004105619005858898,
+  "ranked": [
+    {
+      "block_idx": 2,
+      "alpha": 0.004105619005858898
+    },
+    {
+      "block_idx": 1,
+      "alpha": 0.000530410127248615
+    },
+    {
+      "block_idx": 3,
+      "alpha": 0.0005060131405480206
+    },
+    {
+      "block_idx": 4,
+      "alpha": 0.00034051255672238765
+    },
+    {
+      "block_idx": 0,
+      "alpha": 0.0003223300847457722
+    }
+  ],
+  "alpha_by_block": {
+    "0": 0.0003223300847457722,
+    "1": 0.000530410127248615,
+    "2": 0.004105619005858898,
+    "3": 0.0005060131405480206,
+    "4": 0.00034051255672238765
+  },
+  "warning": "This run uses person_loop_v1 only. Loopy paper averages over many prompts; repeat across prompts before treating the anchor index as universal."
+}

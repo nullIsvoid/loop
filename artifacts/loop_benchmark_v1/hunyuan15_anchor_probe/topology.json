@@ -1,0 +1,48 @@
+{
+  "transformer_version": "480p_i2v",
+  "n_double_blocks": 54,
+  "n_single_blocks": 0,
+  "n_blocks": 54,
+  "requested_blocks": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "benchmark": {
+    "benchmark_id": "person_loop_v1",
+    "source": "/root/latent-loop/assets/loop_benchmark/person.png",
+    "source_sha256": "6807cba271b86885329d64b75ad7c3bb4b8d860374c03f414b0cdfbf4014ad9f",
+    "prompt": "Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move",
+    "seed": 42,
+    "frame_num": 81,
+    "motion_intent": "gentle hair and clothing hem sway",
+    "camera": "fixed",
+    "loop_goal": "last-to-first temporal continuity"
+  },
+  "steps": 50,
+  "video_length": 81,
+  "aspect_ratio": "3:4",
+  "method": "Loopy-style: single-layer temporal RoPE shift=floor(T_latent/2); alpha_l=mean stepwise denoiser-output MSE on frozen native inputs",
+  "signature": {
+    "transformer_version": "480p_i2v",
+    "benchmark": {
+      "benchmark_id": "person_loop_v1",
+      "source": "/root/latent-loop/assets/loop_benchmark/person.png",
+      "source_sha256": "6807cba271b86885329d64b75ad7c3bb4b8d860374c03f414b0cdfbf4014ad9f",
+      "prompt": "Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move",
+      "seed": 42,
+      "frame_num": 81,
+      "motion_intent": "gentle hair and clothing hem sway",
+      "camera": "fixed",
+      "loop_goal": "last-to-first temporal continuity"
+    },
+    "steps": 50,
+    "video_length": 81,
+    "aspect_ratio": "3:4",
+    "dtype": "bf16",
+    "sr": false,
+    "prompt_rewrite": false
+  }
+}

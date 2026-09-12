@@ -8,6 +8,7 @@ from torch import nn
 from latent_loop.adapters.hunyuan.attention import (
     disable_mode_b_on_hunyuan_transformer,
     enable_mode_b_on_hunyuan_transformer,
+    parse_active_block_spec,
 )
 from latent_loop.adapters.hunyuan.rope import (
     describe_official_rope_layout,
@@ -36,11 +37,20 @@ def test_roll_hunyuan_freqs_identity_and_shift():
     assert float(rolled.view(tt, th, tw, d)[1, 0, 0, 0]) == 0.0
 
 
-def test_symmetric_schedule_preview_60_layers():
-    shifts = list_layer_time_shifts(60, 21, SymmetricShiftSchedule())
+def test_symmetric_schedule_preview_54_layers():
+    """480p_i2v runtime uses 54 double blocks, not the old 20+40 guess."""
+    shifts = list_layer_time_shifts(54, 21, SymmetricShiftSchedule())
     assert shifts[0] == 0
     assert shifts[1] == 1
     assert shifts[2] == (-1 % 21)
+
+
+def test_parse_active_block_spec():
+    assert parse_active_block_spec("all", 54) is None
+    assert parse_active_block_spec("0-17", 54) == set(range(0, 18))
+    assert parse_active_block_spec("18-35", 54) == set(range(18, 36))
+    assert parse_active_block_spec("36-53", 54) == set(range(36, 54))
+    assert parse_active_block_spec("0,2,4", 8) == {0, 2, 4}
 
 
 class _FakeBlock(nn.Module):
@@ -82,3 +92,28 @@ def test_enable_disable_mode_b_rolls_per_block():
     n = disable_mode_b_on_hunyuan_transformer(tr)
     assert n == 5
     assert not hasattr(tr, "_latent_loop_mode_b")
+
+
+def test_active_block_subset_skips_inactive():
+    """Depth loc: only listed global indices roll; others stay identity."""
+    tr = _FakeTransformer()
+    tr._latent_loop_num_latent_frames = 4
+    shifts = enable_mode_b_on_hunyuan_transformer(
+        tr,
+        schedule=SymmetricShiftSchedule(),
+        enabled=True,
+        active_block_indices={1},
+    )
+    assert tr._latent_loop_active_blocks == [1]
+    cos, sin = tr.get_rotary_pos_embed((4, 1, 1))
+
+    tr.double_blocks[0](freqs_cis=(cos.clone(), sin.clone()))
+    assert float(tr.double_blocks[0].last_freqs[0][0, 0]) == 0.0
+
+    tr.double_blocks[1](freqs_cis=(cos.clone(), sin.clone()))
+    assert float(tr.double_blocks[1].last_freqs[0][0, 0]) == 3.0
+
+    assert shifts[0] == 0
+    assert shifts[1] == 1
+    assert shifts[2] == 0
+    disable_mode_b_on_hunyuan_transformer(tr)

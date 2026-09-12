@@ -1,0 +1,1303 @@
+{
+  "transformer_version": "480p_i2v",
+  "n_double_blocks": 54,
+  "n_single_blocks": 0,
+  "n_blocks": 54,
+  "requested_blocks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53
+  ],
+  "benchmark": {
+    "benchmark_id": "person_loop_v1",
+    "source": "/root/latent-loop/assets/loop_benchmark/person.png",
+    "source_sha256": "6807cba271b86885329d64b75ad7c3bb4b8d860374c03f414b0cdfbf4014ad9f",
+    "prompt": "Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move",
+    "seed": 42,
+    "frame_num": 81,
+    "motion_intent": "gentle hair and clothing hem sway",
+    "camera": "fixed",
+    "loop_goal": "last-to-first temporal continuity"
+  },
+  "steps": 50,
+  "video_length": 81,
+  "aspect_ratio": "3:4",
+  "method": "Loopy-style: single-layer temporal RoPE shift=floor(T_latent/2); alpha_l=mean stepwise denoiser-output MSE on frozen native inputs",
+  "signature": {
+    "transformer_version": "480p_i2v",
+    "benchmark": {
+      "benchmark_id": "person_loop_v1",
+      "source": "/root/latent-loop/assets/loop_benchmark/person.png",
+      "source_sha256": "6807cba271b86885329d64b75ad7c3bb4b8d860374c03f414b0cdfbf4014ad9f",
+      "prompt": "Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move",
+      "seed": 42,
+      "frame_num": 81,
+      "motion_intent": "gentle hair and clothing hem sway",
+      "camera": "fixed",
+      "loop_goal": "last-to-first temporal continuity"
+    },
+    "steps": 50,
+    "video_length": 81,
+    "aspect_ratio": "3:4",
+    "dtype": "bf16",
+    "sr": false,
+    "prompt_rewrite": false
+  },
+  "captured_steps": 50,
+  "elapsed_sec": 705.25,
+  "input_files": [
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_000.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_001.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_002.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_003.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_004.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_005.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_006.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_007.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_008.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_009.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_010.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_011.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_012.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_013.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_014.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_015.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_016.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_017.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_018.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_019.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_020.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_021.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_022.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_023.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_024.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_025.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_026.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_027.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_028.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_029.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_030.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_031.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_032.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_033.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_034.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_035.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_036.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_037.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_038.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_039.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_040.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_041.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_042.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_043.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_044.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_045.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_046.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_047.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_048.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/inputs/step_049.pt",
+      "shape": [
+        2,
+        65,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.float32",
+      "numel": 4324320
+    }
+  ],
+  "output_files": [
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_000.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_001.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_002.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_003.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_004.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_005.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_006.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_007.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_008.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_009.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_010.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_011.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_012.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_013.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_014.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_015.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_016.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_017.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_018.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_019.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_020.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_021.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_022.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_023.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_024.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_025.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_026.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_027.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_028.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_029.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_030.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_031.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_032.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_033.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_034.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_035.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_036.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_037.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_038.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_039.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_040.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_041.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_042.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_043.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_044.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_045.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_046.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_047.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_048.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    },
+    {
+      "path": "/root/latent-loop/artifacts/loop_benchmark_v1/hunyuan15_anchor_probe/native_cache/outputs/step_049.pt",
+      "shape": [
+        2,
+        32,
+        21,
+        48,
+        33
+      ],
+      "dtype": "torch.bfloat16",
+      "numel": 2128896
+    }
+  ]
+}
