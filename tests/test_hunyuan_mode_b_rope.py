@@ -24,7 +24,6 @@ def test_rope_layout_marks_mode_b_ready():
 
 def test_roll_hunyuan_freqs_identity_and_shift():
     tt, th, tw, d = 4, 2, 2, 8
-    # Encode temporal index into cos channel 0 so rolls are observable.
     cos = torch.zeros(tt * th * tw, d)
     sin = torch.zeros(tt * th * tw, d)
     for t in range(tt):
@@ -33,7 +32,6 @@ def test_roll_hunyuan_freqs_identity_and_shift():
     assert torch.equal(out0[0], cos)
 
     rolled, _ = roll_hunyuan_freqs_cis((cos, sin), tt=tt, th=th, tw=tw, time_shift=1)
-    # torch.roll(+1) moves last temporal slice to front
     assert float(rolled.view(tt, th, tw, d)[0, 0, 0, 0]) == 3.0
     assert float(rolled.view(tt, th, tw, d)[1, 0, 0, 0]) == 0.0
 
@@ -42,7 +40,7 @@ def test_symmetric_schedule_preview_60_layers():
     shifts = list_layer_time_shifts(60, 21, SymmetricShiftSchedule())
     assert shifts[0] == 0
     assert shifts[1] == 1
-    assert shifts[2] == ( -1 % 21)
+    assert shifts[2] == (-1 % 21)
 
 
 class _FakeBlock(nn.Module):
@@ -50,9 +48,9 @@ class _FakeBlock(nn.Module):
         super().__init__()
         self.last_freqs = None
 
-    def forward(self, *, freqs_cis=None, **kwargs):
+    def forward(self, freqs_cis=None, **kwargs):
         self.last_freqs = freqs_cis
-        return kwargs.get("x", None)
+        return None
 
 
 class _FakeTransformer(nn.Module):
@@ -72,19 +70,14 @@ class _FakeTransformer(nn.Module):
 def test_enable_disable_mode_b_rolls_per_block():
     tr = _FakeTransformer()
     enable_mode_b_on_hunyuan_transformer(tr, schedule=SymmetricShiftSchedule(), enabled=True)
-    # Populate rope sizes via wrapped get_rotary
     cos, sin = tr.get_rotary_pos_embed((4, 1, 1))
     assert tr._latent_loop_rope_sizes == (4, 1, 1)
 
-    # block 0 shift 0 → unchanged first token value 0
-    tr.double_blocks[0].forward(freqs_cis=(cos.clone(), sin.clone()))
-    f0 = tr.double_blocks[0].last_freqs[0]
-    assert float(f0[0, 0]) == 0.0
+    tr.double_blocks[0](freqs_cis=(cos.clone(), sin.clone()))
+    assert float(tr.double_blocks[0].last_freqs[0][0, 0]) == 0.0
 
-    # block 1 shift +1 → roll
-    tr.double_blocks[1].forward(freqs_cis=(cos.clone(), sin.clone()))
-    f1 = tr.double_blocks[1].last_freqs[0]
-    assert float(f1[0, 0]) == 3.0
+    tr.double_blocks[1](freqs_cis=(cos.clone(), sin.clone()))
+    assert float(tr.double_blocks[1].last_freqs[0][0, 0]) == 3.0
 
     n = disable_mode_b_on_hunyuan_transformer(tr)
     assert n == 5
