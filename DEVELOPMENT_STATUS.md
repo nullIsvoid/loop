@@ -1,23 +1,24 @@
 # Development status
 
-> **D1 in flight:** Late Anchor Release vs hard-anchor Symmetric I2V (person + environment).  
-> RoPE unchanged. No Circular Temporal Context. No D2 yet.
+> **D1 done:** Late Anchor Release lowers `seam_vs_adj` a bit but **does not** kill the late F-1→0 / 0→1 double spike.  
+> Next design candidate (not started): **D2 circular soft conditioning** around index 0.
 
-## Causal chain (agreed)
+## D1 late numbers
 
-T2V + Symmetric RoPE → latent seam flat.  
-I2V + per-step hard clamp of frame 0 → late F-1→0 **and** 0→1 spike.
+| case | B seam_vs_adj | D1 seam_vs_adj | note |
+|------|--------------:|---------------:|------|
+| person | 1.77 | 1.37 | F-1→0↓ but 0→1↑ |
+| environment | 1.56 | 1.42 | same pattern |
 
-## D1 = Late Anchor Release
+## Active stack
 
-`latent0 = a(step)*ref0 + (1-a)*gen0`  
-a: 0–12 → 1.0; then 0.90…0.00 by step 19.  
-Module: `latent_loop.i2v_conditioning`. Script: `scripts/cloud_mode_b_i2v_d1_compare.py`.
+Symmetric Circular Temporal RoPE + official/Wan-style I2V frame-0 clamp (B) or D1 late release.  
+Module: `latent_loop.i2v_conditioning`.
 
-## Still held
+## Held
 
-- No F-1 dual-nail to reference  
-- No Circular Temporal Context as first D  
+- No Circular Temporal Context as first fix  
 - No S4/S5  
+- No D2 until green-light  
 
-Next after D1 results: if late double-spike dies → design D2 circular soft conditioning; else revisit.
+Details: `artifacts/mode_b_i2v_d1/RESULT.md`

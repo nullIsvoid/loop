@@ -1,0 +1,104 @@
+{
+  "name": "mode_b_i2v_d1_late_anchor_release",
+  "question": "Does Late Anchor Release remove the late F-1\u21920 / 0\u21921 double spike vs hard-anchor Symmetric Mode B?",
+  "attention_backend": {
+    "flash_attn_2": false,
+    "flash_attn_3": false,
+    "backend": "official_attention_sdpa_fallback"
+  },
+  "rope_schedule": "SymmetricShiftSchedule",
+  "shared": {
+    "seed": 42,
+    "steps": 20,
+    "frame_num": 81,
+    "max_area": 901120,
+    "guide_scale": 5.0,
+    "shift": 5.0,
+    "sample_solver": "unipc"
+  },
+  "variants": {
+    "B_hard_anchor": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "D1_late_release": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.9,
+      0.75,
+      0.6,
+      0.45,
+      0.3,
+      0.15,
+      0.0
+    ]
+  },
+  "runs": [
+    {
+      "case_id": "person",
+      "variant": "B_hard_anchor",
+      "late_seam_vs_adj": 1.7689813405756545,
+      "late_F-1->0": 212.66065979003906,
+      "late_0->1": 168.65615844726562,
+      "late_1->2": 104.51622009277344,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1/person/B_hard_anchor"
+    },
+    {
+      "case_id": "person",
+      "variant": "D1_late_release",
+      "late_seam_vs_adj": 1.3689116757112199,
+      "late_F-1->0": 175.2178955078125,
+      "late_0->1": 192.2264404296875,
+      "late_1->2": 106.46009826660156,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1/person/D1_late_release"
+    },
+    {
+      "case_id": "environment",
+      "variant": "B_hard_anchor",
+      "late_seam_vs_adj": 1.5633104040308667,
+      "late_F-1->0": 258.0081481933594,
+      "late_0->1": 218.0906524658203,
+      "late_1->2": 142.42767333984375,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1/environment/B_hard_anchor"
+    },
+    {
+      "case_id": "environment",
+      "variant": "D1_late_release",
+      "late_seam_vs_adj": 1.4177226852104523,
+      "late_F-1->0": 246.54257202148438,
+      "late_0->1": 247.04898071289062,
+      "late_1->2": 144.15415954589844,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1/environment/D1_late_release"
+    }
+  ],
+  "note": "No F-1 conditioning. No circular temporal context. No new RoPE schedule."
+}

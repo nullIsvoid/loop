@@ -1,0 +1,119 @@
+{
+  "case_id": "environment",
+  "variant": "D1_late_release",
+  "anchor_schedule": "LateAnchorReleaseSchedule",
+  "anchor_strengths": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.9,
+    0.75,
+    0.6,
+    0.45,
+    0.3,
+    0.15,
+    0.0
+  ],
+  "rope_schedule": "SymmetricShiftSchedule",
+  "seed": 42,
+  "steps": 20,
+  "elapsed_sec": 185.8,
+  "video_shape": [
+    3,
+    81,
+    1088,
+    800
+  ],
+  "probes": [
+    {
+      "step": 2,
+      "tag": "early",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 550.79296875,
+        "F-2->F-1": 551.0628662109375,
+        "F-1->0": 462.9043273925781,
+        "0->1": 461.6012268066406,
+        "1->2": 552.0048217773438
+      },
+      "seam_l2": 462.9043273925781,
+      "adj_mean_l2": 528.8654708862305,
+      "seam_vs_adj": 0.8752780298114,
+      "pt": "/root/latent-loop/artifacts/mode_b_i2v_d1/environment/D1_late_release/latent/step02_early_slices.pt",
+      "anchor_strength": 1.0
+    },
+    {
+      "step": 10,
+      "tag": "middle",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 458.88848876953125,
+        "F-2->F-1": 459.2748718261719,
+        "F-1->0": 381.3585205078125,
+        "0->1": 381.8235778808594,
+        "1->2": 460.02496337890625
+      },
+      "seam_l2": 381.3585205078125,
+      "adj_mean_l2": 440.0029754638672,
+      "seam_vs_adj": 0.8667180491353961,
+      "pt": "/root/latent-loop/artifacts/mode_b_i2v_d1/environment/D1_late_release/latent/step10_middle_slices.pt",
+      "anchor_strength": 1.0
+    },
+    {
+      "step": 19,
+      "tag": "late",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 142.96405029296875,
+        "F-2->F-1": 161.4344940185547,
+        "F-1->0": 246.54257202148438,
+        "0->1": 247.04898071289062,
+        "1->2": 144.15415954589844
+      },
+      "seam_l2": 246.54257202148438,
+      "adj_mean_l2": 173.90042114257812,
+      "seam_vs_adj": 1.4177226852104523,
+      "pt": "/root/latent-loop/artifacts/mode_b_i2v_d1/environment/D1_late_release/latent/step19_late_slices.pt",
+      "anchor_strength": 0.0
+    }
+  ],
+  "late_diffs_l2": {
+    "F-3->F-2": 142.96405029296875,
+    "F-2->F-1": 161.4344940185547,
+    "F-1->0": 246.54257202148438,
+    "0->1": 247.04898071289062,
+    "1->2": 144.15415954589844
+  },
+  "late_seam_vs_adj": 1.4177226852104523
+}
