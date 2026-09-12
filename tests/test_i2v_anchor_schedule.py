@@ -32,6 +32,14 @@ def test_apply_frame0_anchor_blends_only_index_zero():
     assert torch.equal(out[:, 1:], gen[:, 1:])
 
 
+def test_apply_frame0_accepts_wan_i2v_ref_f1():
+    gen = torch.randn(4, 5, 2, 2)
+    ref = torch.ones(4, 1, 2, 2)
+    out = apply_frame0_anchor(gen, ref, 1.0)
+    assert torch.equal(out[:, 0], ref[:, 0])
+    assert torch.equal(out[:, 1:], gen[:, 1:])
+
+
 def test_apply_frame0_hard_and_free():
     gen = torch.randn(2, 3, 1, 1)
     ref = torch.ones(2, 3, 1, 1)

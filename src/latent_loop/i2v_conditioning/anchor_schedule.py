@@ -83,23 +83,32 @@ def apply_frame0_anchor(
 ) -> Tensor:
     """Blend temporal index 0 toward ``reference`` with strength ``a`` in [0, 1].
 
-    ``latent`` / ``reference``: ``[C, F, H, W]``. Other frames unchanged.
+    ``latent``: ``[C, F, H, W]``.
+    ``reference``: ``[C, F, H, W]`` or Wan I2V encode ``[C, 1, H, W]`` (broadcast).
+    Other temporal frames unchanged.
     """
     a = float(strength)
     if a < 0.0 or a > 1.0:
         raise ValueError(f"strength must be in [0, 1], got {a}")
-    if latent.shape != reference.shape:
+    if latent.ndim != 4 or reference.ndim != 4:
+        raise ValueError("latent and reference must be [C, F, H, W]")
+    if latent.shape[0] != reference.shape[0] or latent.shape[2:] != reference.shape[2:]:
         raise ValueError(
-            f"shape mismatch latent={tuple(latent.shape)} ref={tuple(reference.shape)}"
+            f"C/H/W mismatch latent={tuple(latent.shape)} ref={tuple(reference.shape)}"
         )
+    if reference.shape[1] not in (1, latent.shape[1]):
+        raise ValueError(
+            f"reference F must be 1 or {latent.shape[1]}, got {reference.shape[1]}"
+        )
+    ref0 = reference[:, 0]
     if a == 1.0:
         out = latent.clone()
-        out[:, 0] = reference[:, 0]
+        out[:, 0] = ref0
         return out
     if a == 0.0:
         return latent
     out = latent.clone()
-    out[:, 0] = a * reference[:, 0] + (1.0 - a) * latent[:, 0]
+    out[:, 0] = a * ref0 + (1.0 - a) * latent[:, 0]
     return out
 
 
