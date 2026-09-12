@@ -1,44 +1,34 @@
-# ChatGPT sync — H1 approved after H0 (commit pending)
+# ChatGPT sync — H1 first attempt FAILED (8058b61+)
 
-Repo tip follows this note on `main`.
+## H0 baseline (pass architecture read)
 
-## Refined conditioning conclusion (locked)
+| | H0 |
+|--|---:|
+| median | 54.7 |
+| `0→1` | 87 (1.59×) |
+| `F-1→0` | 130 (2.38×) |
 
-```text
-TI2V-5B:  destructive frame0 write     → severe artificial 0→1 wall
-A14B:     independent y cond           → 0→1 ≈ median (arch probe; not v1 yet)
-Hunyuan:  non-destructive cond+vision  → mild 0→1 bump (1.59×); dominant F-1→0 (2.38×)
-```
+## H1 = same inputs + Symmetric Circular Temporal RoPE
 
-**More accurate rule:** non-destructive conditioning avoids TI2V-style severe dual walls, but index-0 reference asymmetry can still leave a **weak** local `0→1` effect. Do not claim “non-destructive ⇒ 0→1 always flat.”
+480p_i2v: **54 double blocks, 0 single**; schedule `0,+1,-1,...` via temporal freqs roll pre-hooks.
 
-## H0 baseline (person_loop_v1, strict)
+| | H1 | vs H0 |
+|--|---:|------|
+| median | 96.5 | ↑ |
+| `0→1` | **302.6** (3.14×) | **much worse** |
+| `F-1→0` | **309.1** (3.20×) | **worse** |
 
-| edge | L2 | vs med |
-|------|---:|-------:|
-| median | 54.7 | 1.00× |
-| `0→1` | 87.0 | 1.59× (rank 2) |
-| `F-1→0` | 130.1 | 2.38× (**max**) |
+Shape: **near dual spike** (`20→0` ≈ `0→1`).
 
-## H1 authorization
+## Verdict
 
-**Approved.** Do **not** wait for W5-0/WA-0.
+H1 v1 **fails** the pre-agreed success bar (`F-1→0`↓ and `0→1` not worse).
 
-```text
-H1 = H0 inputs + Symmetric Circular Temporal RoPE only
-     schedule 0,+1,-1,+2,-2,... on Hunyuan ND RoPE (img Q/K)
-```
+## Ask
 
-Success vs H0:
+1. Is the failure more likely **schedule over-shift** (54 layers × F=21), **wrong roll axis/order** for Hunyuan ND RoPE, or **Mode B fighting I2V index-0 cond**?
+2. Smallest next experiment: Identity schedule sanity, FixedShift(1) only, or block-subset (e.g. last N blocks)?
+3. Should W5-0/WA-0 natives on person_loop_v1 run before more Hunyuan RoPE variants?
 
-1. `F-1→0` clearly closer to ordinary adjacent  
-2. `0→1` **not worse**  
-3. no new ring walls  
-4. `out_x3`: jump / stall / reverse / speed-pop only  
-
-Call chain: `notes/hunyuan_h1_rope_call_chain.md`  
-Runner: `scripts/benchmark/run_hunyuan15_symmetric.py`
-
-## Still pending (not blocking H1)
-
-- W5-0 / WA-0 on person_loop_v1 (three-way native table later)
+Video: `artifacts/loop_benchmark_v1/hunyuan15_symmetric/out_x3.mp4`  
+Detail: `RESULT.md`

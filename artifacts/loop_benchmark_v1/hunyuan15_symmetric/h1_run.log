@@ -1,0 +1,52 @@
+[2026-09-12 09:43:36,966] INFO: H1 create_pipeline version=480p_i2v aspect=3:4 frames=81 steps=50
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:01<00:04,  1.21s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:21<00:36, 12.24s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:43<00:33, 16.63s/it]Loading checkpoint shards:  80%|████████  | 4/5 [01:11<00:21, 21.32s/it]Loading checkpoint shards: 100%|██████████| 5/5 [01:11<00:00, 14.30s/it]
+[2026-09-12 09:45:38,351] INFO: H1 Mode B on: double=54 single=0 preview_shifts_head=[0, 1, 20, 2, 19, 3, 18, 4]
+
+============================================================
+🎬  HunyuanVideo Generation Task
+------------------------------------------------------------
+User Prompt:               Subtle seamless looping live wallpaper, fixed camera, preserve the woman identity pose and clothing exactly, only gentle hair and clothing hem sway, no cuts, no camera move
+Rewritten Prompt:          <disabled>
+Aspect Ratio:              528:768
+Video Length:              81
+Reference Image:           /root/latent-loop/assets/loop_benchmark/person.png (718, 1047)
+Guidance Scale:            6.0
+Guidance Embedded Scale:   None
+Shift:                     5.0
+Seed:                      42
+Video Resolution:          528 x 768
+Attn mode:                 flash
+Transformer dtype:         torch.bfloat16
+Sampling Steps:            50
+Use Meanflow:              False
+============================================================
+
+  0%|          | 0/50 [00:00<?, ?it/s]The module 'HunyuanVideo_1_5_DiffusionTransformer' is group offloaded and moving it using `.to()` is not supported.
+/root/HunyuanVideo-1.5/hyvideo/commons/__init__.py:225: UserWarning: Falling back from `flash` to `torch` because `flash` is not properly installed.
+  warnings.warn(f"Falling back from `{original_attn_mode}` to `{attn_mode}` because `{original_attn_mode}` is not properly installed.")
+/root/HunyuanVideo-1.5/hyvideo/commons/__init__.py:225: UserWarning: Falling back from `flash` to `torch` because `flash` is not properly installed.
+  warnings.warn(f"Falling back from `{original_attn_mode}` to `{attn_mode}` because `{original_attn_mode}` is not properly installed.")
+  2%|▏         | 1/50 [00:18<15:03, 18.45s/it]  4%|▍         | 2/50 [00:32<12:43, 15.90s/it][2026-09-12 09:46:45,145] INFO: H0 probe step=2 tag=early shape=(1, 32, 21, 48, 33)
+  6%|▌         | 3/50 [00:46<11:47, 15.06s/it]  8%|▊         | 4/50 [01:00<11:08, 14.54s/it] 10%|█         | 5/50 [01:14<10:41, 14.27s/it] 12%|█▏        | 6/50 [01:27<10:20, 14.09s/it] 14%|█▍        | 7/50 [01:41<10:00, 13.97s/it] 16%|█▌        | 8/50 [01:55<09:43, 13.89s/it] 18%|█▊        | 9/50 [02:09<09:27, 13.84s/it] 20%|██        | 10/50 [02:22<09:12, 13.81s/it] 22%|██▏       | 11/50 [02:36<08:57, 13.77s/it] 24%|██▍       | 12/50 [02:50<08:42, 13.74s/it] 26%|██▌       | 13/50 [03:03<08:28, 13.74s/it] 28%|██▊       | 14/50 [03:17<08:14, 13.73s/it] 30%|███       | 15/50 [03:31<08:00, 13.73s/it] 32%|███▏      | 16/50 [03:44<07:45, 13.70s/it] 34%|███▍      | 17/50 [03:58<07:31, 13.69s/it] 36%|███▌      | 18/50 [04:12<07:17, 13.68s/it] 38%|███▊      | 19/50 [04:25<07:04, 13.68s/it] 40%|████      | 20/50 [04:39<06:50, 13.69s/it] 42%|████▏     | 21/50 [04:53<06:37, 13.71s/it] 44%|████▍     | 22/50 [05:07<06:23, 13.70s/it] 46%|████▌     | 23/50 [05:20<06:09, 13.70s/it] 48%|████▊     | 24/50 [05:34<05:56, 13.71s/it][2026-09-12 09:51:46,801] INFO: H0 probe step=24 tag=middle shape=(1, 32, 21, 48, 33)
+ 50%|█████     | 25/50 [05:48<05:42, 13.71s/it] 52%|█████▏    | 26/50 [06:01<05:29, 13.72s/it] 54%|█████▍    | 27/50 [06:15<05:15, 13.70s/it] 56%|█████▌    | 28/50 [06:29<05:01, 13.68s/it] 58%|█████▊    | 29/50 [06:42<04:47, 13.67s/it] 60%|██████    | 30/50 [06:56<04:33, 13.67s/it] 62%|██████▏   | 31/50 [07:10<04:19, 13.67s/it] 64%|██████▍   | 32/50 [07:23<04:06, 13.68s/it] 66%|██████▌   | 33/50 [07:37<03:52, 13.67s/it] 68%|██████▊   | 34/50 [07:51<03:38, 13.68s/it] 70%|███████   | 35/50 [08:04<03:25, 13.68s/it] 72%|███████▏  | 36/50 [08:18<03:11, 13.67s/it] 74%|███████▍  | 37/50 [08:32<02:57, 13.68s/it] 76%|███████▌  | 38/50 [08:46<02:44, 13.69s/it] 78%|███████▊  | 39/50 [08:59<02:30, 13.69s/it] 80%|████████  | 40/50 [09:13<02:17, 13.71s/it] 82%|████████▏ | 41/50 [09:27<02:03, 13.73s/it] 84%|████████▍ | 42/50 [09:40<01:49, 13.71s/it] 86%|████████▌ | 43/50 [09:54<01:35, 13.69s/it] 88%|████████▊ | 44/50 [10:08<01:22, 13.70s/it] 90%|█████████ | 45/50 [10:22<01:08, 13.70s/it] 92%|█████████▏| 46/50 [10:35<00:54, 13.70s/it] 94%|█████████▍| 47/50 [10:49<00:41, 13.70s/it] 96%|█████████▌| 48/50 [11:03<00:27, 13.70s/it] 98%|█████████▊| 49/50 [11:16<00:13, 13.68s/it][2026-09-12 09:57:28,968] INFO: H0 probe step=49 tag=late shape=(1, 32, 21, 48, 33)
+100%|██████████| 50/50 [11:30<00:00, 13.68s/it]The module 'HunyuanVideo_1_5_DiffusionTransformer' is group offloaded and moving it using `.to()` is not supported.
+100%|██████████| 50/50 [11:30<00:00, 13.81s/it]
+{
+  "ok": true,
+  "late": {
+    "max_gap_edge": "20->0",
+    "max_gap_l2": 309.1344909667969,
+    "median_gap_l2": 96.50152587890625,
+    "max_vs_median": 3.203415574534132,
+    "seam_F-1->0": 309.1344909667969,
+    "seam_0->1": 302.59808349609375
+  },
+  "h0_baseline_late": {
+    "median_gap_l2": 54.711273193359375,
+    "seam_0->1": 87.00177001953125,
+    "seam_F-1->0": 130.13558959960938,
+    "max_vs_median": 2.3785882141635972
+  }
+}
+H1_OK
+[rank0]:[W912 09:57:48.770678134 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
