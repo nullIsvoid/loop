@@ -25,15 +25,21 @@ Early/middle rings are nearly flat (max/median ≈ 1.00).
 
 ## Verdict
 
+**Architecture pass only — not a visual seamless loop.**
+
+Eye check of `out_x3.mp4` still shows a clear last→first jump. That matches the numbers: `F-1→0` ≈ **1.93×** median. We did **not** claim pixel/temporal seamless.
+
+What *did* pass the probe question:
+
 **Not a TI2V-5B-style double spike.**
 
 - `0→1` tracks ordinary adjacent motion.
 - Only `F-1→0` is the elevated loop seam.
 
-So independent channel conditioning (`y = mask + VAE(ref+zeros)`) **removes the artificial second wall at 0→1** that TI2V-5B hard frame0 clamp + `t0=0` created.
+So independent channel conditioning (`y = mask + VAE(ref+zeros)`) **removes the artificial second wall at 0→1** that TI2V-5B hard frame0 clamp + `t0=0` created. The **ring seam itself remains**.
 
-This supports **H1/H2**: much of the TI2V-5B residual I2V boundary was conditioning-implementation-specific.
+This supports **H1/H2** (conditioning-implementation-specific extra wall on TI2V-5B), not “A14B already loops clean.”
 
 ## Next
 
-Proceed with HunyuanVideo-1.5 as primary (Phase C native H0 probe). Do not invest further in TI2V-5B latent surgery. A14B stays architecture control / high-quality reference, not the long-term iterative backbone.
+Proceed with HunyuanVideo-1.5 as primary (Phase C native H0 probe). Do not invest further in TI2V-5B latent surgery. A14B stays architecture control / reference — **not** proof of seamless success.

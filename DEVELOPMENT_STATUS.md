@@ -1,6 +1,7 @@
 # Development status
 
-> **Phase A done:** A14B native I2V — **no double spike** (`0→1`≈median; only `F-1→0` elevated).  
+> **Phase A done (architecture only):** A14B native I2V — **no double spike** (`0→1`≈median; only `F-1→0` elevated ~1.93×).  
+> **Not visually seamless** — `out_x3.mp4` still jumps at the loop. “Pass” ≠ closed loop.  
 > Next: HunyuanVideo-1.5 native H0 probe (Phase C). Keep Symmetric Circular Temporal RoPE for later H1.
 
 ## Goal
@@ -13,7 +14,7 @@ I2V seamless loop (last→first motion continuity). No scoring Gates / RepairPla
 |------|--------|
 | Symmetric Circular Temporal RoPE | keep |
 | TI2V-5B post-step conditioning (B→D3) | **closed** |
-| A14B architecture control | **done** — supports H1/H2 |
+| A14B architecture control | **done** — supports H1/H2; **not** visual seamless |
 
 ## A14B late (native, no RoPE)
 
@@ -21,7 +22,8 @@ I2V seamless loop (last→first motion continuity). No scoring Gates / RepairPla
 |--|------:|----:|-------:|--------:|
 | A14B | 236 | **123≈med** | 122 | 1.93 |
 
-vs TI2V-5B hard I2V: both F-1→0 and 0→1 high.
+vs TI2V-5B hard I2V: both F-1→0 and 0→1 high.  
+**Visual:** loop still jumps; residual seam = `F-1→0` only.
 
 ## Next
 
