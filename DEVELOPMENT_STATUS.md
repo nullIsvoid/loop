@@ -1,24 +1,22 @@
 # Development status
 
-> **D1 done:** Late Anchor Release lowers `seam_vs_adj` a bit but **does not** kill the late F-1→0 / 0→1 double spike.  
-> Next design candidate (not started): **D2 circular soft conditioning** around index 0.
+> **D1b done:** Coupled Anchor Release failed to flatten late double spike.  
+> Next candidate (await green-light): **D2 Circular Soft Conditioning**. Symmetric RoPE unchanged.
 
-## D1 late numbers
+## Causal chain (agreed)
 
-| case | B seam_vs_adj | D1 seam_vs_adj | note |
-|------|--------------:|---------------:|------|
-| person | 1.77 | 1.37 | F-1→0↓ but 0→1↑ |
-| environment | 1.56 | 1.42 | same pattern |
+T2V + Symmetric RoPE → latent seam flat.  
+I2V hard clamp of frame 0 → late F-1→0 **and** 0→1 spike.
 
-## Active stack
+| knife | change | late outcome |
+|-------|--------|--------------|
+| B | hard latent + hard t0=0 | double spike |
+| D1 | soft latent + hard t0 | F-1→0 ↓, 0→1 ↑ |
+| D1b | soft latent + soft t0=(1-a)t | still double spike; env worse |
 
-Symmetric Circular Temporal RoPE + official/Wan-style I2V frame-0 clamp (B) or D1 late release.  
-Module: `latent_loop.i2v_conditioning`.
+## Still held
 
-## Held
-
-- No Circular Temporal Context as first fix  
+- No Circular Temporal Context as first knife  
 - No S4/S5  
-- No D2 until green-light  
 
-Details: `artifacts/mode_b_i2v_d1/RESULT.md`
+D2 is now justified if product wants to continue: soft reference conditioning on the ring around index 0, not further single-point D1.x.

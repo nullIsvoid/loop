@@ -8,6 +8,8 @@ from latent_loop.i2v_conditioning import (
     HardAnchorSchedule,
     LateAnchorReleaseSchedule,
     apply_frame0_anchor,
+    apply_frame0_timestep_mask,
+    frame0_timestep_factor,
     list_anchor_strengths,
 )
 
@@ -40,10 +42,19 @@ def test_apply_frame0_accepts_wan_i2v_ref_f1():
     assert torch.equal(out[:, 1:], gen[:, 1:])
 
 
-def test_apply_frame0_hard_and_free():
-    gen = torch.randn(2, 3, 1, 1)
-    ref = torch.ones(2, 3, 1, 1)
-    hard = apply_frame0_anchor(gen, ref, 1.0)
-    free = apply_frame0_anchor(gen, ref, 0.0)
-    assert torch.equal(hard[:, 0], ref[:, 0])
-    assert torch.equal(free, gen)
+def test_coupled_timestep_factor():
+    assert frame0_timestep_factor(1.0, couple_timestep=False) == 0.0
+    assert frame0_timestep_factor(0.5, couple_timestep=False) == 0.0
+    assert frame0_timestep_factor(1.0, couple_timestep=True) == 0.0
+    assert frame0_timestep_factor(0.0, couple_timestep=True) == 1.0
+    assert abs(frame0_timestep_factor(0.25, couple_timestep=True) - 0.75) < 1e-9
+
+
+def test_apply_frame0_timestep_mask_coupled():
+    mask = torch.ones(2, 4, 3, 3)
+    mask[:, 0] = 0.0
+    soft = apply_frame0_timestep_mask(mask, 0.4, couple_timestep=True)
+    assert torch.allclose(soft[:, 0], torch.full_like(soft[:, 0], 0.6))
+    assert torch.allclose(soft[:, 1:], torch.ones_like(soft[:, 1:]))
+    hard = apply_frame0_timestep_mask(mask, 0.4, couple_timestep=False)
+    assert torch.equal(hard[:, 0], torch.zeros_like(hard[:, 0]))

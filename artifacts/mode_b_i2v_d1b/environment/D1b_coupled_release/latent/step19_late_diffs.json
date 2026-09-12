@@ -1,0 +1,23 @@
+{
+  "step": 19,
+  "tag": "late",
+  "indices": [
+    18,
+    19,
+    20,
+    0,
+    1,
+    2
+  ],
+  "diffs_l2": {
+    "F-3->F-2": 150.18963623046875,
+    "F-2->F-1": 167.80343627929688,
+    "F-1->0": 271.2879943847656,
+    "0->1": 259.5106201171875,
+    "1->2": 151.29383850097656
+  },
+  "seam_l2": 271.2879943847656,
+  "adj_mean_l2": 182.19938278198242,
+  "seam_vs_adj": 1.488962203068413,
+  "pt": "/root/latent-loop/artifacts/mode_b_i2v_d1b/environment/D1b_coupled_release/latent/step19_late_slices.pt"
+}

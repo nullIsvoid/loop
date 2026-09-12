@@ -1,0 +1,126 @@
+{
+  "case_id": "person",
+  "variant": "D1b_coupled_release",
+  "couple_timestep": true,
+  "anchor_schedule": "LateAnchorReleaseSchedule",
+  "anchor_strengths": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.9,
+    0.75,
+    0.6,
+    0.45,
+    0.3,
+    0.15,
+    0.0
+  ],
+  "rope_schedule": "SymmetricShiftSchedule",
+  "seed": 42,
+  "steps": 20,
+  "elapsed_sec": 185.07,
+  "video_shape": [
+    3,
+    81,
+    1088,
+    800
+  ],
+  "probes": [
+    {
+      "step": 2,
+      "tag": "early",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 550.8811645507812,
+        "F-2->F-1": 551.1543579101562,
+        "F-1->0": 438.9049987792969,
+        "0->1": 438.0165710449219,
+        "1->2": 552.0934448242188
+      },
+      "seam_l2": 438.9049987792969,
+      "adj_mean_l2": 523.0363845825195,
+      "seam_vs_adj": 0.8391481199336157,
+      "pt": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/D1b_coupled_release/latent/step02_early_slices.pt",
+      "anchor_strength": 1.0,
+      "frame0_timestep_factor": 0.0,
+      "couple_timestep": true
+    },
+    {
+      "step": 10,
+      "tag": "middle",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 458.86114501953125,
+        "F-2->F-1": 459.13568115234375,
+        "F-1->0": 360.0684509277344,
+        "0->1": 361.1038513183594,
+        "1->2": 459.861328125
+      },
+      "seam_l2": 360.0684509277344,
+      "adj_mean_l2": 434.7405014038086,
+      "seam_vs_adj": 0.828237649275941,
+      "pt": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/D1b_coupled_release/latent/step10_middle_slices.pt",
+      "anchor_strength": 1.0,
+      "frame0_timestep_factor": 0.0,
+      "couple_timestep": true
+    },
+    {
+      "step": 19,
+      "tag": "late",
+      "indices": [
+        18,
+        19,
+        20,
+        0,
+        1,
+        2
+      ],
+      "diffs_l2": {
+        "F-3->F-2": 119.47257232666016,
+        "F-2->F-1": 122.35888671875,
+        "F-1->0": 192.0397186279297,
+        "0->1": 198.3632354736328,
+        "1->2": 122.03677368164062
+      },
+      "seam_l2": 192.0397186279297,
+      "adj_mean_l2": 140.5578670501709,
+      "seam_vs_adj": 1.3662680194156815,
+      "pt": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/D1b_coupled_release/latent/step19_late_slices.pt",
+      "anchor_strength": 0.0,
+      "frame0_timestep_factor": 1.0,
+      "couple_timestep": true
+    }
+  ],
+  "late_diffs_l2": {
+    "F-3->F-2": 119.47257232666016,
+    "F-2->F-1": 122.35888671875,
+    "F-1->0": 192.0397186279297,
+    "0->1": 198.3632354736328,
+    "1->2": 122.03677368164062
+  },
+  "late_seam_vs_adj": 1.3662680194156815
+}

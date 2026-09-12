@@ -1,0 +1,88 @@
+{
+  "name": "mode_b_i2v_d1b_coupled_anchor_release",
+  "question": "Does coupling frame-0 timestep release with latent release (D1b) flatten late F-1\u21920 and 0\u21921 vs D1 latent-only / B hard?",
+  "attention_backend": {
+    "flash_attn_2": false,
+    "flash_attn_3": false,
+    "backend": "official_attention_sdpa_fallback"
+  },
+  "rope_schedule": "SymmetricShiftSchedule",
+  "shared": {
+    "seed": 42,
+    "steps": 20,
+    "frame_num": 81,
+    "max_area": 901120,
+    "guide_scale": 5.0,
+    "shift": 5.0,
+    "sample_solver": "unipc"
+  },
+  "runs": [
+    {
+      "case_id": "person",
+      "variant": "B_hard_anchor",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.7689813405756545,
+      "late_F-2->F-1": 104.49781799316406,
+      "late_F-1->0": 212.66065979003906,
+      "late_0->1": 168.65615844726562,
+      "late_1->2": 104.51622009277344,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/B_hard_anchor"
+    },
+    {
+      "case_id": "person",
+      "variant": "D1_late_release",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.3689116757112199,
+      "late_F-2->F-1": 107.553955078125,
+      "late_F-1->0": 175.2178955078125,
+      "late_0->1": 192.2264404296875,
+      "late_1->2": 106.46009826660156,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/D1_late_release"
+    },
+    {
+      "case_id": "person",
+      "variant": "D1b_coupled_release",
+      "couple_timestep": true,
+      "late_seam_vs_adj": 1.3662680194156815,
+      "late_F-2->F-1": 122.35888671875,
+      "late_F-1->0": 192.0397186279297,
+      "late_0->1": 198.3632354736328,
+      "late_1->2": 122.03677368164062,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/D1b_coupled_release"
+    },
+    {
+      "case_id": "environment",
+      "variant": "B_hard_anchor",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.5633104040308667,
+      "late_F-2->F-1": 157.34017944335938,
+      "late_F-1->0": 258.0081481933594,
+      "late_0->1": 218.0906524658203,
+      "late_1->2": 142.42767333984375,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/environment/B_hard_anchor"
+    },
+    {
+      "case_id": "environment",
+      "variant": "D1_late_release",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.4177226852104523,
+      "late_F-2->F-1": 161.4344940185547,
+      "late_F-1->0": 246.54257202148438,
+      "late_0->1": 247.04898071289062,
+      "late_1->2": 144.15415954589844,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/environment/D1_late_release"
+    },
+    {
+      "case_id": "environment",
+      "variant": "D1b_coupled_release",
+      "couple_timestep": true,
+      "late_seam_vs_adj": 1.488962203068413,
+      "late_F-2->F-1": 167.80343627929688,
+      "late_F-1->0": 271.2879943847656,
+      "late_0->1": 259.5106201171875,
+      "late_1->2": 151.29383850097656,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/environment/D1b_coupled_release"
+    }
+  ],
+  "note": "No F-1 conditioning. No circular soft D2. No new RoPE schedule."
+}

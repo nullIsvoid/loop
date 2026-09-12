@@ -5,6 +5,8 @@ from .anchor_schedule import (
     HardAnchorSchedule,
     LateAnchorReleaseSchedule,
     apply_frame0_anchor,
+    apply_frame0_timestep_mask,
+    frame0_timestep_factor,
     list_anchor_strengths,
 )
 
@@ -13,5 +15,7 @@ __all__ = [
     "HardAnchorSchedule",
     "LateAnchorReleaseSchedule",
     "apply_frame0_anchor",
+    "apply_frame0_timestep_mask",
+    "frame0_timestep_factor",
     "list_anchor_strengths",
 ]

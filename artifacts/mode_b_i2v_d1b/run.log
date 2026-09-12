@@ -1,0 +1,121 @@
+[2026-09-12 05:17:56,712] WARNING: flash_attn not installed; using Wan attention() SDPA fallback for full generate
+[2026-09-12 05:17:57,377] INFO: Building WanTI2V once ...
+[2026-09-12 05:19:11,954] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B/models_t5_umt5-xxl-enc-bf16.pth
+[2026-09-12 05:19:20,318] INFO: loading /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B/Wan2.2_VAE.pth
+[2026-09-12 05:19:22,180] INFO: Creating WanModel from /model/HuggingFace/Wan-AI/Wan2.2-TI2V-5B
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 48.25it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+[2026-09-12 05:19:24,332] INFO: === person / B_hard_anchor (couple_timestep=False) ===
+/root/Wan2.2/wan/modules/vae2_2.py:1028: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+  0%|          | 0/20 [00:00<?, ?it/s]/root/Wan2.2/wan/modules/attention.py:166: UserWarning: Padding mask is disabled when using scaled_dot_product_attention. It can have a significant impact on performance.
+  warnings.warn(
+  5%|▌         | 1/20 [00:05<01:42,  5.39s/it] 10%|█         | 2/20 [00:10<01:36,  5.35s/it][2026-09-12 05:20:32,660] INFO: probe step=2 tag=early a=1.000 t0_factor=0.000 couple=False
+ 15%|█▌        | 3/20 [00:16<01:31,  5.38s/it] 20%|██        | 4/20 [00:21<01:25,  5.37s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.37s/it] 30%|███       | 6/20 [00:32<01:15,  5.37s/it] 35%|███▌      | 7/20 [00:37<01:09,  5.38s/it] 40%|████      | 8/20 [00:43<01:04,  5.38s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.39s/it] 50%|█████     | 10/20 [00:53<00:53,  5.40s/it][2026-09-12 05:21:15,815] INFO: probe step=10 tag=middle a=1.000 t0_factor=0.000 couple=False
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.41s/it] 60%|██████    | 12/20 [01:04<00:43,  5.41s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.41s/it] 70%|███████   | 14/20 [01:15<00:32,  5.41s/it] 75%|███████▌  | 15/20 [01:20<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.40s/it][2026-09-12 05:22:04,494] INFO: probe step=19 tag=late a=1.000 t0_factor=0.000 couple=False
+100%|██████████| 20/20 [01:47<00:00,  5.41s/it]100%|██████████| 20/20 [01:47<00:00,  5.40s/it]
+/root/Wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+[2026-09-12 05:22:43,431] INFO: person/B_hard_anchor done late seam_vs_adj=1.7689813405756545 F-1->0=212.66065979003906 0->1=168.65615844726562
+[2026-09-12 05:22:43,740] INFO: === person / D1_late_release (couple_timestep=False) ===
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.35s/it] 10%|█         | 2/20 [00:10<01:36,  5.36s/it][2026-09-12 05:23:52,376] INFO: probe step=2 tag=early a=1.000 t0_factor=0.000 couple=False
+ 15%|█▌        | 3/20 [00:16<01:31,  5.37s/it] 20%|██        | 4/20 [00:21<01:26,  5.38s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.38s/it] 30%|███       | 6/20 [00:32<01:15,  5.39s/it] 35%|███▌      | 7/20 [00:37<01:10,  5.39s/it] 40%|████      | 8/20 [00:43<01:04,  5.40s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.40s/it] 50%|█████     | 10/20 [00:53<00:54,  5.40s/it][2026-09-12 05:24:35,613] INFO: probe step=10 tag=middle a=1.000 t0_factor=0.000 couple=False
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.42s/it] 60%|██████    | 12/20 [01:04<00:43,  5.42s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.41s/it] 70%|███████   | 14/20 [01:15<00:32,  5.41s/it] 75%|███████▌  | 15/20 [01:20<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 05:25:24,343] INFO: probe step=19 tag=late a=0.000 t0_factor=0.000 couple=False
+100%|██████████| 20/20 [01:48<00:00,  5.42s/it]100%|██████████| 20/20 [01:48<00:00,  5.40s/it]
+[2026-09-12 05:26:00,286] INFO: person/D1_late_release done late seam_vs_adj=1.3689116757112199 F-1->0=175.2178955078125 0->1=192.2264404296875
+[2026-09-12 05:26:00,595] INFO: === person / D1b_coupled_release (couple_timestep=True) ===
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.33s/it] 10%|█         | 2/20 [00:10<01:36,  5.35s/it][2026-09-12 05:27:08,554] INFO: probe step=2 tag=early a=1.000 t0_factor=0.000 couple=True
+ 15%|█▌        | 3/20 [00:16<01:31,  5.37s/it] 20%|██        | 4/20 [00:21<01:26,  5.38s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.38s/it] 30%|███       | 6/20 [00:32<01:15,  5.39s/it] 35%|███▌      | 7/20 [00:37<01:10,  5.39s/it] 40%|████      | 8/20 [00:43<01:04,  5.40s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.40s/it] 50%|█████     | 10/20 [00:53<00:54,  5.40s/it][2026-09-12 05:27:51,792] INFO: probe step=10 tag=middle a=1.000 t0_factor=0.000 couple=True
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.42s/it] 60%|██████    | 12/20 [01:04<00:43,  5.42s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.42s/it] 70%|███████   | 14/20 [01:15<00:32,  5.42s/it] 75%|███████▌  | 15/20 [01:21<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 05:28:40,538] INFO: probe step=19 tag=late a=0.000 t0_factor=1.000 couple=True
+100%|██████████| 20/20 [01:48<00:00,  5.42s/it]100%|██████████| 20/20 [01:48<00:00,  5.40s/it]
+[2026-09-12 05:29:15,191] INFO: person/D1b_coupled_release done late seam_vs_adj=1.3662680194156815 F-1->0=192.0397186279297 0->1=198.3632354736328
+[2026-09-12 05:29:15,651] INFO: === environment / B_hard_anchor (couple_timestep=False) ===
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.35s/it] 10%|█         | 2/20 [00:10<01:36,  5.36s/it][2026-09-12 05:30:23,847] INFO: probe step=2 tag=early a=1.000 t0_factor=0.000 couple=False
+ 15%|█▌        | 3/20 [00:16<01:31,  5.38s/it] 20%|██        | 4/20 [00:21<01:26,  5.38s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.38s/it] 30%|███       | 6/20 [00:32<01:15,  5.39s/it] 35%|███▌      | 7/20 [00:37<01:10,  5.39s/it] 40%|████      | 8/20 [00:43<01:04,  5.39s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.40s/it] 50%|█████     | 10/20 [00:53<00:53,  5.40s/it][2026-09-12 05:31:07,061] INFO: probe step=10 tag=middle a=1.000 t0_factor=0.000 couple=False
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.41s/it] 60%|██████    | 12/20 [01:04<00:43,  5.41s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.41s/it] 70%|███████   | 14/20 [01:15<00:32,  5.41s/it] 75%|███████▌  | 15/20 [01:20<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 05:31:55,777] INFO: probe step=19 tag=late a=1.000 t0_factor=0.000 couple=False
+100%|██████████| 20/20 [01:48<00:00,  5.42s/it]100%|██████████| 20/20 [01:48<00:00,  5.40s/it]
+[2026-09-12 05:32:31,094] INFO: environment/B_hard_anchor done late seam_vs_adj=1.5633104040308667 F-1->0=258.0081481933594 0->1=218.0906524658203
+[2026-09-12 05:32:31,520] INFO: === environment / D1_late_release (couple_timestep=False) ===
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.35s/it] 10%|█         | 2/20 [00:10<01:36,  5.35s/it][2026-09-12 05:33:39,556] INFO: probe step=2 tag=early a=1.000 t0_factor=0.000 couple=False
+ 15%|█▌        | 3/20 [00:16<01:31,  5.37s/it] 20%|██        | 4/20 [00:21<01:26,  5.38s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.39s/it] 30%|███       | 6/20 [00:32<01:15,  5.39s/it] 35%|███▌      | 7/20 [00:37<01:10,  5.40s/it] 40%|████      | 8/20 [00:43<01:04,  5.40s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.40s/it] 50%|█████     | 10/20 [00:53<00:54,  5.41s/it][2026-09-12 05:34:22,816] INFO: probe step=10 tag=middle a=1.000 t0_factor=0.000 couple=False
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.41s/it] 60%|██████    | 12/20 [01:04<00:43,  5.41s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.41s/it] 70%|███████   | 14/20 [01:15<00:32,  5.41s/it] 75%|███████▌  | 15/20 [01:21<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 05:35:11,542] INFO: probe step=19 tag=late a=0.000 t0_factor=0.000 couple=False
+100%|██████████| 20/20 [01:48<00:00,  5.42s/it]100%|██████████| 20/20 [01:48<00:00,  5.40s/it]
+[2026-09-12 05:35:46,421] INFO: environment/D1_late_release done late seam_vs_adj=1.4177226852104523 F-1->0=246.54257202148438 0->1=247.04898071289062
+[2026-09-12 05:35:46,842] INFO: === environment / D1b_coupled_release (couple_timestep=True) ===
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:05<01:41,  5.34s/it] 10%|█         | 2/20 [00:10<01:36,  5.36s/it][2026-09-12 05:36:54,749] INFO: probe step=2 tag=early a=1.000 t0_factor=0.000 couple=True
+ 15%|█▌        | 3/20 [00:16<01:31,  5.37s/it] 20%|██        | 4/20 [00:21<01:26,  5.38s/it] 25%|██▌       | 5/20 [00:26<01:20,  5.38s/it] 30%|███       | 6/20 [00:32<01:15,  5.39s/it] 35%|███▌      | 7/20 [00:37<01:10,  5.39s/it] 40%|████      | 8/20 [00:43<01:04,  5.40s/it] 45%|████▌     | 9/20 [00:48<00:59,  5.40s/it] 50%|█████     | 10/20 [00:53<00:54,  5.40s/it][2026-09-12 05:37:37,987] INFO: probe step=10 tag=middle a=1.000 t0_factor=0.000 couple=True
+ 55%|█████▌    | 11/20 [00:59<00:48,  5.41s/it] 60%|██████    | 12/20 [01:04<00:43,  5.41s/it] 65%|██████▌   | 13/20 [01:10<00:37,  5.41s/it] 70%|███████   | 14/20 [01:15<00:32,  5.42s/it] 75%|███████▌  | 15/20 [01:20<00:27,  5.41s/it] 80%|████████  | 16/20 [01:26<00:21,  5.41s/it] 85%|████████▌ | 17/20 [01:31<00:16,  5.41s/it] 90%|█████████ | 18/20 [01:37<00:10,  5.41s/it] 95%|█████████▌| 19/20 [01:42<00:05,  5.41s/it][2026-09-12 05:38:26,692] INFO: probe step=19 tag=late a=0.000 t0_factor=1.000 couple=True
+100%|██████████| 20/20 [01:48<00:00,  5.41s/it]100%|██████████| 20/20 [01:48<00:00,  5.40s/it]
+[2026-09-12 05:39:01,483] INFO: environment/D1b_coupled_release done late seam_vs_adj=1.488962203068413 F-1->0=271.2879943847656 0->1=259.5106201171875
+{
+  "ok": true,
+  "runs": [
+    {
+      "case_id": "person",
+      "variant": "B_hard_anchor",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.7689813405756545,
+      "late_F-2->F-1": 104.49781799316406,
+      "late_F-1->0": 212.66065979003906,
+      "late_0->1": 168.65615844726562,
+      "late_1->2": 104.51622009277344,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/B_hard_anchor"
+    },
+    {
+      "case_id": "person",
+      "variant": "D1_late_release",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.3689116757112199,
+      "late_F-2->F-1": 107.553955078125,
+      "late_F-1->0": 175.2178955078125,
+      "late_0->1": 192.2264404296875,
+      "late_1->2": 106.46009826660156,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/D1_late_release"
+    },
+    {
+      "case_id": "person",
+      "variant": "D1b_coupled_release",
+      "couple_timestep": true,
+      "late_seam_vs_adj": 1.3662680194156815,
+      "late_F-2->F-1": 122.35888671875,
+      "late_F-1->0": 192.0397186279297,
+      "late_0->1": 198.3632354736328,
+      "late_1->2": 122.03677368164062,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/person/D1b_coupled_release"
+    },
+    {
+      "case_id": "environment",
+      "variant": "B_hard_anchor",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.5633104040308667,
+      "late_F-2->F-1": 157.34017944335938,
+      "late_F-1->0": 258.0081481933594,
+      "late_0->1": 218.0906524658203,
+      "late_1->2": 142.42767333984375,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/environment/B_hard_anchor"
+    },
+    {
+      "case_id": "environment",
+      "variant": "D1_late_release",
+      "couple_timestep": false,
+      "late_seam_vs_adj": 1.4177226852104523,
+      "late_F-2->F-1": 161.4344940185547,
+      "late_F-1->0": 246.54257202148438,
+      "late_0->1": 247.04898071289062,
+      "late_1->2": 144.15415954589844,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/environment/D1_late_release"
+    },
+    {
+      "case_id": "environment",
+      "variant": "D1b_coupled_release",
+      "couple_timestep": true,
+      "late_seam_vs_adj": 1.488962203068413,
+      "late_F-2->F-1": 167.80343627929688,
+      "late_F-1->0": 271.2879943847656,
+      "late_0->1": 259.5106201171875,
+      "late_1->2": 151.29383850097656,
+      "dir": "/root/latent-loop/artifacts/mode_b_i2v_d1b/environment/D1b_coupled_release"
+    }
+  ]
+}
+D1B_COMPARE_OK

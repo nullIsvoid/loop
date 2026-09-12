@@ -112,6 +112,40 @@ def apply_frame0_anchor(
     return out
 
 
+def frame0_timestep_factor(strength: float, *, couple_timestep: bool) -> float:
+    """Scalar multiplier for frame-0 tokens' diffusion timestep.
+
+    Official / uncoupled: always 0 (timestep forced to 0 on frame 0).
+    Coupled (D1b): ``(1 - a)`` so a=1 → t0=0, a=0 → t0=current_t.
+    """
+    if not couple_timestep:
+        return 0.0
+    a = float(strength)
+    if a < 0.0 or a > 1.0:
+        raise ValueError(f"strength must be in [0, 1], got {a}")
+    return 1.0 - a
+
+
+def apply_frame0_timestep_mask(
+    official_mask: Tensor,
+    strength: float,
+    *,
+    couple_timestep: bool,
+) -> Tensor:
+    """Build per-token timestep scale from Wan ``mask2[0]`` ``[C,F,H,W]``.
+
+    Official mask is 0 on temporal index 0 and 1 elsewhere.
+    Uncoupled: leave as-is (frame0 → t=0).
+    Coupled: set temporal index 0 to ``(1-a)``.
+    """
+    ts_mask = official_mask.to(dtype=torch.float32)
+    if not couple_timestep:
+        return ts_mask
+    out = ts_mask.clone()
+    out[:, 0] = frame0_timestep_factor(strength, couple_timestep=True)
+    return out
+
+
 def list_anchor_strengths(
     total_steps: int,
     schedule: Frame0AnchorSchedule | None = None,
