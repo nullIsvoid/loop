@@ -2,6 +2,8 @@
 
 > 本文是项目研究目标、借鉴来源和模型角色的权威入口。旧实验文档与本文冲突时，以本文为准。
 
+每次实验的变量、冻结项和可允许结论，必须遵循 [`notes/controlled_experiment_protocol.md`](notes/controlled_experiment_protocol.md)。
+
 ## 研究目标
 
 把非破坏式图像条件与环形时间建模结合，得到原生无缝循环的图生视频（I2V）：

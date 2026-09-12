@@ -51,6 +51,17 @@ DEPTH_SLICES = {
     "H1-B": ("18-35", "hunyuan15_symmetric_depth_18_35"),
     "H1-C": ("36-53", "hunyuan15_symmetric_depth_36_53"),
     "H2-B2": ("2", "hunyuan15_anchor_block2"),
+    "HC-A0": ("all", "hunyuan15_i2v_no_condition_native"),
+    "HC-A1": ("all", "hunyuan15_i2v_no_condition_symmetric"),
+    "HC-B1": ("all", "hunyuan15_i2v_vae_only_symmetric"),
+    "HC-C1": ("all", "hunyuan15_i2v_vision_only_symmetric"),
+}
+
+CONDITION_MODES = {
+    "HC-A0": "none",
+    "HC-A1": "none",
+    "HC-B1": "vae-only",
+    "HC-C1": "vision-only",
 }
 
 
@@ -71,7 +82,8 @@ def parse_args() -> argparse.Namespace:
         choices=sorted(DEPTH_SLICES.keys()),
         help=(
             "H1=full I2V; H1-T2V=same full schedule without image condition; "
-            "H1-A/B/C=depth thirds; H2-B2=block 2 half-period shift"
+            "H1-A/B/C=depth thirds; H2-B2=block 2 half-period shift; "
+            "HC-A0/A1/B1/C1=controlled I2V-condition ablations"
         ),
     )
     p.add_argument(
@@ -99,6 +111,8 @@ def main() -> None:
 
     args = parse_args()
     task = "t2v" if args.experiment_id == "H1-T2V" else "i2v"
+    condition_mode = CONDITION_MODES.get(args.experiment_id, "full")
+    rope_enabled = args.experiment_id != "HC-A0"
     slice_spec, default_run = DEPTH_SLICES[args.experiment_id]
     active_spec = (args.active_blocks or slice_spec).strip()
     run_name = args.run_name or default_run
@@ -212,8 +226,29 @@ def main() -> None:
         overlap_group_offloading=True,
     )
 
+    # 条件消融始终使用同一份 I2V 权重和 reference_image。只将指定
+    # 条件通道清零/关闭，不改输入形状、图像尺寸或 task 分支。
+    if condition_mode in ("none", "vision-only"):
+        original_prepare_cond_latents = pipe._prepare_cond_latents
+
+        def prepare_zero_cond_latents(*call_args, **call_kwargs):
+            cond = original_prepare_cond_latents(*call_args, **call_kwargs)
+            return torch.zeros_like(cond)
+
+        pipe._prepare_cond_latents = prepare_zero_cond_latents  # type: ignore[method-assign]
+
+    if condition_mode in ("none", "vae-only"):
+        def prepare_no_vision_states(*_call_args, **_call_kwargs):
+            return None
+
+        pipe._prepare_vision_states = prepare_no_vision_states  # type: ignore[method-assign]
+
     # H2-B2 必须复用锚点探测的半周期位移，不能误用 Block 2 的对称调度位移。
-    if args.experiment_id == "H2-B2":
+    if not rope_enabled:
+        from latent_loop.rope.schedule import IdentityShiftSchedule
+
+        schedule = IdentityShiftSchedule()
+    elif args.experiment_id == "H2-B2":
         schedule = SingleBlockHalfShiftSchedule(target_block=2)
     else:
         schedule = SymmetricShiftSchedule()
@@ -288,7 +323,12 @@ def main() -> None:
 
     is_anchor_generation = args.experiment_id == "H2-B2"
     is_t2v_control = args.experiment_id == "H1-T2V"
-    is_depth = args.experiment_id not in ("H1", "H1-T2V") and not is_anchor_generation
+    is_condition_control = args.experiment_id.startswith("HC-")
+    is_depth = (
+        args.experiment_id not in ("H1", "H1-T2V")
+        and not is_anchor_generation
+        and not is_condition_control
+    )
     question = (
         "Does a half-period temporal RoPE shift on anchor Block 2 alone reduce "
         "Hunyuan F-1→0 without worsening 0→1 vs H0?"
@@ -299,6 +339,11 @@ def main() -> None:
             "F-1→0 dual spike?"
         )
         if is_t2v_control
+        else (
+            f"Controlled Hunyuan I2V condition ablation {args.experiment_id}: "
+            f"condition_mode={condition_mode}, rope_enabled={rope_enabled}."
+        )
+        if is_condition_control
         else
         f"Depth slice {active_spec}: which third of the 54 double blocks "
         "turns H0's single main seam into H1's near dual spike?"
@@ -317,8 +362,10 @@ def main() -> None:
         "active_blocks_spec": active_spec,
         "active_blocks": None if active_set is None else sorted(active_set),
         "n_active_blocks": n_active,
-        "conditioning_edits": False,
-        "reference_conditioning": task == "i2v",
+        "conditioning_edits": is_condition_control,
+        "reference_image_supplied": task == "i2v",
+        "condition_mode": condition_mode,
+        "rope_enabled": rope_enabled,
         "benchmark": bench.as_metadata(),
         "model": {
             "family": "HunyuanVideo-1.5",
@@ -361,6 +408,29 @@ def main() -> None:
         },
         "question": question,
     }
+    if args.experiment_id in ("HC-A0", "HC-A1"):
+        run["controlled_experiment"] = {
+            "pair_id": "HY-I2V-PAIR-A",
+            "question": (
+                "On the same 480p_i2v checkpoint with both reference paths disabled, "
+                "does enabling full-depth Symmetric Circular RoPE cause the seam?"
+            ),
+            "arm": "control" if args.experiment_id == "HC-A0" else "treatment",
+            "independent_variable": {
+                "name": "rope_enabled",
+                "value": rope_enabled,
+            },
+            "frozen": {
+                "transformer_version": transformer_version,
+                "benchmark": bench.as_metadata(),
+                "steps": args.steps,
+                "video_length": video_length,
+                "dtype": args.dtype,
+                "condition_mode": condition_mode,
+                "active_blocks_spec": active_spec,
+                "schedule_when_enabled": "SymmetricShiftSchedule",
+            },
+        }
     write_json(out_dir / "run.json", run)
     write_result_stub(
         out_dir,
@@ -381,6 +451,11 @@ def main() -> None:
                 if is_anchor_generation
                 else "T2V control has no image condition; schedule remains full-depth."
                 if is_t2v_control
+                else (
+                    f"Controlled condition mode={condition_mode}; "
+                    f"rope_enabled={rope_enabled}."
+                )
+                if is_condition_control
                 else "Depth variants retain the global Symmetric schedule."
             ),
             "Judge vs H0: F-1→0 and 0→1; reject any new ring wall.",
@@ -390,6 +465,8 @@ def main() -> None:
                 if is_anchor_generation
                 else "Control for separating image-condition effects from schedule effects."
                 if is_t2v_control
+                else "Single-variable controlled condition study; see controlled_experiment."
+                if is_condition_control
                 else "No new schedule; W5/WA paused for this depth-loc pass."
             ),
         ],
