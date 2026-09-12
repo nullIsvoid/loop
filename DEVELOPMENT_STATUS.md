@@ -1,31 +1,29 @@
 # Development status
 
-> **I2V gate: B beats A on seam** (person + environment).  
-> Wan Mode B default remains `SymmetricShiftSchedule`. Residual slight B jitter noted.
+> **Next: residual-seam localization (B only).** No S4/S5. No sample expansion.  
+> Decoded frame+flow diagnostics landed; latent early/mid/late probes next when cloud is up.
+
+## Current latent handling
+
+**Active:** Circular Temporal RoPE on attention Q/K (`SymmetricShiftSchedule`), V untouched.  
+**Not active:** residual ring mix, true periodic RoPE, circular temporal context.  
+Details: `notes/current_latent_path.md`.
 
 ## Mode B I2V — human 2026-09-12
-
-Same TI2V-5B with `img=PIL.Image`. A = baseline, B = Symmetric.
 
 | case | A | B | winner |
 |--|--|--|--|
 | person | more obvious jitter | slight jitter | **B** |
 | environment | more obvious jitter | slight jitter | **B** |
 
-→ Circular Temporal RoPE helps wallpaper I2V loop seam, not only T2V.  
-Open: further reduce B’s slight residual jitter (not by inventing S4 yet).  
-**ChatGPT independent I2V scores:** pending — `notes/chatgpt_i2v_review_request.md`.
+## Seam diagnostics (B only) — in progress
 
-## Freeze hygiene (done on `cf3f42f`)
-
-Padded RoPE `seq_len`, Symmetric default, generate `--schedule`, README mainline — closed.
-
-## Prior T2V evidence (closed)
-
-Symmetric default after phase + cross-seed ties. See `artifacts/mode_b_*`.
+Decoded 75–80 / 0–5 + flow strips: `artifacts/mode_b_i2v_seam_diag/`.  
+Person: seam flow ≫ adj + **dx sign flip**. Environment: milder mag bump.  
+Latent probes (steps 2/10/19): script ready, cloud run pending.
 
 ## Still forbidden
 
 - No new schedules for curiosity  
 - No seam_metrics → Gate/Repair  
-- No Comfy / residual / true periodic RoPE until scoped  
+- No implementing D (periodic RoPE / circular context) until latent stage is classified  

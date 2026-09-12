@@ -19,3 +19,6 @@ scripts/_tmp_*.sh
 
 artifacts/mode_b_i2v/_inputs/
 
+
+artifacts/mode_b_i2v_seam_diag/**/latent/*.pt
+

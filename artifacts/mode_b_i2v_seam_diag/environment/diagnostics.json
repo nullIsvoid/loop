@@ -1,0 +1,100 @@
+{
+  "video": "E:/work/loop/artifacts/mode_b_i2v/environment/B_x3.mp4",
+  "cycle_frames": 81,
+  "total_frames_read": 243,
+  "exported_frame_ids": [
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "flow_pairs": [
+    [
+      78,
+      79
+    ],
+    [
+      79,
+      80
+    ],
+    [
+      80,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ]
+  ],
+  "flow_stats": [
+    {
+      "pair": "78->79",
+      "flow_png": "flow_078_to_079.png",
+      "strip_png": "strip_078_to_079.png",
+      "mean_mag": 1.5445936918258667,
+      "median_mag": 0.24912923574447632,
+      "p95_mag": 11.066802978515625,
+      "mean_dx": -0.9789718985557556,
+      "mean_dy": -0.14953497052192688,
+      "is_seam": false
+    },
+    {
+      "pair": "79->80",
+      "flow_png": "flow_079_to_080.png",
+      "strip_png": "strip_079_to_080.png",
+      "mean_mag": 1.8082789182662964,
+      "median_mag": 0.6133444309234619,
+      "p95_mag": 11.065995216369629,
+      "mean_dx": -1.127275824546814,
+      "mean_dy": -0.2206861972808838,
+      "is_seam": false
+    },
+    {
+      "pair": "80->0",
+      "flow_png": "flow_080_to_000.png",
+      "strip_png": "strip_080_to_000.png",
+      "mean_mag": 2.424013137817383,
+      "median_mag": 0.7505542635917664,
+      "p95_mag": 13.39773941040039,
+      "mean_dx": -0.9440977573394775,
+      "mean_dy": -0.10261598229408264,
+      "is_seam": true
+    },
+    {
+      "pair": "0->1",
+      "flow_png": "flow_000_to_001.png",
+      "strip_png": "strip_000_to_001.png",
+      "mean_mag": 2.0889086723327637,
+      "median_mag": 0.35641759634017944,
+      "p95_mag": 13.42097282409668,
+      "mean_dx": -1.5434504747390747,
+      "mean_dy": -0.22238466143608093,
+      "is_seam": false
+    },
+    {
+      "pair": "1->2",
+      "flow_png": "flow_001_to_002.png",
+      "strip_png": "strip_001_to_002.png",
+      "mean_mag": 1.655020833015442,
+      "median_mag": 0.40329307317733765,
+      "p95_mag": 9.83617877960205,
+      "mean_dx": -1.2805217504501343,
+      "mean_dy": 0.12259822338819504,
+      "is_seam": false
+    }
+  ],
+  "aux_seam_vs_adj_flow_ratio": 1.3662565749401447,
+  "note": "Auxiliary only. Compare seam strip 80\u21920 vs neighbors: position jump (big RGB change), velocity jump (mag spike), direction reverse (hue flip in flow), local desync (regional)."
+}
