@@ -8,6 +8,9 @@ build/
 *.egg-info/
 .idea/
 
+# 本机云机连接信息：只保存在工作区，不进入 Git。
+.env.cloud.local
+
 # Schedule / phase experiments: keep full singles off git; allow x3 previews.
 artifacts/mode_b_schedules/**/*.mp4
 !artifacts/mode_b_schedules/*_x3.mp4
